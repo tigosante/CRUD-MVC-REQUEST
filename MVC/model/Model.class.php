@@ -10,8 +10,10 @@ class Model extends AbstractModel
 
     public function __construct(string $acao)
     {
+        $request = $_REQUEST["METHOD_REQUEST"];
         $this->acaoValidate = $acao . "Validate";
-        if ($_REQUEST["METHOD_REQUEST"] !== "PUT" && !method_exists($this, $this->acaoValidate)) {
+
+        if ($request !== "PUT" && $request !== "DELETE" && !method_exists($this, $this->acaoValidate)) {
             echo "O método não existe.";
             die();
         }
