@@ -18,6 +18,7 @@ class UsuarioObject extends UsuarioValidate
             "," . self::NR_MATRICULA
             . " FROM PPC.TB_USUARIO";
     }
+
     protected function postUsuario(): string
     {
         return
@@ -25,6 +26,7 @@ class UsuarioObject extends UsuarioValidate
             . self::NO_USUARIO . " = :" . self::NO_USUARIO .
             ","  . self::NR_MATRICULA . " = :" . self::NR_MATRICULA;
     }
+
     protected function putUsuario(): string
     {
         return
