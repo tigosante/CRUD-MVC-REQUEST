@@ -20,18 +20,27 @@ class ModelDefault extends AbstractModelCore
         }
     }
 
-    public function post($objeto)
+    public function post($objeto, $commit = true)
     {
-        return $this->executar_comando($objeto);
+        return $this->tipo_comando($objeto, $commit);
     }
 
-    public function put($objeto)
+    public function put($objeto, $commit = true)
     {
-        return $this->executar_comando($objeto);
+        return $this->tipo_comando($objeto, $commit);
     }
 
-    public function delete($objeto)
+    public function delete($objeto, $commit = true)
     {
-        return "";
+        return $this->tipo_comando($objeto, $commit);
+    }
+
+    private function tipo_comando($objeto, $commit)
+    {
+        if ($commit) {
+            return $this->executar_comando($objeto, $commit);
+        } else {
+            return $this->executar_comando_sem_commit($objeto, $commit);
+        }
     }
 }

@@ -141,8 +141,9 @@ abstract class AbstractModelCore
      * @copyright  PPC - Plataforma de Planejamento e Controle.
      * @version    1.0.
      */
-    protected function executar_comando()
+    protected function executar_comando($objeto)
     {
+        $this->finalizar_comando($objeto);
         return oci_execute($this->oracleOb) ? "sucesso" : $this->retornar_erro();
     }
 
@@ -156,9 +157,10 @@ abstract class AbstractModelCore
      * @copyright  PPC - Plataforma de Planejamento e Controle.
      * @version    1.0.
      */
-    protected function executar_comando_sem_commit($retorno_banco)
+    protected function executar_comando_sem_commit($objeto)
     {
-        return oci_execute($retorno_banco, OCI_NO_AUTO_COMMIT) ? "sucesso" : $this->retornar_erro($retorno_banco);
+        $this->finalizar_comando($objeto);
+        return oci_execute($this->oracleOb, OCI_NO_AUTO_COMMIT) ? "sucesso" : $this->retornar_erro();
     }
 
     /**

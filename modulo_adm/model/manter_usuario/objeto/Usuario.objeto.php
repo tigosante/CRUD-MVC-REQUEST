@@ -1,10 +1,8 @@
 <?php
-
 class UsuarioObjeto
 {
     public $condicoes = [];
     public $complemento = "";
-
 
     protected const NO_USUARIO = 'NO_USUARIO';
     protected const NR_MATRICULA = 'NR_MATRICULA';
@@ -20,6 +18,7 @@ class UsuarioObjeto
             "," . self::NR_MATRICULA
             . " FROM PPC.TB_USUARIO ";
     }
+
     protected function post_usuario()
     {
         return
