@@ -1,27 +1,26 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"] . "modulo_adm/model/manter_usuario/validation/Usuario.Validate.php");
 
-class UsuarioObject extends UsuarioValidate
+class UsuarioObjeto
 {
+    public $condicoes = [];
+    public $complemento = "";
+
+
     protected const NO_USUARIO = 'NO_USUARIO';
     protected const NR_MATRICULA = 'NR_MATRICULA';
 
-    public static function ini($acao)
+    protected function get_usuario()
     {
-        self::$executar = new UsuarioObject;
-        return self::$executar->$acao();
-    }
+        $this->condicoes = [" AND " . self::NR_MATRICULA . " = :" . self::NR_MATRICULA . " "];
+        $this->complemento = " ORDER BY " . self::NO_USUARIO . " ASC ";
 
-    protected function getUsuario()
-    {
         return
             "SELECT "
             . self::NO_USUARIO .
             "," . self::NR_MATRICULA
             . " FROM PPC.TB_USUARIO ";
     }
-
-    protected function postUsuario()
+    protected function post_usuario()
     {
         return
             "UPDATE PPC.TB_USUARIO SET"
@@ -29,7 +28,7 @@ class UsuarioObject extends UsuarioValidate
             ","  . self::NR_MATRICULA . " = :" . self::NR_MATRICULA;
     }
 
-    protected function putUsuario()
+    protected function put_usuario()
     {
         return
             "INSERT INTO PPC.TB_USUARIO("

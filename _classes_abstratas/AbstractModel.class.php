@@ -29,9 +29,7 @@ abstract class AbstractModelCore
     public $mParametro_bind;
 
     private $mConexao;
-
     private $oracleOb;
-    protected $connection;
 
     public function __construct(ConexaoDB $conexao)
     {
@@ -43,13 +41,94 @@ abstract class AbstractModelCore
         $this->mConexao->conexao_fechar();
     }
 
-    protected function retornaDados($comando, $condicoes)
+    protected function retornar_dados($objeto)
     {
-        $comando .= $this->filtros_comando($condicoes);
-        $this->oracleOb = $this->mConexao->preparar_comando($comando);
-        $this->executa_binds($this->oracleOb);
+        $this->finalizar_comando($objeto);
+        return $this->dados();
+    }
 
-        return $this->retornar_array($this->oracleOb);
+    protected function retornar_dados_json($objeto)
+    {
+        $this->finalizar_comando($objeto);
+        return $this->dados_json();
+    }
+
+    protected function retornar_dados_clob($objeto)
+    {
+        $this->finalizar_comando($objeto);
+        return $this->dados_CLOB();
+    }
+
+    private function finalizar_comando($objeto)
+    {
+        $metodo = trim($_REQUEST["acao"]);
+        $comando = $objeto->$metodo();
+
+        $objeto->condicoes = $this->finalizar_condicoes($objeto->condicoes);
+        $this->oracleOb = $this->mConexao->preparar_comando($comando . $objeto->condicoes . $objeto->complemento);
+
+        if ($objeto->condicoes) {
+            $this->binds();
+        }
+    }
+
+    /**
+     * Retorna uma string com todas as condições que receberão conteúdo da view.
+     * Verifica quais conteúdos vindos da view existem no Array $filtros e concatena em uma string.
+     *
+     * @param   filtros   $filtros Array com condições que serão utilizadas no comando.
+     * @return  String
+     *
+     * @author Tiago Silva.
+     * @copyright  PPC - Plataforma de Planejamento e Controle
+     * @version    1.0
+     */
+    protected function finalizar_condicoes($filtros = [])
+    {
+        $condicoes   = "";
+        $quantidade  = count($filtros);
+
+        foreach (array_keys($this->mParametro_bind) as $filtro) {
+            for ($i = 0; $i < $quantidade; $i++) {
+                if ($this->busca_string("%" . ":" . strtoupper($filtro) . "%", $filtros[$i])) {
+                    $condicoes .= $filtros[$i];
+                    unset($filtros[$i]);
+                }
+            }
+        }
+
+        return empty($condicoes) ? " " : " WHERE 1=1 " . $condicoes;
+    }
+
+    /**
+     * Busca uma string dentro de outra.
+     *
+     * @param String  $buscador     string que será buscada.
+     * @param String  $local_busca  String que será verificada.
+     *
+     * @author Tiago Silva.
+     * @copyright  PPC - Plataforma de Planejamento e Controle
+     * @version    1.0
+     */
+    protected function busca_string($buscador, $local_busca)
+    {
+        return preg_match("/" . str_replace("%", ".*?", $buscador) . "/", $local_busca) > 0;
+    }
+
+    /**
+     * Executa a função OCI_BIND_BY_NAME somente nas BINDS que contém conteúdo vindos da view.
+     *
+     * @param retorno   $retorno  Statement do comando.
+     *
+     * @author Tiago Silva.
+     * @copyright  PPC - Plataforma de Planejamento e Controle
+     * @version    1.0
+     */
+    protected function binds()
+    {
+        foreach (array_keys($this->mParametro_bind) as $bind) {
+            oci_bind_by_name($this->oracleOb, ":" . strtoupper($bind), $this->mParametro_bind[$bind]);
+        }
     }
 
     /**
@@ -62,9 +141,9 @@ abstract class AbstractModelCore
      * @copyright  PPC - Plataforma de Planejamento e Controle.
      * @version    1.0.
      */
-    protected function executar_comando($retorno_banco)
+    protected function executar_comando()
     {
-        return oci_execute($retorno_banco) ? "sucesso" : $this->retornar_erro($retorno_banco);
+        return oci_execute($this->oracleOb) ? "sucesso" : $this->retornar_erro();
     }
 
     /**
@@ -107,16 +186,16 @@ abstract class AbstractModelCore
      * @copyright  PPC - Plataforma de Planejamento e Controle.
      * @version    1.0.
      */
-    protected function retornar_array($retorno_banco)
+    protected function dados()
     {
-        if (oci_execute($retorno_banco, OCI_NO_AUTO_COMMIT)) {
-            while ($linha = oci_fetch_array($retorno_banco, OCI_BOTH)) {
+        if (oci_execute($this->oracleOb, OCI_NO_AUTO_COMMIT)) {
+            while ($linha = oci_fetch_array($this->oracleOb, OCI_BOTH)) {
                 $array[] = $linha;
             }
 
             return $array;
         } else {
-            return $this->retornar_erro($retorno_banco);
+            return $this->retornar_erro();
         }
     }
 
@@ -130,16 +209,16 @@ abstract class AbstractModelCore
      * @copyright  PPC - Plataforma de Planejamento e Controle.
      * @version    1.0.
      */
-    protected function retornar_array_json($retorno_banco)
+    protected function dados_json()
     {
-        if (oci_execute($retorno_banco, OCI_NO_AUTO_COMMIT)) {
-            while ($linha = oci_fetch_array($retorno_banco, OCI_BOTH)) {
+        if (oci_execute($this->oracleOb, OCI_NO_AUTO_COMMIT)) {
+            while ($linha = oci_fetch_array($this->oracleOb, OCI_BOTH)) {
                 $array[] = $linha;
             }
 
             return json_encode($array);
         } else {
-            return $this->retornar_erro($retorno_banco);
+            return $this->retornar_erro();
         }
     }
 
@@ -153,15 +232,15 @@ abstract class AbstractModelCore
      * @copyright  PPC - Plataforma de Planejamento e Controle.
      * @version    1.0.
      */
-    protected function retornar_array_clob($retorno_banco)
+    protected function dados_CLOB()
     {
-        if (oci_execute($retorno_banco)) {
-            while ($linha = oci_fetch_array($retorno_banco, OCI_BOTH + OCI_B_CLOB)) {
+        if (oci_execute($this->oracleOb)) {
+            while ($linha = oci_fetch_array($this->oracleOb, OCI_BOTH + OCI_B_CLOB)) {
                 $array[] = $linha;
             }
             return $array;
         } else {
-            return $this->retornar_erro($retorno_banco);
+            return $this->retornar_erro();
         }
     }
 
@@ -175,72 +254,8 @@ abstract class AbstractModelCore
      * @copyright  PPC - Plataforma de Planejamento e Controle.
      * @version    1.0.
      */
-    private function retornar_erro($retorno_banco)
+    private function retornar_erro()
     {
-        return json_encode("erro:" . oci_error($retorno_banco)["message"]);
-    }
-
-    /**
-     * Retorna uma string com todas as condições que receberão conteúdo da view.
-     * Verifica quais conteúdos vindos da view existem no Array $filtros e concatena em uma string.
-     *
-     * @param   filtros   $filtros Array com condições que serão utilizadas no comando.
-     * @return  String
-     *
-     * @author Tiago Silva.
-     * @copyright  PPC - Plataforma de Planejamento e Controle
-     * @version    1.0
-     */
-    protected function filtros_comando($filtros = [])
-    {
-        $condicoes   = "";
-        $quantidade  = count($filtros);
-
-        foreach (array_keys($this->mParametro_bind) as $filtro) {
-            for ($i = 0; $i < $quantidade; $i++) {
-                if ($this->busca_string("%" . ":" . strtoupper($filtro) . "%", $filtros[$i])) {
-                    $condicoes .= $filtros[$i];
-                    unset($filtros[$i]);
-                }
-            }
-        }
-
-        return empty($condicoes) ? "" : " WHERE 1=1 " . $condicoes;
-    }
-
-    /**
-     * Busca uma string dentro de outra.
-     *
-     * @param String  $buscador     string que será buscada.
-     * @param String  $local_busca  String que será verificada.
-     *
-     * @author Tiago Silva.
-     * @copyright  PPC - Plataforma de Planejamento e Controle
-     * @version    1.0
-     */
-    protected function busca_string($buscador, $local_busca)
-    {
-        return preg_match("/" . str_replace("%", ".*?", $buscador) . "/", $local_busca) > 0;
-    }
-
-    /**
-     * Executa a função OCI_BIND_BY_NAME somente nas BINDS que contém conteúdo vindos da view.
-     *
-     * @param retorno   $retorno  Statement do comando.
-     *
-     * @author Tiago Silva.
-     * @copyright  PPC - Plataforma de Planejamento e Controle
-     * @version    1.0
-     */
-    protected function executa_binds($retorno)
-    {
-        foreach (array_keys($this->mParametro_bind) as $bind) {
-            oci_bind_by_name($retorno, ":" . strtoupper($bind), $this->mParametro_bind[$bind]);
-        }
-    }
-
-    protected function preparar_comando($comando)
-    {
-        return $this->mConexao->preparar_comando($comando);
+        return json_encode("erro:" . oci_error($this->oracleOb)["message"]);
     }
 }

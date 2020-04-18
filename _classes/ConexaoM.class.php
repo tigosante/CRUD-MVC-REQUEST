@@ -3,9 +3,8 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "_interfaces/Conexao.interface.php";
 
 class ConexaoM implements ConexaoDB
 {
-    public static $instance;
-
     public $conexao;
+    public static $instance;
 
     public static function getInstance()
     {
@@ -22,8 +21,8 @@ class ConexaoM implements ConexaoDB
             throw new InvalidArgumentException();
         }
 
-        $dados_da_conexao = "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP) (HOST = " . $_SERVER["PPC_DB_HOST"] . ") (PORT = 1521)) (CONNECT_DATA = (SERVICE_NAME = " . $_SERVER["PPC_DB_SERVICE"] . ")))";
-        $this->conexao = oci_connect($_SERVER["PPC_DB_USER"], $_SERVER["PPC_DB_PASSWORD"], $dados_da_conexao, "UTF8");
+        $dados_conexao = "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP) (HOST = " . $_SERVER["PPC_DB_HOST"] . ") (PORT = 1521)) (CONNECT_DATA = (SERVICE_NAME = " . $_SERVER["PPC_DB_SERVICE"] . ")))";
+        $this->conexao = oci_connect($_SERVER["PPC_DB_USER"], $_SERVER["PPC_DB_PASSWORD"], $dados_conexao, "UTF8");
     }
 
     public function conexao_fechar()
