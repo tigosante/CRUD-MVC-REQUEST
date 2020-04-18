@@ -59,6 +59,18 @@ abstract class AbstractModelCore
         return $this->dados_CLOB();
     }
 
+    protected function executar_comando($objeto)
+    {
+        $this->finalizar_comando($objeto);
+        return oci_execute($this->oracleOb) ? "sucesso" : $this->retornar_erro();
+    }
+
+    protected function executar_comando_sem_commit($objeto)
+    {
+        $this->finalizar_comando($objeto);
+        return oci_execute($this->oracleOb, OCI_NO_AUTO_COMMIT) ? "sucesso" : $this->retornar_erro();
+    }
+
     private function finalizar_comando($objeto)
     {
         $metodo = trim($_REQUEST["acao"]);
@@ -129,38 +141,6 @@ abstract class AbstractModelCore
         foreach (array_keys($this->mParametro_bind) as $bind) {
             oci_bind_by_name($this->oracleOb, ":" . strtoupper($bind), $this->mParametro_bind[$bind]);
         }
-    }
-
-    /**
-     * comentar.
-     * comentar.
-     * comentar.
-     *
-     * @param   parametro  $ comentar.
-     * @author .
-     * @copyright  PPC - Plataforma de Planejamento e Controle.
-     * @version    1.0.
-     */
-    protected function executar_comando($objeto)
-    {
-        $this->finalizar_comando($objeto);
-        return oci_execute($this->oracleOb) ? "sucesso" : $this->retornar_erro();
-    }
-
-    /**
-     * comentar.
-     * comentar.
-     * comentar.
-     *
-     * @param   parametro  $ comentar.
-     * @author .
-     * @copyright  PPC - Plataforma de Planejamento e Controle.
-     * @version    1.0.
-     */
-    protected function executar_comando_sem_commit($objeto)
-    {
-        $this->finalizar_comando($objeto);
-        return oci_execute($this->oracleOb, OCI_NO_AUTO_COMMIT) ? "sucesso" : $this->retornar_erro();
     }
 
     /**
