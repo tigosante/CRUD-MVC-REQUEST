@@ -13,8 +13,18 @@ abstract class AbModel
     public function buscar($comando)
     {
         // return $comando();
-        $comando = $this->pdo->prepare("SELECT * FROM `teste`");
+
+        // Mais usado para SELECTS
+        $comando = $this->pdo->prepare("SELECT * FROM `teste` WHERE ID = :ID");
+
         if ($comando->execute()) {
+            $valor = "1";
+            // Usado para enviar parametros por variáveis e tratar dados.
+            $comando->bindParam(":ID", $valor);
+
+            // Aceita valor setado diretamente.
+            // $comando->bindValue(":ID", "1");
+
             return $comando->fetchAll()[0]["nome"];
         }
 
@@ -22,7 +32,7 @@ abstract class AbModel
 
         //  OU
 
-
-        return $this->pdo->query("SELECT * FROM `teste`")->fetchAll()[0]["nome"];
+        // Mais usado para executar UPDATES, DELETES ou INSERTS.
+        // return $this->pdo->query("SELECT * FROM `teste`")->fetchAll()[0]["nome"];
     }
 }
