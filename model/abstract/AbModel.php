@@ -39,6 +39,10 @@ abstract class AbModel
         // $comando->bindValue(":ID", "1");
 
         if ($comando->execute()) {
+            // Busca apenas uma linha.
+            return $comando->fetch()["nome"];
+
+            // Busca todas as linhas
             return $comando->fetchAll()[0]["nome"];
         }
 
