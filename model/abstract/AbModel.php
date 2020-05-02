@@ -19,5 +19,10 @@ abstract class AbModel
         }
 
         return $comando->errorInfo();
+
+        //  OU
+
+
+        return $this->pdo->query("SELECT * FROM `teste`")->fetchAll()[0]["nome"];
     }
 }
