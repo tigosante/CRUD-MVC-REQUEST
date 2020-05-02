@@ -47,6 +47,9 @@ abstract class AbModel
         //  OU
 
         // Mais usado para executar UPDATES, DELETES ou INSERTS com valores setados.
-        // return $this->pdo->query("SELECT * FROM `teste`")->fetchAll()[0]["nome"];
+        return $this->pdo->query("SELECT * FROM `teste`")->fetchAll()[0]["nome"];
+
+        $comando = "UPDATE `teste` SET `id`= $id,`nome`= $nome,`sobrenome`= $sobrenome,`peso`= $peso WHERE id = $id";
+        return $this->pdo->query($comando)->execute() ?? false;
     }
 }
