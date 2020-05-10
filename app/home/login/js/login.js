@@ -5,21 +5,13 @@ let login_user = () => {
         data: $("#form_login").serializeArray(),
         dataType: "JSON",
         async: true,
-        beforeSend: function () {
-            // $("#carregar").html(
-            //     "<img src='img/preloader.gif' style='width: 40px;' style='display: none; text-align: center;'> CARREGANDO"
-            // );
-        },
-        complete: function () {
-            // $("#carregar").html("");
-        },
+        beforeSend: function () {},
+        complete: function () {},
         success: function (retorno) {
             if (retorno.resultado) tela_inicial();
             else novo_user();
         },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            // alert_error("Erro, Desculpe!");
-        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {},
     });
 };
 
