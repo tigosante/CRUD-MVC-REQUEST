@@ -18,6 +18,11 @@ class LoginC extends AbController
     {
         return $this->daoUser->verificar_user();
     }
+
+    protected function novo_user()
+    {
+        return $this->daoUser->create();
+    }
 }
 
 LoginC::init();
