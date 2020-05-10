@@ -1,4 +1,5 @@
 <?php
+require_once(ROOT . "/app/home/login/model/userO.class.php");
 
 class UserM
 {

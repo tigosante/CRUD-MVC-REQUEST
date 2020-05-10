@@ -1,7 +1,6 @@
 <?php
 
 require_once(ROOT . "/app/core/classes/abstracts/AbModel.php");
-require_once(ROOT . "/app/home/login/model/userO.class.php");
 require_once(ROOT . "/app/home/login/model/userM.class.php");
 
 class UserDAO extends AbModel
