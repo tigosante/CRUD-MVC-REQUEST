@@ -6,17 +6,20 @@ class UserDAO extends AbModel
     public function verificar_user(UserO $user): bool
     {
         $id = $user->get_id();
+        $ds_email = $user->get_ds_email();
+        $senha_user = $user->get_senha_user();
+
         $sql = "SELECT * FROM `USUARIO` WHERE 1=1 ";
 
         $sql .= $id > -1 ? " AND ID = :ID " : "";
-        $sql .= $user->get_ds_email() ? " AND DS_EMAIL = :DS_EMAIL " : "";
-        $sql .= $user->get_senha_user() ? " AND SENHA_USER = :SENHA_USER " : "";
+        $sql .= $ds_email ? " AND DS_EMAIL = :DS_EMAIL " : "";
+        $sql .= $senha_user ? " AND SENHA_USER = :SENHA_USER " : "";
 
         $comando = $this->pdo->prepare($sql);
 
         $parametros = [
-            ":DS_EMAIL" => $user->get_ds_email(),
-            ":SENHA_USER" => $user->get_senha_user()
+            ":DS_EMAIL" => $ds_email,
+            ":SENHA_USER" => $senha_user
         ];
 
         if ($id > -1) {
