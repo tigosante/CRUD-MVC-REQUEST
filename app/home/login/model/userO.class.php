@@ -7,6 +7,10 @@ class UserO
     private $ds_email = "";
     private $senha_user = "";
 
+    public const NO_USER = "NO_USER";
+    public const DS_EMAIL = "DS_EMAIL";
+    public const SENHA_USER = "SENHA_USER";
+
     public function __construct($no_user = "", $ds_email = "", $senha_user = "")
     {
         $this->no_user = $no_user;
