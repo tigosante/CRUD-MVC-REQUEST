@@ -1,32 +1,28 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"] . "/app/core/classes/abstracts/AbModel.php");
+
+require_once(ROOT . "/app/core/classes/abstracts/AbModel.php");
+require_once(ROOT . "/app/home/login/model/userO.class.php");
+require_once(ROOT . "/app/home/login/model/userM.class.php");
 
 class UserDAO extends AbModel
 {
-    public function verificar_user(UserO $user): bool
+    private $mUser;
+    private $oUser;
+
+    public function __construct()
     {
-        $id = $user->get_id();
-        $ds_email = $user->get_ds_email();
-        $senha_user = $user->get_senha_user();
+        $this->oUser = new UserO;
+        $this->mUser = new UserM;
+        parent::__construct();
+    }
 
-        $sql = "SELECT * FROM `USUARIO` WHERE 1=1 ";
+    public function verificar_user(): bool
+    {
+        $this->oUser->set_all_parametros();
 
-        $sql .= $id > -1 ? " AND ID = :ID " : "";
-        $sql .= $ds_email ? " AND DS_EMAIL = :DS_EMAIL " : "";
-        $sql .= $senha_user ? " AND SENHA_USER = :SENHA_USER " : "";
-
+        $sql = $this->mUser->sql_verificar_user($this->oUser);
         $comando = $this->pdo->prepare($sql);
 
-        $parametros = [
-            ":DS_EMAIL" => $ds_email,
-            ":SENHA_USER" => $senha_user
-        ];
-
-        if ($id > -1) {
-            $parametros[":ID"] = $id;
-        }
-
-
-        return ($comando->execute($parametros) && $comando->rowCount() === 1);
+        return ($comando->execute($this->mUser->get_parametos()) && $comando->rowCount() === 1);
     }
 }
