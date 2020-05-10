@@ -3,8 +3,8 @@ let login_user = () => {
         method: "POST",
         url: "../../../../app/home/login/controller/LoginC.class.php",
         data: $("#form_login").serializeArray(),
-        dataType: "JSON",
         async: true,
+        dataType: "JSON",
         beforeSend: function () {},
         complete: function () {},
         success: function (retorno) {

@@ -36,14 +36,14 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label for="ds_email">E-mail</label>
-                                <input type="text" class="form-control " id="ds_email" name="ds_email" placeholder="e-mail">
+                                <input type="text" class="form-control " id="ds_email" name="ds_email" placeholder="e-mail" required>
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label for="senha_user">Senha</label>
-                                <input type="password" class="form-control " id="senha_user" name="senha_user" placeholder="senha">
+                                <input type="password" class="form-control " id="senha_user" name="senha_user" placeholder="senha" required>
                             </div>
                         </div>
                     </div>
