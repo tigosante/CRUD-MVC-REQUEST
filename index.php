@@ -1,7 +1,8 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"] . "/model/conexao/conexao.php");
+define($document_root, $_SERVER["DOCUMENT_ROOT"], true);
 
-$mConexao = new Conexao();
-if ($mConexao->conectar()) {
-    require_once($_SERVER["DOCUMENT_ROOT"] . "/screens/pg_inicial.php");
+require_once($document_root . "/app/core/config/conexao.php");
+
+if ((new Conexao())->conectar()) {
+    require_once($document_root . "/screens/pg_inicial.php");
 }

@@ -9,6 +9,15 @@ class Conexao implements IConexao
     private static $username = "user_teste";
     private static $password = "123456";
 
+    public function __construct()
+    {
+        try {
+            self::$conexao = new PDO(self::$dsn, self::$username, self::$password);
+        } catch (PDOException $e) {
+            $this->errorConexao($e);
+        }
+    }
+
     public static function getInstance()
     {
         if (self::$conexao === NULL) {
@@ -16,17 +25,6 @@ class Conexao implements IConexao
         }
 
         return self::$conexao;
-    }
-
-    public function conectar()
-    {
-        try {
-            self::$conexao = new PDO(self::$dsn, self::$username, self::$password);
-        } catch (PDOException $e) {
-            $this->errorConexao($e);
-        }
-
-        return true;
     }
 
     public function errorConexao($error)
