@@ -19,9 +19,24 @@ class LoginC extends AbController
         return $this->daoUser->verificar_user();
     }
 
-    protected function novo_user()
+    protected function cria_user()
     {
         return $this->daoUser->create();
+    }
+
+    protected function busca_user()
+    {
+        return $this->daoUser->read();
+    }
+
+    protected function atualiza_user()
+    {
+        return $this->daoUser->update(intval($_REQUEST["id"]));
+    }
+
+    protected function deleta_user()
+    {
+        return $this->daoUser->delete(intval($_REQUEST["id"]));
     }
 }
 
