@@ -1,23 +1,18 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"] . "/model/conexao/conexao.php");
+
+require_once($_SERVER["DOCUMENT_ROOT"] . "/app/core/classes/interfaces/IConexao.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/app/core/config/conexao.php");
 
 abstract class AbModel
 {
     protected $pdo;
 
-    public function __construct()
+    public function __construct(IConexao $conexao = NULL)
     {
+        // if ($conexao === NULL) {
         $this->pdo = Conexao::getInstance();
-    }
-
-    public function buscar($comando)
-    {
-        $comando = $this->pdo->prepare("SELECT * FROM `teste` ");
-
-        if ($comando->execute()) {
-            return $comando->fetchAll()[0]["nome"];
-        }
-
-        return $comando->errorInfo();
+        // } else {
+        //     $this->pdo = $conexao::getInstance();
+        // }
     }
 }

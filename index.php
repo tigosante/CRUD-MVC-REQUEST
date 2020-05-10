@@ -1,8 +1,12 @@
 <?php
-define($document_root, $_SERVER["DOCUMENT_ROOT"], true);
 
-require_once($document_root . "/app/core/config/conexao.php");
+define("DOCUMENT_ROOT", $_SERVER["DOCUMENT_ROOT"], true);
+require_once(DOCUMENT_ROOT . "/app/core/config/conexao.php");
 
-if ((new Conexao())->conectar()) {
-    require_once($document_root . "/screens/pg_inicial.php");
+$conexao = new Conexao;
+
+if (!isset($conexao)) {
+    require_once(DOCUMENT_ROOT . "/app/home/home.php");
+} else {
+    require_once(DOCUMENT_ROOT . "/app/home/login/login_page.php");
 }

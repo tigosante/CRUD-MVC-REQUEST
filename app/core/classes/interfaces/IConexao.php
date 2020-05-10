@@ -2,6 +2,6 @@
 
 interface IConexao
 {
-    public function conectar();
+    public static function getInstance();
     public function errorConexao($error);
 }

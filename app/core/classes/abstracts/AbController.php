@@ -10,6 +10,12 @@ abstract class AbController
     public function __construct()
     {
         $acao = trim($_REQUEST["acao"]);
-        echo json_encode($this->$acao());
+        $resultado = $this->$acao();
+
+        if ($resultado === true || $resultado === false) {
+            echo json_encode(["resultado" => $resultado]);
+        } else {
+            echo json_encode($resultado);
+        }
     }
 }
