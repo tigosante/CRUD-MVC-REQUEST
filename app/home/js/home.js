@@ -1,7 +1,7 @@
 let login_user = () => {
     $.ajax({
         method: "POST",
-        url: "../../../../app/home/login/controller/LoginC.class.php",
+        url: "../../../../app/home/controller/HomeC.class.php",
         data: $("#form_login").serializeArray(),
         async: true,
         dataType: "JSON",
@@ -16,7 +16,9 @@ let login_user = () => {
 };
 
 let tela_inicial = () => {
-    window.location = "#app/home/home";
+    window.location.replace("#app/home/home");
 };
 
-let novo_user = () => {};
+let novo_user = () => {
+    window.location.replace("#app/home/nove_user/nove_user");
+};

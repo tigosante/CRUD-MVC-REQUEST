@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="./app/home/login/js/login.js"></script>
+    <script type="text/javascript" src="./app/home/js/home.js"></script>
 </body>
 
 </html>

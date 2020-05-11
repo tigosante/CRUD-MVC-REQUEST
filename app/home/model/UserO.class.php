@@ -24,9 +24,15 @@ class UserO
             $metodo = "set_" . $chave;
 
             if ($chave !== "acao" && method_exists($this, $metodo)) {
-                $this->$metodo($valor);
+                try {
+                    $this->$metodo($valor);
+                } catch (Throwable $e) {
+                    return false;
+                }
             }
         }
+
+        return true;
     }
 
     public function get_id(): int
