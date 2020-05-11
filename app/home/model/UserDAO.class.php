@@ -30,14 +30,14 @@ class UserDAO extends AbModel
         return ($comando->execute($this->parametros) && $comando->rowCount() === 1);
     }
 
-    public function merge(int $id = NULL)
+    public function merge(UserO $user)
     {
-        return $id === NULL ? $this->create() : $this->update($id);
+        return $user->get_id() === -1 ? $this->create($user) : $this->update($user->get_id());
     }
 
     public function create(UserO $user)
     {
-        $this->sql = "INSERT INTO USUARIO ( NO_USER, DS_EMAIL, SENHA_USER)
+        $this->sql = "INSERT INTO USUARIO (NO_USER, DS_EMAIL, SENHA_USER)
             VALUES (:NO_USER, :DS_EMAIL, :SENHA_USER)";
 
         $this->parametros = [

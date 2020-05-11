@@ -9,10 +9,10 @@ abstract class AbModel
 
     public function __construct(IConexao $conexao = NULL)
     {
-        // if ($conexao === NULL) {
-        $this->pdo = Conexao::getInstance();
-        // } else {
-        //     $this->pdo = $conexao::getInstance();
-        // }
+        if ($conexao === NULL) {
+            $this->pdo = Conexao::getInstance();
+        } else {
+            $this->pdo = $conexao::getInstance();
+        }
     }
 }

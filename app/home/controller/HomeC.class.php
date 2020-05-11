@@ -23,6 +23,12 @@ class HomeC extends AbController
         return $validacao ? $this->daoUser->verificar_user($this->oUser) : $validacao;
     }
 
+    protected function merge()
+    {
+        $validacao = $this->oUser->set_all_parametros();
+        return $validacao ? $this->daoUser->merge($this->oUser) : $validacao;
+    }
+
     protected function cria_user()
     {
         $validacao = $this->oUser->set_all_parametros();
