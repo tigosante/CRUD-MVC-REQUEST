@@ -3,7 +3,7 @@
 require_once($_SERVER["DOCUMENT_ROOT"] . "/app/core/classes/interfaces/IConexao.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/app/core/config/conexao.php");
 
-abstract class AbModel
+abstract class AbDAO
 {
     protected $pdo;
 

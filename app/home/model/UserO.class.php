@@ -6,6 +6,7 @@ class UserO
     private $no_user = "";
     private $ds_email = "";
     private $senha_user = "";
+    private $conf_senha_user = "";
 
     public const NO_USER = "NO_USER";
     public const DS_EMAIL = "DS_EMAIL";
@@ -73,5 +74,12 @@ class UserO
     public function set_senha_user(String $senha_user): void
     {
         $this->senha_user = $senha_user;
+    }
+
+    public function set_conf_senha_user(String $conf_senha_user): void
+    {
+        if ($this->senha_user === $conf_senha_user) {
+            $this->senha_user = $conf_senha_user;
+        }
     }
 }

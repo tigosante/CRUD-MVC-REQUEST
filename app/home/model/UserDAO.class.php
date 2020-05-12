@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT . "/app/core/classes/abstracts/AbModel.php");
+require_once(ROOT . "/app/core/classes/abstracts/AbDAO.php");
 require_once(ROOT . "/app/home/model/userO.class.php");
 
-class UserDAO extends AbModel
+class UserDAO extends AbDAO
 {
     private $sql = "";
     private $parametros = [];

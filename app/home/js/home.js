@@ -1,3 +1,8 @@
+let checa_user = () => {
+    const path = "#app/home/screens/login_page";
+    trocar_conteudo_pagina(path);
+};
+
 let login_user = () => {
     $.ajax({
         method: "POST",
@@ -15,10 +20,30 @@ let login_user = () => {
     });
 };
 
-let tela_inicial = () => {
-    window.location.replace("#app/home/home");
+let novo_user = () => {
+    $.ajax({
+        method: "POST",
+        url: "../../../../app/home/controller/HomeC.class.php",
+        data: $("#form_novo_user").serializeArray(),
+        async: true,
+        dataType: "JSON",
+        beforeSend: function () {},
+        complete: function () {},
+        success: function (retorno) {
+            if (retorno.resultado) {
+                alert("Usuário cadastrado");
+                window.location.hash = "#app/home/screens/home_page";
+            } else novo_user();
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {},
+    });
 };
 
-let novo_user = () => {
-    window.location.replace("#app/home/nove_user/nove_user");
+let tela_inicial = () => {
+    window.location.hash = "#app/home/screens/home_page";
+};
+
+let tela_novo_user = () => {
+    const path = "#app/home/screens/novo_user";
+    trocar_conteudo_pagina(path);
 };
