@@ -6,5 +6,5 @@ require_once(DOCUMENT_ROOT . "/app/core/config/conexao.php");
 $conexao = new Conexao;
 
 if (isset($conexao)) {
-    require_once(DOCUMENT_ROOT . "/app/home/screens/home.php");
+    require_once(DOCUMENT_ROOT . "/app/home/page/home.php");
 }

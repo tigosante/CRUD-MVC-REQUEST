@@ -18,7 +18,7 @@
 
     <script type="text/javascript" src="./js/ajax.js"></script>
     <script>
-        buscar();
+    buscar();
     </script>
 </body>
 

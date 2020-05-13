@@ -1,5 +1,5 @@
 let checa_user = () => {
-    const path = "#app/home/screens/login_page";
+    const path = "#app/home/page/login_page";
     trocar_conteudo_pagina(path);
 };
 
@@ -32,7 +32,7 @@ let novo_user = () => {
         success: function (retorno) {
             if (retorno.resultado) {
                 alert("Usuário cadastrado");
-                window.location.hash = "#app/home/screens/home_page";
+                window.location.hash = "#app/home/page/home_page";
             } else novo_user();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {},
@@ -40,10 +40,10 @@ let novo_user = () => {
 };
 
 let tela_inicial = () => {
-    window.location.hash = "#app/home/screens/home_page";
+    window.location.hash = "#app/home/page/home_page";
 };
 
 let tela_novo_user = () => {
-    const path = "#app/home/screens/novo_user";
+    const path = "#app/home/page/novo_user";
     trocar_conteudo_pagina(path);
 };
