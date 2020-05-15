@@ -12,14 +12,14 @@ $user = true;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="../../../app/assets/css/boostrap/boostrap.4.4.0.min.css">
+    <link rel="stylesheet" href="app/assets/css/boostrap/boostrap.4.4.0.min.css">
 
-    <script src="../../app/assets/lib/js/jquery/jquery.3.5.min.js"></script>
-    <script src="../../app/assets/lib/js/bootstrap/bootstrap.4.4.0.min.js"></script>
-    <script src="../../app/assets/lib/js/popper/popper.min.js"></script>
+    <script src="app/assets/js/jquery/jquery.3.5.min.js"></script>
+    <script src="app/assets/js/bootstrap/bootstrap.4.4.0.min.js"></script>
+    <script src="app/assets/js/popper/popper.min.js"></script>
 
-    <script type="text/javascript" src="../../app/assets/js/default_application/default_application.js"></script>
-    <script type="text/javascript" src="../lib/home/js/home.js"></script>
+    <script type="text/javascript" src="app/assets/js/default_application/default_application.js"></script>
+    <script type="text/javascript" src="lib/home/js/home.js"></script>
 
     <title>Plataforma de Treinamento</title>
 

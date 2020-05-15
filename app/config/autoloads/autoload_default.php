@@ -1,22 +1,18 @@
 <?php
-spl_autoload_register(function ($nameSpace) {
-    definirValores();
 
-    foreach (PATHS as  $path) {
-        $dirCompleto = $path . DIR . getNameSpace($nameSpace) . EXTENSAO;
+define("ROOT", $_SERVER["DOCUMENT_ROOT"], true);
+define("PATHS", ["/app/", "/lib/", "/tests/"], true);
+define("EXTENSAO", ".class.php", true);
+
+spl_autoload_register(function ($nameSpace) {
+    foreach (PATHS as $path) {
+        $dirCompleto =   ROOT . $path . getNameSpace($nameSpace) . EXTENSAO;
 
         if (is_file($dirCompleto) && file_exists($dirCompleto) && (!class_exists(getClasse($nameSpace)))) {
             require_once $dirCompleto;
         }
     }
 });
-
-function definirValores()
-{
-    define("DIR", $_SERVER["DOCUMENT_ROOT"], true);
-    define("PATHS", ["app/", "lib/", "tests/"], true);
-    define("EXTENSAO", ".class.php", true);
-}
 
 function getNameSpace($nameSpace)
 {

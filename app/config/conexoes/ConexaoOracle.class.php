@@ -2,18 +2,18 @@
 
 namespace config\conexoes;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/config/autoloads/autoload_default.php";
 
 use core\classes\interfaces\IConexao;
 
-class Conexao implements IConexao
+class ConexaoOracle implements IConexao
 {
     private static $conexao;
 
     private static $dsn = "mysql:host=localhost;dbname=mysql";
     private static $options = [\PDO::FETCH_ASSOC];
-    private static $username = "user_teste";
-    private static $password = "123456";
+    private static $username = "root";
+    private static $password = "";
 
     public function __construct()
     {
