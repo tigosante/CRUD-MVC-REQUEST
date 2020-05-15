@@ -1,6 +1,6 @@
 <?php
 
-namespace core\config;
+namespace config\conexoes;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.php";
 

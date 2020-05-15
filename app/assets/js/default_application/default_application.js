@@ -1,11 +1,11 @@
 $(document).ready(function (e) {
     if (window.location.hash) {
-        const path = window.location.hash.substring(1);
+        const path = "lib/" + window.location.hash.substring(1);
         $("#conteudo_plataforma").load(path + ".php");
     }
 
     jQuery(window).on("hashchange", function (e) {
-        const path = window.location.hash.substring(1);
+        const path = "lib/" + window.location.hash.substring(1);
         $("#conteudo_plataforma").load(path + ".php");
     });
 
