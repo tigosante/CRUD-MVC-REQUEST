@@ -1,9 +1,12 @@
 <?php
-define("ROOT", $_SERVER["DOCUMENT_ROOT"], true);
 
-require_once(ROOT . "/app/core/classes/abstracts/AbController.php");
-require_once(ROOT . "/app/home/model/UserDAO.class.php");
-require_once(ROOT . "/app/home/model/UserO.class.php");
+namespace home\controller;
+
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.php";
+
+use home\model\UserO;
+use home\model\UserDAO;
+use core\classes\abstracts\AbController;
 
 class HomeC extends AbController
 {

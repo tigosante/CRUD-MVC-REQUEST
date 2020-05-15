@@ -1,7 +1,10 @@
 <?php
 
-require_once(ROOT . "/app/core/classes/abstracts/AbDAO.php");
-require_once(ROOT . "/app/home/model/userO.class.php");
+namespace home\model;
+
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.php";
+
+use home\model\UserO;
 
 class UserDAO extends AbDAO
 {

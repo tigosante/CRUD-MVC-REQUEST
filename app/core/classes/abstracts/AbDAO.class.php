@@ -1,7 +1,11 @@
 <?php
 
-require_once($_SERVER["DOCUMENT_ROOT"] . "/app/core/classes/interfaces/IConexao.php");
-require_once($_SERVER["DOCUMENT_ROOT"] . "/app/core/config/conexao.php");
+namespace core\classes\abstracts;
+
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.php";
+
+use core\config\Conexao;
+use core\classes\interfaces\IConexao;
 
 abstract class AbDAO
 {

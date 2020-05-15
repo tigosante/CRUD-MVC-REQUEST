@@ -1,10 +1,8 @@
 <?php
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.php";
 
-define("DOCUMENT_ROOT", $_SERVER["DOCUMENT_ROOT"], true);
-require_once(DOCUMENT_ROOT . "/app/core/config/conexao.php");
-
-$conexao = new Conexao;
+$conexao = new core\config\Conexao;
 
 if (isset($conexao)) {
-    require_once(DOCUMENT_ROOT . "/app/home/page/home.php");
+    require_once($_SERVER["DOCUMENT_ROOT"] . "/app/home/page/home.php");
 }

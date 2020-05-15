@@ -1,5 +1,7 @@
 <?php
 
+namespace home\model;
+
 class UserO
 {
     private $id = -1;
@@ -27,7 +29,7 @@ class UserO
             if ($chave !== "acao" && method_exists($this, $metodo)) {
                 try {
                     $this->$metodo($valor);
-                } catch (Throwable $e) {
+                } catch (\Throwable $e) {
                     return false;
                 }
             }
