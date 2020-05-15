@@ -9,15 +9,15 @@
 
 # Design Patterns
 - PDO: PHP DATA OBJECTS.
-- - Objetos statments usados para tratar dados do banco de dados.
+  - Objetos statments usados para tratar dados do banco de dados.
 
 - DAO: DATA ACCESSS OBJECTS.
-- - Abstração das tabelas do banco de dados em forma de objetos.
+  - Abstração das tabelas do banco de dados em forma de objetos.
 
 - MVC: MODEL, VIEW e CONTROLLER.
-- - Pedrão de organização de arquivos e pastas para separar responsabilidades dentro do projeto.
+  - Pedrão de organização de arquivos e pastas para separar responsabilidades dentro do projeto.
 
 - Singleton: Única instância de um objeto.
-- - Usado para manter apenas uma instância de um ou mais objetos.
+  - Usado para manter apenas uma instância de um ou mais objetos.
 
 # Esse mini curso foi desenvolvido para o treinamento de novos estagiários e está aberto ao publico.
