@@ -1,15 +1,20 @@
 <?php
 
+/**
+ * nome do pacote/path ao qual esta classe pertence.
+ */
+
 namespace core\classes\abstracts;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.php";
 abstract class Controller
 {
-    public static function init()
+    public static function init(): object
     {
         $classe = get_called_class();
         return new $classe();
     }
+
     public function __construct()
     {
         $acao = trim($_REQUEST["acao"]);

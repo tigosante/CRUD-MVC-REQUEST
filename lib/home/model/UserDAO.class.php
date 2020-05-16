@@ -1,16 +1,29 @@
 <?php
 
+/**
+ * nome do pacote/path ao qual esta classe pertence.
+ */
+
 namespace home\model;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.php";
 
-use home\model\UserO;
+/**
+ * namespace: Pacote/path de uma determinada classe.
+ * Usado para importar uma determinada classes.
+ */
 
-class UserDAO extends AbDAO
+use home\_objetos\UserO;
+use core\classes\abstracts\ModelDAO;
+
+/**
+ * Objeto de tratamento de dados vindos do DB.
+ */
+class UserDAO extends ModelDAO
 {
-    private $sql = "";
-    private $parametros = [];
-
+    /**
+     * Verifica a existência de um usuário no BD.
+     */
     public function verificar_user(UserO $user): bool
     {
         $this->sql = "SELECT * FROM USUARIO WHERE 1=1 ";
@@ -33,12 +46,15 @@ class UserDAO extends AbDAO
         return ($comando->execute($this->parametros) && $comando->rowCount() === 1);
     }
 
-    public function merge(UserO $user)
+    /**
+     * Verifica o objeto recebido e cria ou atualiza o mesmo no DB.
+     */
+    public function merge(UserO $user): bool
     {
         return $user->get_id() === -1 ? $this->create($user) : $this->update($user->get_id());
     }
 
-    public function create(UserO $user)
+    public function create(UserO $user): bool
     {
         $this->sql = "INSERT INTO USUARIO (NO_USER, DS_EMAIL, SENHA_USER)
             VALUES (:NO_USER, :DS_EMAIL, :SENHA_USER)";
@@ -52,7 +68,10 @@ class UserDAO extends AbDAO
         return $this->pdo->prepare($this->sql)->execute($this->parametros);
     }
 
-    public function read(UserO $user)
+    /**
+     * Busca todos, alguns ou apenas 1 usuário.
+     */
+    public function read(UserO $user): array
     {
         $this->sql = "SELECT * FROM USUARIO WHERE 1=1 ";
         $this->parametros = [];
@@ -80,13 +99,19 @@ class UserDAO extends AbDAO
         return $id_validate ? $comando->fetch() : $comando->fetchAll();
     }
 
-    public function update(int $id)
+    /**
+     * Atualiza as informações de um determinado usuário no BD.
+     */
+    public function update(int $id): bool
     {
         $this->sql = "UPDATE USUARIO SET NO_USER= :NO_USER, DS_EMAIL= :DS_EMAIL, SENHA_USER= :SENHA_USER WHERE ID = :ID";
         return $this->pdo->prepare($this->sql)->execute([":ID" => $id]);
     }
 
-    public function delete(int $id)
+    /**
+     * Apaga o registro de um determinado usuário do DB;
+     */
+    public function delete(int $id): bool
     {
         $this->sql = "DELETE FROM USUARIO WHERE ID = :ID";
         return $this->pdo->prepare($this->sql)->execute([":ID" => $id]);
