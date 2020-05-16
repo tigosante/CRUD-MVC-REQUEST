@@ -21,7 +21,7 @@
 
 -   MVC: MODEL, VIEW e CONTROLLER.
 
-    -   Pedrão de organização de arquivos e pastas para separar responsabilidades dentro do projeto.
+    -   Padrão de organização de arquivos e pastas para separar responsabilidades dentro do projeto.
 
 -   Singleton: Única instância de um objeto.
     -   Usado para manter apenas uma instância de um ou mais objetos.
