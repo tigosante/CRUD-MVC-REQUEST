@@ -18,4 +18,11 @@ use core\classes\abstracts\View;
  */
 class ModuloV extends View
 {
+    /**
+     * Cria uma tabela com os dados dos modulos informados.
+     */
+    public function montar_tabela_modulos()
+    {
+        // Implementação
+    }
 }

@@ -1,11 +1,23 @@
 <?php
 
+/**
+ * nome do pacote/path ao qual esta classe pertence.
+ */
+
 namespace config\conexoes;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/config/autoloads/autoload_default.php";
+/**
+ * namespace: Pacote/path de uma determinada classe.
+ * Usado para importar uma determinada classes.
+ */
 
 use core\classes\interfaces\IConexao;
 
+/**
+ * Objeto que realiza a conexão com o Oracle DB e implementa a interface IConexao.
+ * Cria a conexão usando PDO - PHP Data Objects.
+ */
 class ConexaoOracle implements IConexao
 {
     private static $conexao;
@@ -24,15 +36,23 @@ class ConexaoOracle implements IConexao
         }
     }
 
+    /**
+     * Método que verifica se existe a instância de uma determinada conexão.
+     * Retorna a mesma caso já exista.
+     * Retorna uma nova caso não exista.
+     */
     public static function getInstance()
     {
-        if (self::$conexao === NULL) {
+        if (isset(self::$conexao)) {
             self::$conexao = new \PDO(self::$dsn, self::$username, self::$password);
         }
 
         return self::$conexao;
     }
 
+    /**
+     * Responsável por informar os erros de conexão.
+     */
     public function errorConexao($error)
     {
         $error_message = $error->getMessage();

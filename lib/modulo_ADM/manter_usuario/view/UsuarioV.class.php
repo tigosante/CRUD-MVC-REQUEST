@@ -18,4 +18,11 @@ use core\classes\abstracts\view;
  */
 class UsuarioV extends View
 {
+    /**
+     * Cria uma tabela com os dados dos usuários informados.
+     */
+    public function montar_tabela_usuario()
+    {
+        // Implementação
+    }
 }
