@@ -2,8 +2,8 @@
 
 namespace modulo_adm\usuario\model;
 
-use core\classes\abstracts\AbDAO;
+use core\classes\abstracts\ModelDAO;
 
-class UsuarioDAO extends AbDAO
+class UsuarioDAO extends ModelDAO
 {
 }

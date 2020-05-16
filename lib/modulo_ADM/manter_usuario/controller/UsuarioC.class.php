@@ -2,9 +2,9 @@
 
 namespace modulo_adm\usuario\controller;
 
-use core\classes\abstracts\AbController;
+use core\classes\abstracts\Controller;
 
-class UsuarioC extends AbController
+class UsuarioC extends Controller
 {
 }
 

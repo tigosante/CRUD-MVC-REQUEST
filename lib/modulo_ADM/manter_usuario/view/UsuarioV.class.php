@@ -1,9 +1,9 @@
 <?php
 
-namespace modulo_adm\usuario\view;
+namespace modulo_adm\usuario\View;
 
 use core\classes\abstracts\view;
 
-class UsuarioV extends AbView
+class UsuarioV extends View
 {
 }
