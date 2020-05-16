@@ -5,8 +5,9 @@
 -   Páginas HTML5.
 -   Folha de estilos CSS 3.
 -   Requisição por Jquery.
--   Banco de dodos MySQL: XAMPP.
--   PDD: Programação orientada a objetos em PHP 7.2.3.
+-   Banco de dados MySQL: XAMPP.
+-   Criação de um autoload para usar namespaces.
+-   POO: Programação orientada a objetos em PHP 7.2.3.
 
 # Design Patterns
 
