@@ -1,5 +1,7 @@
 # Treinamento em PHP, JS, Jquery e MySQL.
 
+# Esse mini curso foi desenvolvido para o treinamento de novos estagiários e está aberto ao publico.
+
 # Densenvolvimento:
 
 -   Páginas HTML5.
@@ -25,5 +27,3 @@
 
 -   Singleton: Única instância de um objeto.
     -   Usado para manter apenas uma instância de um ou mais objetos.
-
-# Esse mini curso foi desenvolvido para o treinamento de novos estagiários e está aberto ao publico.
