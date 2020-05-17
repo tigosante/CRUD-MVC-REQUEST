@@ -37,6 +37,8 @@ class UserO extends ObjetoDAO
         $this->no_user = $no_user;
         $this->ds_email = $ds_email;
         $this->senha_user = $senha_user;
+
+        parent::__construct("TB_USER", [self::NO_USER, self::DS_EMAIL, self::SENHA_USER]);
     }
 
 
