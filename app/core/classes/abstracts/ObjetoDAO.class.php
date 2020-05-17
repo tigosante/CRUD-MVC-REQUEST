@@ -52,6 +52,7 @@ abstract class ObjetoDAO extends ModelDAO
 
     public function merge()
     {
+        return empty($this->get_sq_value()) ? $this->create() : $this->update();
     }
 
     public function create()
@@ -102,7 +103,12 @@ abstract class ObjetoDAO extends ModelDAO
     private function get_sq_value()
     {
         $get_sq = "get_" . strtolower($this->get_sq_name());
-        return $this->$get_sq();
+
+        try {
+            return $this->$get_sq();
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
 
     private function get_binds(): string
