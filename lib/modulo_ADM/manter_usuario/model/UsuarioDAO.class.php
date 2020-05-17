@@ -31,5 +31,7 @@ class UsuarioDAO extends ModelDAO
         $user->find($sq_user);
         $user->update();
         $user->delete($sq_user);
+
+        $user->merge();
     }
 }
