@@ -50,6 +50,10 @@ abstract class ObjetoDAO extends ModelDAO
         return true;
     }
 
+    public function merge()
+    {
+    }
+
     public function create()
     {
         $this->add_sq_binds();
@@ -92,12 +96,12 @@ abstract class ObjetoDAO extends ModelDAO
 
     private function get_sq_name(): string
     {
-        return "SQ_" . $this->table;
+        return "SQ_" . substr($this->table, 3);
     }
 
     private function get_sq_value()
     {
-        $get_sq = "get_" . strtolower($this->table);
+        $get_sq = "get_" . strtolower($this->get_sq_name());
         return $this->$get_sq();
     }
 
