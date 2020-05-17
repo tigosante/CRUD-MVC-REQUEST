@@ -50,12 +50,12 @@ abstract class ObjetoDAO extends ModelDAO
         return true;
     }
 
-    public function merge()
+    public function merge(): bool
     {
         return empty($this->get_sq_value()) ? $this->create() : $this->update();
     }
 
-    public function create()
+    public function create(): bool
     {
         $this->add_sq_binds();
 
@@ -63,7 +63,7 @@ abstract class ObjetoDAO extends ModelDAO
         return $this->pdo->prepare($query)->execute($this->get_binds());
     }
 
-    public function find(int $sq_value)
+    public function find(int $sq_value): array
     {
         $query = "SELECT * FROM {$this->db_name}{$this->table} WHERE {$this->get_sq_name()} = :{$this->get_sq_name()}";
         $data = $this->pdo->prepare($query);
