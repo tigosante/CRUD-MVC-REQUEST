@@ -10,12 +10,9 @@
 -   Banco de dados MySQL: XAMPP.
 -   Criação de um autoload para usar namespaces.
 -   POO: Programação orientada a objetos em PHP 7.2.3.
+-   PDO: PHP DATA OBJECTS - Objetos statments usados para tratar dados do banco de dados.
 
 # Design Patterns
-
--   PDO: PHP DATA OBJECTS.
-
-    -   Objetos statments usados para tratar dados do banco de dados.
 
 -   DAO: DATA ACCESSS OBJECTS.
 
