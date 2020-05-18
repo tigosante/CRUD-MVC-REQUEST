@@ -32,6 +32,7 @@ class TreinamentoC extends Controller
         $this->model = new TreinamentoM;
         $this->oTreinamento = new TreinamentoO;
         $this->vTreinamento = new TreinamentoV;
+        parent::__construct();
     }
 
     protected function get_dados()

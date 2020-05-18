@@ -32,6 +32,8 @@ abstract class ObjetoDAO extends ModelDAO
         $this->table = $table;
         $this->db_name = $db_name;
         $this->columns = $columns;
+
+        parent::__construct();
     }
 
     /**
