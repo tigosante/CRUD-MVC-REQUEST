@@ -27,4 +27,19 @@ class TreinamentoM extends ModelDAO
 
         return $dados->fetchAll(\PDO::FETCH_OBJ);
     }
+
+    public function update_dado(TreinamentoO $treinamento): bool
+    {
+        return $treinamento->update();
+    }
+
+    public function set_novo_dado(TreinamentoO $treinamento): bool
+    {
+        return $treinamento->create();
+    }
+
+    public function delete_dado(TreinamentoO $treinamento): bool
+    {
+        return $treinamento->delete();
+    }
 }

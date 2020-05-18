@@ -43,6 +43,33 @@ class TreinamentoC extends Controller
         $dados = $this->model->get_dados($this->oTreinamento);
         return $this->vTreinamento->montar_tabela($dados);
     }
+
+    protected function update_dado()
+    {
+        if (!$this->oTreinamento->set_all_parametros()) {
+            return false;
+        }
+
+        return $this->model->update_dado($this->oTreinamento);
+    }
+
+    protected function set_novo_dado()
+    {
+        if (!$this->oTreinamento->set_all_parametros()) {
+            return false;
+        }
+
+        return $this->model->set_novo_dado($this->oTreinamento);
+    }
+
+    protected function delete_dado()
+    {
+        if (!$this->oTreinamento->set_all_parametros()) {
+            return false;
+        }
+
+        return $this->model->delete_dado($this->oTreinamento);
+    }
 }
 
 TreinamentoC::init();

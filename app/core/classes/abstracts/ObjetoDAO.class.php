@@ -106,8 +106,12 @@ abstract class ObjetoDAO extends ModelDAO
         return $this->pdo->prepare($query)->execute($this->get_binds());
     }
 
-    public function delete(int $sq_value): bool
+    public function delete(int $sq_value = -1): bool
     {
+        if ($sq_value < 0) {
+            $sq_value = $this->get_sq_value();
+        }
+
         $query = "DELETE {$this->db_name}{$this->table} WHERE {$this->get_sq_name()} = :{$this->get_sq_name()}";
         return $this->pdo->prepare($query)->execute([":{$this->get_sq_name()}" => $sq_value]);
     }
