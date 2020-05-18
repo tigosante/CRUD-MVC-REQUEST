@@ -6,7 +6,7 @@
 
 namespace core\classes\interfaces;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/config/autoloads/autoload_default.php";
 /**
  * Interface para uso de vários models sem precisar centralizar a instância desses mesmo em outras classes model.
  */

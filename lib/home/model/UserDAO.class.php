@@ -6,7 +6,7 @@
 
 namespace home\model;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/config/autoloads/autoload_default.php";
 
 /**
  * namespace: Pacote/path de uma determinada classe.

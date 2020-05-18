@@ -6,6 +6,8 @@
 
 namespace modulo_adm\usuario\model;
 
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/config/autoloads/autoload_default.php";
+
 /**
  * namespace: Pacote/path de uma determinada classe.
  * Usado para importar uma determinada classes.
@@ -19,19 +21,11 @@ use home\_objetos\UserO;
  */
 class UsuarioDAO extends ModelDAO
 {
-    public function __construct()
+
+    protected function criar_usuario(UserO $usuario): bool
     {
-        $sq_user = 1;
+        // Implementação da regra de negócio.
 
-        $user = new UserO();
-
-        $user->set_all_parametros();
-
-        $user->create();
-        $user->find($sq_user);
-        $user->update();
-        $user->delete($sq_user);
-
-        $user->merge();
+        return $usuario->create();
     }
 }

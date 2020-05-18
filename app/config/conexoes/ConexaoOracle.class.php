@@ -6,7 +6,6 @@
 
 namespace config\conexoes;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/config/autoloads/autoload_default.php";
 /**
  * namespace: Pacote/path de uma determinada classe.
  * Usado para importar uma determinada classes.
@@ -24,8 +23,8 @@ class ConexaoOracle implements IConexao
 
     private static $dsn = "mysql:host=localhost;dbname=mysql";
     private static $options = [\PDO::FETCH_ASSOC];
-    private static $username = "root";
-    private static $password = "";
+    private static $username = "tiago";
+    private static $password = "0TwU9XYElaK8AIms";
 
     public function __construct()
     {
@@ -43,7 +42,7 @@ class ConexaoOracle implements IConexao
      */
     public static function getInstance()
     {
-        if (isset(self::$conexao)) {
+        if (!isset(self::$conexao)) {
             self::$conexao = new \PDO(self::$dsn, self::$username, self::$password);
         }
 

@@ -6,7 +6,7 @@
 
 namespace core\classes\abstracts;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/config/autoloads/autoload_default.php";
 
 /**
  * namespace: Pacote/path de uma determinada classe.
@@ -14,6 +14,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.p
  */
 
 use core\classes\abstracts\ModelDAO;
+use PDO;
 
 /**
  * Abstração de métodos para uso em classes Objeto.
@@ -50,26 +51,50 @@ abstract class ObjetoDAO extends ModelDAO
         return true;
     }
 
-    public function merge(): bool
+    public function merge($get_data = false, $fetch_method = PDO::FETCH_OBJ): bool
     {
-        return empty($this->get_sq_value()) ? $this->create() : $this->update();
+        return empty($this->get_sq_value()) ? $this->create($get_data, $fetch_method) : $this->update();
     }
 
-    public function create(): bool
+    public function create($get_data = false, $fetch_method = PDO::FETCH_OBJ)
     {
         $this->add_sq_binds();
 
         $query = "INSERT INTO {$this->db_name}{$this->table} ({join(', ', $this->columns)}) VALUES (:{join(', :', $this->columns)})";
-        return $this->pdo->prepare($query)->execute($this->get_binds());
+
+        $data = $this->pdo->prepare($query);
+        $result = $data->execute($this->get_binds());
+
+        if ($result) {
+            if ($get_data) {
+                return $this->get_last_data($fetch_method);
+            }
+
+            return $result;
+        }
+
+        return $result;
     }
 
-    public function find(int $sq_value): array
+    public function find_by_sq(int $sq_value, $fetch_method = PDO::FETCH_OBJ): array
     {
         $query = "SELECT * FROM {$this->db_name}{$this->table} WHERE {$this->get_sq_name()} = :{$this->get_sq_name()}";
         $data = $this->pdo->prepare($query);
         $data->execute([":{$this->get_sq_name()}" => $sq_value]);
 
-        return $data->fetch(\PDO::FETCH_OBJ);
+        return $data->fetch($fetch_method);
+    }
+
+    public function find_all($fetch_method = PDO::FETCH_OBJ): array
+    {
+        $query = "SELECT * FROM {$this->db_name}{$this->table}";
+        $data = $this->pdo->prepare($query);
+
+        if ($data->execute()) {
+            return $data->fetchAll($fetch_method);
+        }
+
+        return false;
     }
 
     public function update(): bool
@@ -88,6 +113,18 @@ abstract class ObjetoDAO extends ModelDAO
     {
         $query = "DELETE {$this->db_name}{$this->table} WHERE {$this->get_sq_name()} = :{$this->get_sq_name()}";
         return $this->pdo->prepare($query)->execute([":{$this->get_sq_name()}" => $sq_value]);
+    }
+
+    public function get_last_data($fetch_method = PDO::FETCH_OBJ)
+    {
+        $query = "SELECT * FROM {$this->db_name}{$this->table} WHERE {$this->get_sq_name()} = (SELECT MAX({$this->get_sq_name()}) FROM {$this->db_name}{$this->table})";
+        $data = $this->pdo->prepare($query);
+
+        if ($data->execute()) {
+            return $data->fetch($fetch_method);
+        }
+
+        return false;
     }
 
     private function add_sq_binds(): void

@@ -6,7 +6,7 @@
 
 namespace core\classes\abstracts;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/core/autoloads/autoload_default.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/config/autoloads/autoload_default.php";
 
 
 /**
@@ -20,19 +20,19 @@ use core\classes\interfaces\IConexao;
 /**
  * Abstração de métodos para uso em classes model DAO.
  */
-abstract class ModelDAO
+class ModelDAO
 {
-    protected $pdo;
+    public $pdo;
     protected $sql = "";
     protected $parametros = [];
 
     public function __construct(IConexao $conexao = NULL)
     {
-        if ($conexao === NULL) {
-            $this->pdo = ConexaoOracle::getInstance();
-        } else {
-            $this->pdo = $conexao::getInstance();
-        }
+        // if ($conexao === NULL) {
+        $this->pdo = ConexaoOracle::getInstance();
+        // } else {
+        //     $this->pdo = $conexao::getInstance();
+        // }
     }
 
     /**
