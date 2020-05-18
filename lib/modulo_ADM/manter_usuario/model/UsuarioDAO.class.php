@@ -9,7 +9,7 @@ namespace modulo_adm\usuario\model;
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/config/autoloads/autoload_default.php";
 
 /**
- * namespace: Pacote/path de uma determinada classe.
+ * namespace: Pacote/path/caminho de uma determinada classe..
  * Usado para importar uma determinada classes.
  */
 

@@ -36,7 +36,7 @@ $user = true;
 
 <body>
 
-    <div class="" id="conteudo_plataforma"></div>
+    <div class="container-fluid" id="conteudo_plataforma"></div>
 
     <script>
     checa_user();

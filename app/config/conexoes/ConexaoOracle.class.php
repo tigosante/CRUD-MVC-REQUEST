@@ -7,7 +7,7 @@
 namespace config\conexoes;
 
 /**
- * namespace: Pacote/path de uma determinada classe.
+ * namespace: Pacote/path/caminho de uma determinada classe..
  * Usado para importar uma determinada classes.
  */
 
@@ -21,10 +21,15 @@ class ConexaoOracle implements IConexao
 {
     private static $conexao;
 
+    // private static $dsn = "mysql:host=localhost;dbname=mysql";
+    // private static $options = [\PDO::FETCH_ASSOC];
+    // private static $username = "tiago";
+    // private static $password = "0TwU9XYElaK8AIms";
+
     private static $dsn = "mysql:host=localhost;dbname=mysql";
     private static $options = [\PDO::FETCH_ASSOC];
-    private static $username = "tiago";
-    private static $password = "0TwU9XYElaK8AIms";
+    private static $username = "USR_TREINAMNETO";
+    private static $password = "fhX7VgCniXfkQ8nb";
 
     public function __construct()
     {

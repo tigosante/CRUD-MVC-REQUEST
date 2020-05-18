@@ -4,7 +4,7 @@
  * nome do pacote/path ao qual esta classe pertence.
  */
 
-namespace modulo_adm\_objetos;
+// namespace modulo_adm\_objetos;
 
 /**
  * Objeto que representa a tabela TB_MODULO.

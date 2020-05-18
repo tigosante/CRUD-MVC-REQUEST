@@ -7,7 +7,7 @@
 namespace modulo_adm\modulo\view;
 
 /**
- * namespace: Pacote/path de uma determinada classe.
+ * namespace: Pacote/path/caminho de uma determinada classe..
  * Usado para importar uma determinada classes.
  */
 

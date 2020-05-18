@@ -9,7 +9,7 @@ namespace core\classes\abstracts;
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/config/autoloads/autoload_default.php";
 
 /**
- * namespace: Pacote/path de uma determinada classe.
+ * namespace: Pacote/path/caminho de uma determinada classe..
  * Usado para importar uma determinada classes.
  */
 
@@ -27,7 +27,7 @@ abstract class ObjetoDAO extends ModelDAO
     protected $columns;
     protected $columns_binds;
 
-    public function __construct(string $table, array $columns, string $db_name = "PPC.")
+    public function __construct(string $table, array $columns, string $db_name = "TRE.")
     {
         $this->table = $table;
         $this->db_name = $db_name;
@@ -100,10 +100,7 @@ abstract class ObjetoDAO extends ModelDAO
     public function update(): bool
     {
         $this->add_sq_binds();
-
-        foreach ($this->columns as $column) {
-            array_push($this->columns_binds, " {$column} = :{$column}");
-        }
+        $this->load_binds();
 
         $query = "UPDATE {$this->db_name}{$this->table} SET {join(', ', $this->columns_binds)} WHERE {$this->get_sq_name()} = :{$this->get_sq_name()}";
         return $this->pdo->prepare($query)->execute($this->get_binds());
@@ -127,9 +124,38 @@ abstract class ObjetoDAO extends ModelDAO
         return false;
     }
 
+    public function get_query_insert(): string
+    {
+        return "INSERT INTO {$this->db_name}{$this->table} ({$this->get_columns()}) VALUES ({$this->get_columns_binds()})";
+    }
+
+    public function get_query_select(): string
+    {
+        return "SELECT * FROM {$this->db_name}{$this->table}  WHERE 1=1 ";
+    }
+
+    public function get_query_update(): string
+    {
+        $this->load_binds();
+
+        return "UPDATE {$this->db_name}{$this->table} SET {join(', ', $this->columns_binds)}  WHERE 1=1 ";
+    }
+
+    public function get_query_delete(): string
+    {
+        return "DELETE {$this->db_name}{$this->table}  WHERE 1=1 ";
+    }
+
     private function add_sq_binds(): void
     {
         array_push($this->binds, [":{$this->get_sq_name()}" => $this->get_sq_value()]);
+    }
+
+    private function load_binds(): void
+    {
+        foreach ($this->columns as $column) {
+            array_push($this->columns_binds, " {$column} = :{$column}");
+        }
     }
 
     private function get_sq_name(): string
@@ -151,11 +177,21 @@ abstract class ObjetoDAO extends ModelDAO
     private function get_binds(): string
     {
         foreach ($this->columns as $column) {
-            $method_name = "get_{strtolower($column)}";
+            $method_name = "get_" . strtolower($column);
 
             array_push($this->binds, [":{$column}" => $this->$method_name()]);
         }
 
         return join(", ", $this->binds);
+    }
+
+    private function get_columns(): string
+    {
+        return join(", ", $this->columns);
+    }
+
+    private function get_columns_binds(): string
+    {
+        return ":" . join(", ", $this->columns);
     }
 }
