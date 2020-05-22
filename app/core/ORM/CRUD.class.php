@@ -7,6 +7,7 @@ use core\classes\ORM\Querys;
 abstract class CRUD extends Querys
 {
     private $query = "";
+    private $joins = "";
     private $conditions = "";
     private $query_full = "";
 
@@ -41,6 +42,12 @@ abstract class CRUD extends Querys
     {
         $this->query = "DELETE {$this->db_name}{$this->table_name} WHERE 1=1 ";
 
+        return $this;
+    }
+
+    protected function join(string $type_join, string $table_name, string $condition, string $db_name = "PPC."): object
+    {
+        $this->joins .= " {$type_join} JOIN {$db_name}{$table_name} {$condition} ";
         return $this;
     }
 

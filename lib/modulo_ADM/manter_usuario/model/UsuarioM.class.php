@@ -15,7 +15,11 @@ class UsuarioM extends ModelDAO
         $usuario->create();
         $usuario->insert()->execute();
 
-        $usuario->select()->where($condition_nr_matricula)->fetch();
+        $usuario->select()
+            ->join("LEFT", "TB_MODULO AS MD", "ON (MD.CD_MODULO = USU.CD_MODULO)")
+            ->join("INNER", "VW_DEPENDENCIA AS VW", "ON (VW.CD_EMPRESA_DEPENDENCIA = USU.CD_EMPRESA_DEPENDENCIA)")
+            ->where($condition_nr_matricula)->fetch();
+
         $usuario->select()->where_array($conditions)->fetch_all();
 
         $usuario->update()->execute();
