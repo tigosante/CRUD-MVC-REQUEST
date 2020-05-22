@@ -13,13 +13,13 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/config/autoloads/autoload_default
  * Usado para importar uma determinada classes.
  */
 
-use core\classes\abstracts\ModelDAO;
+use core\classes\ORM\CRUD;
 use PDO;
 
 /**
  * Abstração de métodos para uso em classes Objeto.
  */
-abstract class ObjetoDAO extends ModelDAO
+abstract class ObjetoDAO extends CRUD
 {
     protected $table;
     protected $binds;

@@ -7,8 +7,21 @@ use home\_objetos\UserO;
 
 class UsuarioM extends ModelDAO
 {
-    public function criar_usuario(UserO $usuario): bool
+    public function criar_usuario(UserO $usuario)
     {
-        return $usuario->create();
+        $condition_nr_matricula = "AND NR_MATRICULA = 991521";
+        $conditions = [$condition_nr_matricula, " OR NO_USUARIO LIKE %tiago%"];
+
+        $usuario->create();
+        $usuario->insert()->execute();
+
+        $usuario->select()->where($condition_nr_matricula)->fetch();
+        $usuario->select()->where_array($conditions)->fetch_all();
+
+        $usuario->update()->execute();
+        $usuario->update(991521, "=")->where("AND NO_USUARIO LIKE %TIAGO%")->execute();
+
+        $usuario->delete()->where($condition_nr_matricula)->execute();
+        $usuario->delete()->where_array($conditions)->execute();
     }
 }
