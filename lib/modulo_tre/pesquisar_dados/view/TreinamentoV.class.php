@@ -21,7 +21,7 @@ class TreinamentoV extends View
     /**
      * Cria uma tabela com os dados dos usuários informados.
      */
-    public function montar_tabela(array $dados)
+    public function montar_tabela(array $dados): string
     {
         // Essa implementação é feita de maneira diferente atualmente no BRB.
         // Não use como padrão de projeto, use apenas para treino.

@@ -14,7 +14,6 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/config/autoloads/autoload_default
  */
 
 use core\classes\abstracts\Controller;
-use modulo_tre\_objetos\TreinamentoO;
 use modulo_tre\pesquisar_dados\View\TreinamentoV;
 use modulo_tre\pesquisar_dados\model\TreinamentoM;
 
@@ -24,52 +23,34 @@ use modulo_tre\pesquisar_dados\model\TreinamentoM;
 class TreinamentoC extends Controller
 {
     private $model;
-    private $oTreinamento;
-    private $vTreinamento;
+    private $view;
 
     public function __construct()
     {
+        $this->view = new TreinamentoV;
         $this->model = new TreinamentoM;
-        $this->oTreinamento = new TreinamentoO;
-        $this->vTreinamento = new TreinamentoV;
         parent::__construct();
     }
 
     protected function get_dados()
     {
-        if (!$this->oTreinamento->set_all_parametros()) {
-            return false;
-        }
-
-        $dados = $this->model->get_dados($this->oTreinamento);
-        return $this->vTreinamento->montar_tabela($dados);
+        $dados = $this->model->get_dados();
+        return $this->view->montar_tabela($dados);
     }
 
     protected function update_dado()
     {
-        if (!$this->oTreinamento->set_all_parametros()) {
-            return false;
-        }
-
-        return $this->model->update_dado($this->oTreinamento);
+        return $this->model->update_dado();
     }
 
     protected function set_novo_dado()
     {
-        if (!$this->oTreinamento->set_all_parametros()) {
-            return false;
-        }
-
-        return $this->model->set_novo_dado($this->oTreinamento);
+        return $this->model->set_novo_dado();
     }
 
     protected function delete_dado()
     {
-        if (!$this->oTreinamento->set_all_parametros()) {
-            return false;
-        }
-
-        return $this->model->delete_dado($this->oTreinamento);
+        return $this->model->delete_dado();
     }
 }
 

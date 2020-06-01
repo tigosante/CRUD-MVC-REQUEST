@@ -3,43 +3,44 @@
 namespace modulo_tre\pesquisar_dados\model;
 
 use core\classes\abstracts\ModelDAO;
-use modulo_tre\_objetos\TreinamentoO;
 
 class TreinamentoM extends ModelDAO
 {
-    public function get_dados(TreinamentoO $treinamento): array
+    public $parametros;
+
+    public function get_dados(): array
     {
         $binds = [];
-        $this->sql = $treinamento->get_query_select();
+        $this->sql = "SELECT NAME, EMAIL FROM TRE.TB_TREINAMENTO WHERE 1=1 ";
 
-        if ($treinamento->get_name()) {
+        if (!empty($_REQUEST["name"])) {
             $this->sql .= " AND UPPER(NAME) LIKE UPPER('%':NAME'%') ";
-            array_push($binds, [":NAME" => $treinamento->get_name()]);
+            array_push($binds, [":NAME" => $_REQUEST["name"]]);
         }
 
-        if ($treinamento->get_email()) {
+        if (!empty($_REQUEST["email"])) {
             $this->sql .= " AND UPPER(EMAIL) LIKE UPPER('%':EMAIL'%') ";
-            array_push($binds, [":EMAIL" => $treinamento->get_email()]);
+            array_push($binds, [":EMAIL" => $_REQUEST["email"]]);
         }
 
         $dados = $this->pdo->prepare($this->sql);
         $dados->execute($binds);
 
-        return $dados->fetchAll(\PDO::FETCH_OBJ);
+        return $dados->fetchAll();
     }
 
-    public function update_dado(TreinamentoO $treinamento): bool
+    public function update_dado(): bool
     {
-        return $treinamento->update();
+        return true;
     }
 
-    public function set_novo_dado(TreinamentoO $treinamento): bool
+    public function set_novo_dado(): bool
     {
-        return $treinamento->create();
+        return true;
     }
 
-    public function delete_dado(TreinamentoO $treinamento): bool
+    public function delete_dado(): bool
     {
-        return $treinamento->delete();
+        return true;
     }
 }

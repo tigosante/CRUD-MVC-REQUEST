@@ -21,10 +21,10 @@
                 <input type="hidden" id="acao" name="acao" value="get_dados">
                 <div class="col-md-12 text-right">
                     <button type="button" class="btn btn-primary" onclick="get_dados('form_pesquisar_dados')">
-                        <div class="" id="texto-button-login">Pesquisar</div>
+                        Pesquisar
                     </button>
                     <button type="button" class="btn btn-primary" onclick="page_novo_dado()">
-                        <div class="" id="texto-button-login">Novo dado</div>
+                        Novo dado
                     </button>
                 </div>
             </form>
