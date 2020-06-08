@@ -21,16 +21,7 @@ e-mail: tsilvasantos38@gmail.com
 -   POO: Programação orientada a objetos em PHP 7.2.3.
 -   PDO: PHP DATA OBJECTS - Objetos statments usados para tratar dados do banco de dados.
 
-# Patterns
-
--   Modularização:
-
-    -   Organização da aplicação por módulos. Cada módulo carrega seu ambiente para funcionamento e consome um core comum na aplicação.
-
--   ORM:
-
-    -   Manipulação do banco de dados através de abstrações feitas com objetos.
-    -   O ORM usado nessa aplicação foi desenvolvido com base no Eloquent PHP.
+# Design Patterns
 
 -   MVC: MODEL, VIEW e CONTROLLER.
 
