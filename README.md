@@ -21,7 +21,7 @@ e-mail: tsilvasantos38@gmail.com
 -   POO: Programação orientada a objetos em PHP 7.2.3.
 -   PDO: PHP DATA OBJECTS - Objetos statments usados para tratar dados do banco de dados.
 
-# Design Patterns
+# Patterns
 
 -   Modularização:
 
