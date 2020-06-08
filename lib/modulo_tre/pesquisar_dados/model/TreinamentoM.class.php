@@ -10,18 +10,10 @@ class TreinamentoM extends ModelDAO
 
     public function get_dados(): array
     {
-        $binds = [];
         $this->sql = "SELECT NAME, EMAIL FROM TRE.TB_TREINAMENTO WHERE 1=1 ";
 
-        if (!empty($_REQUEST["name"])) {
-            $this->sql .= " AND UPPER(NAME) LIKE UPPER('%':NAME'%') ";
-            array_push($binds, [":NAME" => $_REQUEST["name"]]);
-        }
-
-        if (!empty($_REQUEST["email"])) {
-            $this->sql .= " AND UPPER(EMAIL) LIKE UPPER('%':EMAIL'%') ";
-            array_push($binds, [":EMAIL" => $_REQUEST["email"]]);
-        }
+        $binds = $this->validar_dado_nome();
+        $binds = $this->validar_dado_email($binds);
 
         $dados = $this->pdo->prepare($this->sql);
         $dados->execute($binds);
@@ -42,5 +34,25 @@ class TreinamentoM extends ModelDAO
     public function delete_dado(): bool
     {
         return true;
+    }
+
+    private function validar_dado_nome(array $binds = []): array
+    {
+        if (!empty($_REQUEST["name"])) {
+            $this->sql .= " AND UPPER(NAME) LIKE UPPER('%':NAME'%') ";
+            array_push($binds, [":NAME" => $_REQUEST["name"]]);
+        }
+
+        return $binds;
+    }
+
+    private function validar_dado_email(array $binds = []): array
+    {
+        if (!empty($_REQUEST["email"])) {
+            $this->sql .= " AND UPPER(EMAIL) LIKE UPPER('%':EMAIL'%') ";
+            array_push($binds, [":EMAIL" => $_REQUEST["email"]]);
+        }
+
+        return $binds;
     }
 }

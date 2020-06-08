@@ -32,23 +32,23 @@ class TreinamentoC extends Controller
         parent::__construct();
     }
 
-    protected function get_dados()
+    protected function get_dados(): string
     {
         $dados = $this->model->get_dados();
         return $this->view->montar_tabela($dados);
     }
 
-    protected function update_dado()
+    protected function update_dado(): bool
     {
         return $this->model->update_dado();
     }
 
-    protected function set_novo_dado()
+    protected function set_novo_dado(): bool
     {
         return $this->model->set_novo_dado();
     }
 
-    protected function delete_dado()
+    protected function delete_dado(): bool
     {
         return $this->model->delete_dado();
     }
