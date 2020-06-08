@@ -2,9 +2,9 @@
 
 namespace core\classes\ORM;
 
-use core\classes\ORM\Querys;
+use core\classes\ORM\AUXORM;
 
-abstract class CRUD extends Querys
+abstract class CRUD extends AUXORM
 {
     private $query = "";
     private $joins = "";
