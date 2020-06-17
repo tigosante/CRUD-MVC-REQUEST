@@ -55,7 +55,7 @@ abstract class ConexaoOracle implements IConexao
     /**
      * Responsável por informar os erros de conexão.
      */
-    public static function errorConexao($error): void
+    public static function errorConexao(\PDOException $error): void
     {
         throw new \InvalidArgumentException("Error conexão:\n" . $error->getMessage(), 1);
     }

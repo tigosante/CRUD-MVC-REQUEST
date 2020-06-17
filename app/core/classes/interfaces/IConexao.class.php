@@ -16,10 +16,10 @@ interface IConexao
      * Retorna a mesma caso já exista.
      * Retorna uma nova caso não exista.
      */
-    public static function getInstance();
+    public static function getInstance(): \PDO;
 
     /**
      * Responsável por informar os erros de conexão.
      */
-    public function errorConexao($error);
+    public function errorConexao(\PDOException $error): void;
 }
