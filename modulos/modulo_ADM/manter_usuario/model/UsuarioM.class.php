@@ -41,6 +41,7 @@ class UsuarioM extends ModelDAO
         $ds_email = "tiago@email.com";
 
         $stmt = $this->pdo->prepare($this->sql);
+
         $stmt->bindValue(":NO_USER", "Tiago Silva", \PDO::PARAM_STR);
         $stmt->bindParam(":DS_EMAIL", $ds_email, \PDO::PARAM_STR);
         $stmt->bindColumn(":NR_MATRIUCLA", $nr_matricula, \PDO::PARAM_INT, strlen("{$nr_matricula}"));
