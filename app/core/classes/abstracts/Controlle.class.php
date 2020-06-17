@@ -15,7 +15,12 @@ abstract class Controller
         return new $classe();
     }
 
-    public function __construct()
+    protected function __construct()
+    {
+        $this->chamarMetodo();
+    }
+
+    private function chamarMetodo(): void
     {
         $acao = trim($_REQUEST["acao"]);
         $resultado = $this->$acao();

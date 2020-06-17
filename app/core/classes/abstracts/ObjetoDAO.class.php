@@ -124,7 +124,7 @@ abstract class ObjetoDAO extends CRUD
      *
      * @return array
      */
-    public function find_all($fetch_method = PDO::FETCH_OBJ): array
+    public function select($fetch_method = PDO::FETCH_OBJ): array
     {
         $query = "SELECT * FROM {$this->db_name}{$this->table}";
         $data = $this->pdo->prepare($query);

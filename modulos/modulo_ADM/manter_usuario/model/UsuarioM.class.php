@@ -7,25 +7,63 @@ use home\_objetos\UserO;
 
 class UsuarioM extends ModelDAO
 {
-    public function criar_usuario(UserO $usuario)
+    public function buscar_usuarios(): array
     {
-        $condition_nr_matricula = "AND NR_MATRICULA = 991521";
-        $conditions = [$condition_nr_matricula, " OR NO_USUARIO LIKE %tiago%"];
+        $this->sql = "SELECT NO_USER, DS_EMAIL FROM TRE.TB_USER";
 
-        $usuario->create();
-        $usuario->insert()->execute();
+        $stmt = $this->pdo->prepare($this->sql);
+        $stmt->execute();
 
-        $usuario->select()
-            ->join("LEFT", "TB_MODULO AS MD", "ON (MD.CD_MODULO = USU.CD_MODULO)")
-            ->join("INNER", "VW_DEPENDENCIA AS VW", "ON (VW.CD_EMPRESA_DEPENDENCIA = USU.CD_EMPRESA_DEPENDENCIA)")
-            ->where($condition_nr_matricula)->fetch();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 
-        $usuario->select()->where_array($conditions)->fetch_all();
+    public function buscar_usuario_id(int $id): object
+    {
+        $this->sql = "SELECT NO_USER, DS_EMAIL FROM TRE.TB_USER WHERE NR_MATRICULA = :NR_MATRICULA";
 
-        $usuario->update()->execute();
-        $usuario->update(991521, "=")->where("AND NO_USUARIO LIKE %TIAGO%")->execute();
+        $stmt = $this->pdo->prepare($this->sql);
+        $stmt->bindParam(":NR_MATRICULA", $id);
 
-        $usuario->delete()->where($condition_nr_matricula)->execute();
-        $usuario->delete()->where_array($conditions)->execute();
+        $stmt->execute();
+
+        $object = $stmt->fetch(\PDO::FETCH_OBJ);
+
+        $object->NO_USER = "Nome do usuário: {$object->NO_USER}";
+
+        return $object;
+    }
+
+    public function criar_usuario(): bool
+    {
+        $this->sql = "INSERT INTO TRE.TB_USER (NO_USUER, DS_EMAIL, NR_MATRIUCLA) VALUES (:NO_USUER, :DS_EMAIL, :NR_MATRIUCLA)";
+
+        $nr_matricula = 991521;
+        $ds_email = "tiago@email.com";
+
+        $stmt = $this->pdo->prepare($this->sql);
+        $stmt->bindValue(":NO_USER", "Tiago Silva", \PDO::PARAM_STR);
+        $stmt->bindParam(":DS_EMAIL", $ds_email, \PDO::PARAM_STR);
+        $stmt->bindColumn(":NR_MATRIUCLA", $nr_matricula, \PDO::PARAM_INT, strlen("{$nr_matricula}"));
+
+        return $stmt->execute();
+    }
+
+    public function remover_usuario(int $id): bool
+    {
+        $this->sql = "DELETE TRE.TB_USER WHERE NR_MATRICULA = :NR_MATRICULA";
+
+        $stmt = $this->pdo->prepare($this->sql);
+
+        return $stmt->execute([":NR_MATRICULA" => $id]);
+    }
+
+    public function atualizar_usuario(int $id): bool
+    {
+        $this->sql = "UPDATE TRE.TB_USER SET(NO_USER = :NO_USER, DS_EMAIL = :DS_EMAIL) WHERE NR_MATRICULA = :NR_MATRICULA";
+
+        $binds = [":NO_USER" => "Tiago Santos", ":DS_EMAIL" => "ts@email.com"];
+
+        $stmt = $this->pdo->prepare($this->sql);
+        return $stmt->execute($binds);
     }
 }

@@ -22,17 +22,20 @@ use core\classes\interfaces\IConexao;
  */
 class ModelDAO
 {
+    /**
+     * @param PDO $pdo
+     */
     public $pdo;
     protected $sql = "";
     protected $parametros = [];
 
     public function __construct(IConexao $conexao = NULL)
     {
-        // if ($conexao === NULL) {
-        $this->pdo = ConexaoOracle::getInstance();
-        // } else {
-        //     $this->pdo = $conexao::getInstance();
-        // }
+        if ($conexao === NULL) {
+            $this->pdo = ConexaoOracle::getInstance();
+        } else {
+            $this->pdo = $conexao::getInstance();
+        }
     }
 
     /**
