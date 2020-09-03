@@ -30,12 +30,12 @@ class OracleConnection implements DataBaseConnectionInterface
     return self::$singletonObject;
   }
 
-  public  function createConnection(): bool
+  public  function createConnection(array $options = null): bool
   {
     $result = true;
 
     try {
-      $this->connection = new \PDO($this->dsn, $this->username, $this->password, $this->options);
+      $this->connection = new \PDO($this->dsn, $this->username, $this->password, $options ?? $this->options);
     } catch (\PDOException $exception) {
       $result = false;
       var_dump("Erro ao criar conexão com o banco de dados: " . $exception->getMessage());

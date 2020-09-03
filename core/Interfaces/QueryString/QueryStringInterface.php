@@ -2,14 +2,15 @@
 
 namespace core\Interfaces\QueryString;
 
+use core\interfaces\TableObject\TableObjectHelperInterface;
+
 interface QueryStringInterface
 {
-  public function insert(): string;
-  public function select(): string;
-  public function update(): string;
+  public function __construct(TableObjectHelperInterface $tableObjectHelperInterface);
+
+  public function insert(array $tableColumns = null): string;
+  public function select(array $tableColumns = null): string;
+  public function update(array $tableColumns = null): string;
   public function delete(): string;
-  public function join(): string;
-  public function where(): string;
-  public function groupBy(): string;
-  public function orderBy(): string;
+  public function where(string $conditions, bool $isFindBySQ = false): string;
 }

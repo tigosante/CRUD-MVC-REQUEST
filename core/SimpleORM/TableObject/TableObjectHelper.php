@@ -2,36 +2,34 @@
 
 namespace core\SimpleORM\TableObject;
 
-use core\interfaces\Helpers\TableObjectHelperInterface;
+use core\interfaces\TableObject\TableObjectHelperInterface;
 
 class TableObjectHelper implements TableObjectHelperInterface
 {
   /**
-   * @var int $tableSq
-   */
-  private $tableSq;
-
-  /**
-   * @var string $tabelName
-   */
-  private $tabelName;
-
-  /**
    * @var string $dataBaseName
    */
-  private $dataBaseName;
+  private $dataBaseName = null;
 
   /**
-   * @var array $tabelColumns
+   * @var string $tableName
    */
-  private $tabelColumns;
+  private $tableName = null;
 
+  /**
+   * @var int $tableSq
+   */
+  private $tableSq = null;
+
+  /**
+   * @var array $tableColumns
+   */
+  private $tableColumns = null;
 
   public function getDataBaseName(): string
   {
     return $this->dataBaseName;
   }
-
   public function setDataBaseName(string $dataBaseName): void
   {
     $this->dataBaseName = $dataBaseName;
@@ -39,19 +37,17 @@ class TableObjectHelper implements TableObjectHelperInterface
 
   public function getTableName(): string
   {
-    return $this->tabelName;
+    return $this->tableName;
   }
-
-  public function setTableName(string $tabelName): void
+  public function setTableName(string $tableName): void
   {
-    $this->tabelName = $tabelName;
+    $this->tableName = $tableName;
   }
 
   public function getTableSq(): int
   {
     return $this->tableSq;
   }
-
   public function setTableSq(int $tableSq): void
   {
     $this->tableSq = $tableSq;
@@ -59,11 +55,10 @@ class TableObjectHelper implements TableObjectHelperInterface
 
   public function getTableColumns(): array
   {
-    return $this->tabelColumns;
+    return $this->tableColumns;
   }
-
-  public function setTableColumns(array $tabelColumns): void
+  public function setTableColumns(array $tableColumns): void
   {
-    $this->tabelColumns = $tabelColumns;
+    $this->tableColumns = $tableColumns;
   }
 }

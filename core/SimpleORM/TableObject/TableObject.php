@@ -1,49 +1,54 @@
 <?php
 
-namespace core\SimpleORM\TableObject;
+namespace core\TableObject\TableObject;
 
-use core\SimpleORM\TableObject\TableObjectHelper;
 use core\interfaces\TableObject\TableObjectInterface;
 
-class TableObject extends TableObjectHelper implements TableObjectInterface
+class TableObject implements TableObjectInterface
 {
-  public function setData(string $tableColumnName, $value = null): bool
+  /**
+   * @var object $object
+   */
+  private $object;
+
+  public function __construct(object $object)
   {
-    $result = true;
-    $method = "get_" . $tableColumnName;
-
-    try {
-      if (method_exists($this,  $method)) {
-        $value = $value !== null ? $value : $_REQUEST[$tableColumnName];
-        $this->$method($value);
-      }
-    } catch (\Throwable $error) {
-      $result = false;
-      var_dump("Erro ao tentar usar o método: 'get_{$tableColumnName}'. Error: " . $error->getMessage());
-    }
-
-    return $result;
+    $this->object = $object;
   }
-
   public function setAllData(): bool
   {
     $result = true;
 
-    foreach ($_REQUEST as $key => $value) {
-      if ($key !== "acao") {
-        $result = $this->setData($key, $value);
+    try {
+      foreach ($_REQUEST as $key => $value) {
+        $method = "set_" . $key;
+
+        if ($key !== "acao" && method_exists($this->object, $method)) {
+          $this->object->$method($value);
+        }
       }
+    } catch (\Throwable $error) {
+      $result = false;
+      var_dump("Erro ao tentar settar os dados vindos da view:: Error: " . $error->getMessage());
     }
 
     return $result;
   }
-
   public function setAllDataFromArray(array $dataArray): bool
   {
     $result = true;
 
-    foreach ($dataArray as $key => $value) {
-      $result = $this->setData($key, $value);
+    try {
+      foreach ($dataArray as $key => $value) {
+        $method = "set_" . strtolower($key);
+
+        if (method_exists($this->object, $method)) {
+          $this->object->$method($value);
+        }
+      }
+    } catch (\Throwable $error) {
+      $result = false;
+      var_dump("Erro ao tentar settar os dados vindos de um array:: Error: " . $error->getMessage());
     }
 
     return $result;
