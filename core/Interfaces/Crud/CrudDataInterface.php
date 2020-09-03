@@ -1,5 +1,7 @@
 <?php
 
+namespace core\interfaces\Crud;
+
 interface CrudDataInterface
 {
   public function create(array $tableColumns = null): bool;
