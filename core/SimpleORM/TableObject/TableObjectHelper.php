@@ -48,7 +48,7 @@ class TableObjectHelper implements TableObjectHelperInterface
   {
     return $this->tableSq;
   }
-  public function setTableSq(int $tableSq): void
+  public function setTableSq(int $tableSq = null): void
   {
     $this->tableSq = $tableSq;
   }

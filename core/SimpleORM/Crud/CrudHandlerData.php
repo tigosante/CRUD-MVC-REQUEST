@@ -26,12 +26,6 @@ class CrudHandlerData implements CrudHandlerDataInterface
     $this->repositoryHandlerDataInterface = $repositoryHandlerDataInterface;
   }
 
-  public function create(array $tableColumns = null): bool
-  {
-    $this->repositoryHandlerDataInterface->setQuery($this->queryFactory("insert", $tableColumns));
-    return $this->repositoryHandlerDataInterface->handleData();
-  }
-
   public function update(array $tableColumns = null): bool
   {
     $this->repositoryHandlerDataInterface->setQuery($this->queryFactory("update", $tableColumns));
@@ -51,6 +45,6 @@ class CrudHandlerData implements CrudHandlerDataInterface
 
   private function queryFactory(string $queryTpe, array $tableColumns = null): string
   {
-    return $queryTpe === "delete" ? $this->queryStringInterface->delete() : $this->queryStringInterface->$queryTpe($tableColumns);
+    return $queryTpe === "delete" ? $this->queryStringInterface->delete() : $this->queryStringInterface->update($tableColumns);
   }
 }

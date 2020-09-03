@@ -26,7 +26,7 @@ class CrudGetData implements CrudGetDataInterface
     $this->repositoryGetDataInterface = $repositoryGetDataInterface;
   }
 
-  public function find(array $tableColumns = null): array
+  public function findAll(array $tableColumns = null): array
   {
     $this->repositoryGetDataInterface->setQuery($this->queryStringInterface->select($tableColumns));
     return $this->repositoryGetDataInterface->getDataFromDB();

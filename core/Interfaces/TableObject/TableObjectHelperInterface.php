@@ -11,7 +11,7 @@ interface TableObjectHelperInterface
   public function setTableName(string $tableName): void;
 
   public function getTableSq(): int;
-  public function setTableSq(int $tableSq): void;
+  public function setTableSq(int $tableSq = null): void;
 
   public function getTableColumns(): array;
   public function setTableColumns(array $tableColumns): void;
