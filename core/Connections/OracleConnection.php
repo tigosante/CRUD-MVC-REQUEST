@@ -9,17 +9,17 @@ class OracleConnection implements DataBaseConnectionInterface
   /**
    * @var self $singletonObject
    */
-  public static $singletonObject;
+  private static $singletonObject;
 
   /**
    * @var \PDO $connection
    */
-  public $connection;
+  private $connection;
 
-  public $dsn = null;
-  public $username = null;
-  public $password = null;
-  public $options = null;
+  private $dsn = "";
+  private $username = "";
+  private $password = "";
+  private $options = [];
 
   public static function singleton(): self
   {
@@ -30,12 +30,12 @@ class OracleConnection implements DataBaseConnectionInterface
     return self::$singletonObject;
   }
 
-  public  function createConnection(array $options = null): bool
+  private function createConnection(): bool
   {
     $result = true;
 
     try {
-      $this->connection = new \PDO($this->dsn, $this->username, $this->password, $options ?? $this->options);
+      $this->connection = new \PDO($this->dsn, $this->username, $this->password, $this->options);
     } catch (\PDOException $exception) {
       $result = false;
       var_dump("Erro ao criar conexão com o banco de dados: " . $exception->getMessage());
@@ -46,6 +46,7 @@ class OracleConnection implements DataBaseConnectionInterface
 
   public function getConnection(): \PDO
   {
+    $this->createConnection();
     return $this->connection;
   }
 }
