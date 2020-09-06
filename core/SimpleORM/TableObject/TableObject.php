@@ -4,25 +4,22 @@ namespace core\TableObject\TableObject;
 
 use core\Connections\OracleConnection;
 use core\interfaces\{
-  Crud\CrudGetDataInterface,
+  Crud\CrudGetData,
+  Crud\CrudHandlerData,
   Crud\CrudHandlerDataInterface,
-  QueryString\QueryStringInterface,
+  QueryString\QueryString,
+  SQLCommands\SQLCommandsInterface,
   Repository\RepositoryGetDataInterface,
   Repository\RepositoryHandlerDataInterface,
-  SQLCommands\SQLCommandsHelperInterface,
-  SQLCommands\SQLCommandsInterface,
   TableObject\TableObjectInterface,
   TableObject\TableObjectHelperInterface
 };
 use core\SimpleORM\{
-  Crud\CrudGetData,
-  Crud\CrudHandlerData,
-  TableObject\TableObjectHelper,
-  QueryString\QueryString,
+  Repository\RepositoryGetData,
+  Repository\RepositoryHandlerData,
   SQLCommands\SQLCommands,
   SQLCommands\SQLCommandsHelper,
-  Repository\RepositoryGetData,
-  Repository\RepositoryHandlerData
+  TableObject\TableObjectHelper
 };
 
 class TableObject implements TableObjectInterface
@@ -127,7 +124,7 @@ class TableObject implements TableObjectInterface
         if ($key !== "acao" && method_exists($this->object, $method) && $value !== null) {
           $this->object->$method($value);
 
-          if($isDataToTableDataBase){
+          if ($isDataToTableDataBase) {
             $this->setDataToTableObject($key, $value);
           }
         }
@@ -150,7 +147,7 @@ class TableObject implements TableObjectInterface
         if (method_exists($this->object, $method)) {
           $this->object->$method($value);
 
-          if($isDataToTableDataBase){
+          if ($isDataToTableDataBase) {
             $this->setDataToTableObject($key, $value);
           }
         }
@@ -165,7 +162,7 @@ class TableObject implements TableObjectInterface
 
   private function setDataToTableObject(string $key, $value): void
   {
-    array_push($thid->dataToTableObject, [strtoupper($key) => $value]);
+    array_push($this->dataToTableObject, [strtoupper($key) => $value]);
   }
 
   public function select(array $tableColumns = null): SQLCommandsInterface
@@ -180,6 +177,7 @@ class TableObject implements TableObjectInterface
 
   public function create(array $tableColumns = null): bool
   {
+    return true;
   }
 
   public function findAll(array $tableColumns = null): array

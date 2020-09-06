@@ -2,8 +2,10 @@
 
 namespace core\SimpleORM\SQLCommands;
 
-use core\interfaces\SQLCommands\SQLCommandsHelperInterface;
-use core\interfaces\TableObject\TableObjectHelperInterface;
+use core\interfaces\{
+  SQLCommands\SQLCommandsHelperInterface,
+  TableObject\TableObjectHelperInterface
+};
 
 class SQLCommandsHelper implements SQLCommandsHelperInterface
 {
