@@ -1,2 +1,2 @@
 <?php
-var_dump("Em devesenvolvimento!");
+var_dump("Em desenvolvimento!");
