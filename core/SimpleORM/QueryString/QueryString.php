@@ -1,8 +1,11 @@
 <?php
 
-namespace core\Interfaces\QueryString;
+namespace core\SimpleORM\QueryString;
 
-use core\interfaces\TableObject\TableObjectHelperInterface;
+use core\Interfaces\{
+  QueryString\QueryStringInterface,
+  TableObject\TableObjectHelperInterface
+};
 
 class QueryString implements QueryStringInterface
 {

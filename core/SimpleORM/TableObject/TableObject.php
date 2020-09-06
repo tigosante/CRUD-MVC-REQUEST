@@ -7,7 +7,7 @@ use core\interfaces\{
   Crud\CrudGetData,
   Crud\CrudHandlerData,
   Crud\CrudHandlerDataInterface,
-  QueryString\QueryString,
+  QueryString\QueryStringInterface,
   SQLCommands\SQLCommandsInterface,
   Repository\RepositoryGetDataInterface,
   Repository\RepositoryHandlerDataInterface,
@@ -17,6 +17,7 @@ use core\interfaces\{
 use core\SimpleORM\{
   Repository\RepositoryGetData,
   Repository\RepositoryHandlerData,
+  QueryString\QueryString,
   SQLCommands\SQLCommands,
   SQLCommands\SQLCommandsHelper,
   TableObject\TableObjectHelper
