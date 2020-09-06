@@ -16,11 +16,11 @@ use core\interfaces\{
   TableObject\TableObjectHelperInterface
 };
 use core\SimpleORM\{
-  Repository\RepositoryGetData,
-  Repository\RepositoryHandlerData,
+  TableObject\TableObjectHelper,
   SQLCommands\SQLCommands,
   SQLCommands\SQLCommandsHelper,
-  TableObject\TableObjectHelper
+  Repository\RepositoryGetData,
+  Repository\RepositoryHandlerData
 };
 
 class TableObject implements TableObjectInterface
