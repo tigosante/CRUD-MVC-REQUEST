@@ -42,6 +42,6 @@ class CrudGetData implements CrudGetDataInterface
 
   public function setData(array $data): void
   {
-    $this->repositoryHandlerDataInterface->setData($data);
+    $this->repositoryGetDataInterface->setData($data);
   }
 }

@@ -20,21 +20,32 @@ class CrudHandlerData implements CrudHandlerDataInterface
    */
   private $repositoryHandlerDataInterface;
 
+  /**
+   * @var string $conditions
+   */
+  private $conditions = " WHERE 1=1 ";
+
   public function __construct(QueryStringInterface $queryStringInterface, RepositoryHandlerDataInterface $repositoryHandlerDataInterface)
   {
     $this->queryStringInterface = $queryStringInterface;
     $this->repositoryHandlerDataInterface = $repositoryHandlerDataInterface;
   }
 
+  public function where(string $conditions): self
+  {
+    $this->conditions .= " {$conditions} ";
+    return $this;
+  }
+
   public function update(array $tableColumns = null): bool
   {
-    $this->repositoryHandlerDataInterface->setQuery($this->queryFactory("update", $tableColumns));
+    $this->repositoryHandlerDataInterface->setQuery($this->queryFactory("update", $tableColumns) . $this->conditions);
     return $this->repositoryHandlerDataInterface->handleData();
   }
 
   public function delete(int $tableSq): bool
   {
-    $this->repositoryHandlerDataInterface->setQuery($this->queryFactory("delete"));
+    $this->repositoryHandlerDataInterface->setQuery($this->queryFactory("delete") . $this->conditions);
     return $this->repositoryHandlerDataInterface->handleData();
   }
 

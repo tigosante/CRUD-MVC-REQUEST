@@ -17,6 +17,8 @@ interface CrudHandlerDataInterface
 {
   public function __construct(QueryStringInterface $queryStringInterface, RepositoryHandlerDataInterface $repositoryHandlerDataInterface);
 
+  public function where(string $conditions): self;
+
   public function update(array $tableColumns = null): bool;
   public function delete(int $tableSq): bool;
 
