@@ -1,6 +1,6 @@
 <?php
 
-namespace core\interfaces\Crud;
+namespace core\SimpleORM\Crud;
 
 use core\interfaces\{
   Crud\CrudGetDataInterface,

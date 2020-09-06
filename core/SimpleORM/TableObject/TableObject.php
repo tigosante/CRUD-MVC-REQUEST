@@ -4,8 +4,6 @@ namespace core\TableObject\TableObject;
 
 use core\Connections\OracleConnection;
 use core\interfaces\{
-  Crud\CrudGetData,
-  Crud\CrudHandlerData,
   Crud\CrudHandlerDataInterface,
   QueryString\QueryStringInterface,
   SQLCommands\SQLCommandsInterface,
@@ -15,6 +13,9 @@ use core\interfaces\{
   TableObject\TableObjectHelperInterface
 };
 use core\SimpleORM\{
+  Crud\CrudGetData,
+  Crud\CrudCreateData,
+  Crud\CrudHandlerData,
   Repository\RepositoryGetData,
   Repository\RepositoryHandlerData,
   QueryString\QueryString,
@@ -71,6 +72,11 @@ class TableObject implements TableObjectInterface
   private $crudHandlerDataInterface;
 
   /**
+   * @var CrudCreateDataInterface $crudCreateDataInterface
+   */
+  private $CrudCreateDataInterface;
+
+  /**
    * @var QueryStringInterface $queryStringInterface
    */
   private $queryStringInterface;
@@ -111,6 +117,8 @@ class TableObject implements TableObjectInterface
     $this->crudGetDataInterface = new CrudGetData($this->queryStringInterface, $this->repositoryGetDataInterface);
 
     $this->repositoryHandlerDataInterface = new RepositoryHandlerData($this->dataBaseConnectionInterface);
+
+    $this->CrudCreateDataInterface = new CrudCreateData($this->queryStringInterface, $this->repositoryHandlerDataInterface);
     $this->crudHandlerDataInterface = new CrudHandlerData($this->queryStringInterface, $this->repositoryHandlerDataInterface);
   }
 
@@ -178,7 +186,7 @@ class TableObject implements TableObjectInterface
 
   public function create(array $tableColumns = null): bool
   {
-    return true;
+    return $this->CrudCreateDataInterface->create($tableColumns);
   }
 
   public function findAll(array $tableColumns = null): array
@@ -194,6 +202,7 @@ class TableObject implements TableObjectInterface
   public function setData(array $data): void
   {
     $this->crudGetDataInterface->setData($data);
+    $this->CrudCreateDataInterface->setData($data);
     $this->crudHandlerDataInterface->setData($data);
   }
 }

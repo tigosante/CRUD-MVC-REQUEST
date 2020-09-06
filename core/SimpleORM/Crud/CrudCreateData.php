@@ -2,13 +2,13 @@
 
 namespace core\SimpleORM\Crud;
 
-use core\interfaces\{
-  Crud\CrudHandlerDataInterface,
+use core\Interfaces\{
+  Crud\CrudCreateDataInterface,
   QueryString\QueryStringInterface,
   Repository\RepositoryHandlerDataInterface
 };
 
-class CrudHandlerData implements CrudHandlerDataInterface
+class CrudCreateData implements CrudCreateDataInterface
 {
   /**
    * @var QueryStringInterface $queryStringInterface
@@ -26,25 +26,14 @@ class CrudHandlerData implements CrudHandlerDataInterface
     $this->repositoryHandlerDataInterface = $repositoryHandlerDataInterface;
   }
 
-  public function update(array $tableColumns = null): bool
+  public function create(array $tableColumns = null): bool
   {
-    $this->repositoryHandlerDataInterface->setQuery($this->queryFactory("update", $tableColumns));
-    return $this->repositoryHandlerDataInterface->handleData();
-  }
-
-  public function delete(int $tableSq): bool
-  {
-    $this->repositoryHandlerDataInterface->setQuery($this->queryFactory("delete"));
+    $this->repositoryHandlerDataInterface->setQuery($this->queryStringInterface->insert($tableColumns));
     return $this->repositoryHandlerDataInterface->handleData();
   }
 
   public function setData(array $data): void
   {
     $this->repositoryHandlerDataInterface->setData($data);
-  }
-
-  private function queryFactory(string $queryTpe, array $tableColumns = null): string
-  {
-    return $queryTpe === "delete" ? $this->queryStringInterface->delete() : $this->queryStringInterface->update($tableColumns);
   }
 }
