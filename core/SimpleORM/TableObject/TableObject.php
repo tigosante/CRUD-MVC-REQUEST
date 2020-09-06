@@ -85,6 +85,14 @@ class TableObject implements TableObjectInterface
     $this->setObjects();
   }
 
+  private function setTableConfig(array $tableConfig): void
+  {
+    $this->tableObjectHelperInterface->setTableSq($tableConfig["tableSq"]);
+    $this->tableObjectHelperInterface->setTableName($tableConfig["tableName"]);
+    $this->tableObjectHelperInterface->setTableColumns($tableConfig["tableColumns"]);
+    $this->tableObjectHelperInterface->setDataBaseName($tableConfig["dataBaseName"] ?? ".PPC");
+  }
+
   private function setObjects(): void
   {
     $this->dataBaseConnectionInterface = new OracleConnection;
@@ -99,14 +107,6 @@ class TableObject implements TableObjectInterface
 
     $this->repositoryHandlerDataInterface = new RepositoryHandlerData($this->dataBaseConnectionInterface);
     $this->crudHandlerDataInterface = new CrudHandlerData($this->queryStringInterface, $this->repositoryHandlerDataInterface);
-  }
-
-  private function setTableConfig(array $tableConfig): void
-  {
-    $this->tableObjectHelperInterface->setTableSq($tableConfig["tableSq"]);
-    $this->tableObjectHelperInterface->setTableName($tableConfig["tableName"]);
-    $this->tableObjectHelperInterface->setTableColumns($tableConfig["tableColumns"]);
-    $this->tableObjectHelperInterface->setDataBaseName($tableConfig["dataBaseName"] ?? ".PPC");
   }
 
   public function setAllData(): bool
