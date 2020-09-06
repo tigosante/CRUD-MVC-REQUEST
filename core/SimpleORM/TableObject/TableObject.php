@@ -6,7 +6,9 @@ use core\Connections\OracleConnection;
 use core\interfaces\{
   Crud\CrudGetDataInterface,
   Crud\CrudHandlerDataInterface,
+  QueryString\QueryStringInterface,
   Repository\RepositoryGetDataInterface,
+  Repository\RepositoryHandlerDataInterface,
   SQLCommands\SQLCommandsHelperInterface,
   SQLCommands\SQLCommandsInterface,
   TableObject\TableObjectInterface,
