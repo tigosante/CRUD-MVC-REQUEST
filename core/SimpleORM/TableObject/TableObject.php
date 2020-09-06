@@ -4,11 +4,8 @@ namespace core\TableObject\TableObject;
 
 use core\Connections\OracleConnection;
 use core\interfaces\{
-  Crud\CrudGetData,
   Crud\CrudGetDataInterface,
-  Crud\CrudHandlerData,
   Crud\CrudHandlerDataInterface,
-  QueryString\QueryString,
   Repository\RepositoryGetDataInterface,
   SQLCommands\SQLCommandsHelperInterface,
   SQLCommands\SQLCommandsInterface,
@@ -16,7 +13,10 @@ use core\interfaces\{
   TableObject\TableObjectHelperInterface
 };
 use core\SimpleORM\{
+  Crud\CrudGetData,
+  Crud\CrudHandlerData,
   TableObject\TableObjectHelper,
+  QueryString\QueryString,
   SQLCommands\SQLCommands,
   SQLCommands\SQLCommandsHelper,
   Repository\RepositoryGetData,
