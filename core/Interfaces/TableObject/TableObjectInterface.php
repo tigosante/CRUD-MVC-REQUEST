@@ -9,8 +9,8 @@ interface TableObjectInterface
 {
   public function __construct(array $tableConfig, object $object);
 
-  public function setAllData(): bool;
-  public function setAllDataFromArray(array $dataArray): bool;
+  public function setAllData(bool $isDataToTableDataBase = true): bool;
+  public function setAllDataFromArray(array $dataArray, bool $isDataToTableDataBase = true): bool;
 
   public function select(array $tableColumns = null): SQLCommandsInterface;
 
@@ -20,4 +20,6 @@ interface TableObjectInterface
 
   public function findAll(array $tableColumns = null): array;
   public function findBySq(int $tableSq, array $tableColumns = null): array;
+
+  public function setData(array $data): void;
 }

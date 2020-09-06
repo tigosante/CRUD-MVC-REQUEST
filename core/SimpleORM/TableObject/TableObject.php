@@ -31,6 +31,11 @@ class TableObject implements TableObjectInterface
   private $object;
 
   /**
+   * @var array $dataToTableObject
+   */
+  private $dataToTableObject = array();
+
+  /**
    * @var TableObjectHelperInterface $tableObjectHelperInterface
    */
   private $tableObjectHelperInterface;
@@ -109,7 +114,7 @@ class TableObject implements TableObjectInterface
     $this->crudHandlerDataInterface = new CrudHandlerData($this->queryStringInterface, $this->repositoryHandlerDataInterface);
   }
 
-  public function setAllData(): bool
+  public function setAllData(bool $isDataToTableDataBase = true): bool
   {
     $result = true;
 
@@ -117,8 +122,12 @@ class TableObject implements TableObjectInterface
       foreach ($_REQUEST as $key => $value) {
         $method = "set_" . $key;
 
-        if ($key !== "acao" && method_exists($this->object, $method)) {
+        if ($key !== "acao" && method_exists($this->object, $method) && $value !== null) {
           $this->object->$method($value);
+
+          if($isDataToTableDataBase){
+            $this->setDataToTableObject($key, $value);
+          }
         }
       }
     } catch (\Throwable $error) {
@@ -128,7 +137,7 @@ class TableObject implements TableObjectInterface
 
     return $result;
   }
-  public function setAllDataFromArray(array $dataArray): bool
+  public function setAllDataFromArray(array $dataArray, bool $isDataToTableDataBase = true): bool
   {
     $result = true;
 
@@ -138,6 +147,10 @@ class TableObject implements TableObjectInterface
 
         if (method_exists($this->object, $method)) {
           $this->object->$method($value);
+
+          if($isDataToTableDataBase){
+            $this->setDataToTableObject($key, $value);
+          }
         }
       }
     } catch (\Throwable $error) {
@@ -146,6 +159,11 @@ class TableObject implements TableObjectInterface
     }
 
     return $result;
+  }
+
+  private function setDataToTableObject(string $key, $value): void
+  {
+    array_push($thid->dataToTableObject, [strtoupper($key) => $value]);
   }
 
   public function select(array $tableColumns = null): SQLCommandsInterface
@@ -170,5 +188,11 @@ class TableObject implements TableObjectInterface
   public function findBySq(int $tableSq, array $tableColumns = null): array
   {
     return $this->crudGetDataInterface->findBySq($tableSq, $tableColumns);
+  }
+
+  public function setData(array $data): void
+  {
+    $this->crudGetDataInterface->setData($data);
+    $this->crudHandlerDataInterface->setData($data);
   }
 }
