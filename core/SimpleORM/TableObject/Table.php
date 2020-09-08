@@ -1,6 +1,6 @@
 <?php
 
-namespace core\TableObject\TableObject;
+namespace core\TableObject;
 
 use core\Connections\OracleConnection;
 use core\interfaces\{
@@ -21,19 +21,6 @@ use core\SimpleORM\{
   TableObject\TableInfo
 };
 
-/**
- * @method __construct(array $tableConfiguration, object $object)
- * @method setAllData(bool $isDataToTableDataBase = true): bool
- * @method ignoreInArray(array $ignore): void
- * @method setDataFromArray(array $dataArray, bool $isDataToTableDataBase = true): bool
- * @method select(array $tableColumns = null): QuerySqlInterface
- * @method where(string $conditions): DataDBInterface
- * @method create(array $tableColumns = null): bool
- * @method find(int $tableIdentifier, array $tableColumns = null): array
- * @method findAll(array $tableColumns = null): array
- * @method setData(array $data): void
- * @method clean(): void
- */
 class Table implements TableInterface
 {
   /**
