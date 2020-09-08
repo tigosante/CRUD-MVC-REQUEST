@@ -8,16 +8,6 @@ use core\interfaces\{
   Repository\RepositoryDataDBInterface
 };
 
-/**
- * @method select(array $tableColumns = null): self
- * @method join(string $joinCondition): self
- * @method where(array $whereCondition): self
- * @method groupBy(array $groupByCondition): self
- * @method orderBy(array $orderByCondition): self
- * @method clean(): void
- * @method fetchAll(): array
- * @method getQueryString(): string
- */
 class QuerySql implements QuerySqlInterface
 {
   /**

@@ -8,16 +8,6 @@ use core\Interfaces\{
   Repository\RepositoryDataDBInterface
 };
 
-/**
- * @method __construct(QuerySqlStringInterface $querySqlStringInterface, RepositoryDataDBInterface $repositoryDataDBInterface)
- * @method find(int $tableIdentifier, array $tableColumns = null): array
- * @method findAll(array $tableColumns = null): array
- * @method delete(int $tableIdentifier): bool
- * @method update(array $tableColumns = null): bool
- * @method where(string $conditions): self
- * @method getData(): ?array
- * @method setData(array $data): void
- */
 class DataDB implements DataDBInterface
 {
   /**

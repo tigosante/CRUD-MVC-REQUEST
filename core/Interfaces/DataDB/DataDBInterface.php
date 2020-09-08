@@ -7,13 +7,6 @@ use core\interfaces\Helpers\{
   QueryDataHelper
 };
 
-/**
- * @method find(int $tableIdentifier, array $tableColumns = null): array
- * @method findAll(array $tableColumns = null): array
- * @method delete(int $tableIdentifier): bool
- * @method update(array $tableColumns = null): bool
- * @method where(string $conditions): self
- */
 interface DataDBInterface extends QueryDataHelper, SetDataHelper
 {
   public function find(int $tableIdentifier, array $tableColumns = null): array;

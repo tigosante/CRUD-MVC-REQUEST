@@ -2,16 +2,6 @@
 
 namespace core\interfaces\TableObject;
 
-/**
- * @method getDataBaseName(): string
- * @method setDataBaseName(string $dataBaseName): void
- * @method getTableName(): string
- * @method setTableName(string $tableName): void
- * @method getTableIdentifier(): int
- * @method setTableIdentifier(int $tableIdentifier = null): void
- * @method getTableColumns(): array
- * @method setTableColumns(array $tableColumns): void
- */
 interface TableInfoInterface
 {
   public function getDataBaseName(): string;

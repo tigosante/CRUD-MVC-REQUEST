@@ -7,14 +7,6 @@ use core\Interfaces\{
   Connections\DataBaseConnectionInterface
 };
 
-/**
- * @method getDataDB(): bool
- * @method handleDataDB(): ?array
- * @method getQuery(): ?string
- * @method setQuery(string $query): void
- * @method getData(): ?array
- * @method setData(array $query): void
- */
 class RepositoryDataDB implements RepositoryDataDBInterface
 {
   /**

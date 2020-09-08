@@ -23,7 +23,7 @@ $tableAdm->set_id(1);
 $tableAdm->set_adm_name("Pedro");
 $tableAdm->set_dt_cricao((new DateTime())->format('Y-m-d'));
 
-$tableAdm->where($tableAdm::ID . "= :ID")->update();
+$tableAdm->where($tableAdm::ID . " = :ID")->update();
 
 //  ---------------------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ $tableAdm->create();
 $tableAdm->set_id(2);
 
 // Remoção de registro de usuário.
-$tableAdm->where($tableAdm::ID . "= :ID")->delete();
+$tableAdm->where($tableAdm::ID . " = :ID")->delete($tableAdm->get_id());
 
 //  ---------------------------------------------------------------------------------------
 // Busca de registro no banco de dados.

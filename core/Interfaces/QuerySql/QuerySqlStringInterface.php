@@ -4,25 +4,6 @@ namespace core\Interfaces\QuerySql;
 
 use core\interfaces\TableObject\TableInfoInterface;
 
-/**
- * @method getSelect(): string
- * @method setSelect(array $tableColumns = null): void
- * @method getJoin(): string
- * @method setJoin(string $joinCondition): void
- * @method getWhere(): string
- * @method setWhere(array $whereCondition): void
- * @method getGroupBy(): string
- * @method setGroupBy(array $groupByCondition): void
- * @method getOrderBy(): string
- * @method setOrderBy(array $orderByCondition): void
- * @method getInsert(): string
- * @method setInsert(array $tableColumns = null): void
- * @method getUpdate(): string
- * @method setUpdate(array $tableColumns = null): void
- * @method getDelete(): string
- * @method setDelete(int $identifier): void
- * @method clean(): void
- */
 interface QuerySqlStringInterface
 {
   public function __construct(TableInfoInterface $tableInfoInterface);

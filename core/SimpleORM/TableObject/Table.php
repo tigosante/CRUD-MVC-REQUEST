@@ -63,7 +63,7 @@ class Table implements TableInterface
    */
   private $createDataDBInterface;
 
-  public function __construct(array $tableConfiguration, object $object)
+  public function __construct(array $tableConfiguration, object &$object)
   {
     $this->object = $object;
     $this->tableInfoInterface = new TableInfo;
@@ -152,6 +152,7 @@ class Table implements TableInterface
 
   public function where(string $conditions): DataDBInterface
   {
+    $this->dataDBInterface->where($conditions);
     return $this->dataDBInterface;
   }
 
