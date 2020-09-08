@@ -7,6 +7,9 @@ use core\Interfaces\{
   Repository\RepositoryDataDBInterface
 };
 
+/**
+ * @method __construct(QuerySqlStringInterface $querySqlStringInterface, RepositoryDataDBInterface $repositoryDataDBInterface)
+ */
 interface QueryDataHelper
 {
   public function __construct(QuerySqlStringInterface $querySqlStringInterface, RepositoryDataDBInterface $repositoryDataDBInterface);

@@ -8,6 +8,12 @@ use core\interfaces\{
   Repository\RepositoryDataDBInterface
 };
 
+/**
+ * @method __construct(QuerySqlStringInterface $querySqlStringInterface, RepositoryDataDBInterface $repositoryDataDBInterface)
+ * @method create(array $tableColumns = null): bool
+ * @method getData(): ?array
+ * @method setData(array $data): void
+ */
 class CreateDataDB implements CreateDataDBInterface
 {
   /**

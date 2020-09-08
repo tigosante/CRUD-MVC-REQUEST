@@ -2,20 +2,22 @@
 
 namespace core\interfaces\TableObject;
 
-use core\Interfaces\DataDB\DataDBInterface;
-use core\Interfaces\QuerySql\QuerySqlInterface;
+use core\Interfaces\{
+  DataDB\DataDBInterface,
+  QuerySql\QuerySqlInterface
+};
 
 /**
- * @method function __construct(array $tableConfig, object $object);
- * @method function setAllData(bool $isDataToTableDataBase = true): bool;
- * @method function setDataFromArray(array $dataArray, bool $isDataToTableDataBase = true): bool;
- * @method function select(array $tableColumns = null): QuerySqlInterface;
- * @method function where(string $conditions): DataDBInterface;
- * @method function create(array $tableColumns = null): bool;
- * @method function find(int $tableIdentifier, array $tableColumns = null): array;
- * @method function findAll(array $tableColumns = null): array;
- * @method function setData(array $data): void;
- * @method function clean(): void;
+ * @method function __construct(array $tableConfig, object $object)
+ * @method function setAllData(bool $isDataToTableDataBase = true): bool
+ * @method function setDataFromArray(array $dataArray, bool $isDataToTableDataBase = true): bool
+ * @method function select(array $tableColumns = null): QuerySqlInterface
+ * @method function where(string $conditions): DataDBInterface
+ * @method function create(array $tableColumns = null): bool
+ * @method function find(int $tableIdentifier, array $tableColumns = null): array
+ * @method function findAll(array $tableColumns = null): array
+ * @method function setData(array $data): void
+ * @method function clean(): void
  */
 interface TableInterface
 {
