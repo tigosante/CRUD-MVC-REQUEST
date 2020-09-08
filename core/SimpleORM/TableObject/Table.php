@@ -179,5 +179,6 @@ class Table implements TableInterface
 
   public function clean(): void
   {
+    $this->querySqlInterface->clean();
   }
 }
