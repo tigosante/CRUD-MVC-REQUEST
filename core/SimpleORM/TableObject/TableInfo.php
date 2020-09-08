@@ -2,9 +2,9 @@
 
 namespace core\SimpleORM\TableObject;
 
-use core\interfaces\TableObject\TableObjectHelperInterface;
+use core\interfaces\TableObject\TableInfoInterface;
 
-class TableObjectHelper implements TableObjectHelperInterface
+class TableInfo implements TableInfoInterface
 {
   /**
    * @var string $dataBaseName
@@ -17,9 +17,9 @@ class TableObjectHelper implements TableObjectHelperInterface
   private $tableName = null;
 
   /**
-   * @var int $tableSq
+   * @var int $tableIdentifier
    */
-  private $tableSq = null;
+  private $tableIdentifier = null;
 
   /**
    * @var array $tableColumns
@@ -44,13 +44,15 @@ class TableObjectHelper implements TableObjectHelperInterface
     $this->tableName = $tableName;
   }
 
-  public function getTableSq(): int
+  public function getTableIdentifier(): int
   {
-    return $this->tableSq;
+    return $this->tableIdentifier;
   }
-  public function setTableSq(int $tableSq = null): void
+  public function setTableIdentifier(int $tableIdentifier = null): void
   {
-    $this->tableSq = $tableSq;
+    if ($tableIdentifier !== null) {
+      $this->tableIdentifier = $tableIdentifier;
+    }
   }
 
   public function getTableColumns(): array

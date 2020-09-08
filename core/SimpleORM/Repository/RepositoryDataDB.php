@@ -3,11 +3,19 @@
 namespace core\SimpleORM\Repository;
 
 use core\Interfaces\{
-  Connections\DataBaseConnectionInterface,
-  Repository\RepositoryHandlerDataInterface
+  Repository\RepositoryDataDBInterface,
+  Connections\DataBaseConnectionInterface
 };
 
-class RepositoryHandlerData implements RepositoryHandlerDataInterface
+/**
+ * @method getDataDB(): bool;
+ * @method handleDataDB(): ?array;
+ * @method getQuery(): ?string;
+ * @method setQuery(string $query): void;
+ * @method getData(): ?array;
+ * @method setData(array $query): void;
+ */
+class RepositoryDataDB implements RepositoryDataDBInterface
 {
   /**
    * @var \PDO $connection
@@ -26,10 +34,18 @@ class RepositoryHandlerData implements RepositoryHandlerDataInterface
 
   public function __construct(DataBaseConnectionInterface $dataBaseConnectionInterface)
   {
-    $dataBaseConnectionInterface->createConnection();
     $this->connection = $dataBaseConnectionInterface->getConnection();
   }
-  public function handleData(): bool
+
+  public function getDataDB(): ?array
+  {
+    $statement = $this->connection->prepare($this->getQuery());
+    $statement->execute($this->getData());
+
+    return $statement->fetchAll();
+  }
+
+  public function handleDataDB(): bool
   {
     return $this->connection->prepare($this->getQuery())->execute($this->getData());
   }
