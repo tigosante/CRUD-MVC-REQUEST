@@ -6,5 +6,5 @@ use core\Interfaces\Connections\DataBaseConnectionInterface;
 
 interface ModelInterface
 {
-  public function __construct(DataBaseConnectionInterface $dataBaseConnectionInterface = null, array $options = null);
+  public function __construct(DataBaseConnectionInterface $dataBaseConnectionInterface = null);
 }
