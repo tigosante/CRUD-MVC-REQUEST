@@ -10,8 +10,8 @@ interface TableInfoInterface
   public function getTableName(): string;
   public function setTableName(string $tableName): void;
 
-  public function getTableIdentifier(): int;
-  public function setTableIdentifier(int $tableIdentifier = null): void;
+  public function getTableIdentifier(): string;
+  public function setTableIdentifier(string $tableIdentifier = null): void;
 
   public function getTableColumns(): array;
   public function setTableColumns(array $tableColumns): void;

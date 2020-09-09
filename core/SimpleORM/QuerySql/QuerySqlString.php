@@ -105,22 +105,6 @@ class QuerySqlString implements QuerySqlStringInterface
     array_push($this->whereCondition, $whereCondition);
   }
 
-  public function getTableIdentifier(): string
-  {
-    $identifierValue = "";
-
-    if (!(isset($this->tableIdentifier))) {
-      $identifierValue = $this->tableInfoInterface->getTableIdentifier() . " = {$this->tableIdentifier} ";
-    }
-
-    return $identifierValue;
-  }
-
-  public function setTableIdentifier(int $tableIdentifier): void
-  {
-    $this->tableIdentifier = $tableIdentifier;
-  }
-
   public function getGroupBy(): string
   {
     return " GROUP BY " . join(", ", $this->groupByCondition);
@@ -175,6 +159,22 @@ class QuerySqlString implements QuerySqlStringInterface
   public function setDelete(int $tableIdentifier): void
   {
     $this->delete = "DELETE {$this->dataBaseName}{$this->tableName} ";
+  }
+
+  public function getTableIdentifier(): string
+  {
+    $identifierValue = "";
+
+    if (!(isset($this->tableIdentifier))) {
+      $identifierValue = " " . $this->tableInfoInterface->getTableIdentifier() . " = {$this->tableIdentifier} ";
+    }
+
+    return $identifierValue;
+  }
+
+  public function setTableIdentifier(int $tableIdentifier): void
+  {
+    $this->tableIdentifier = $tableIdentifier;
   }
 
   public function clean(): void

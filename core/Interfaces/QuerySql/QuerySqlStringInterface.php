@@ -32,5 +32,8 @@ interface QuerySqlStringInterface
   public function getDelete(): string;
   public function setDelete(int $tableIdentifier): void;
 
+  public function getTableIdentifier(): string;
+  public function setTableIdentifier(int $tableIdentifier): void;
+
   public function clean(): void;
 }

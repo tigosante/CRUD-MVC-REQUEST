@@ -10,8 +10,10 @@ use core\interfaces\{
   QuerySql\QuerySqlStringInterface,
   TableObject\TableInterface,
   TableObject\TableInfoInterface,
+  Pagination\PaginationInterface,
   Repository\RepositoryDataDBInterface
 };
+use core\Interfaces\DataDB\FindDataInterface;
 use core\SimpleORM\{
   DataDB\DataDB,
   DataDB\CreateDataDB,
@@ -20,6 +22,8 @@ use core\SimpleORM\{
   Repository\RepositoryDataDB,
   TableObject\TableInfo
 };
+use core\SimpleORM\DataDB\FindData;
+use core\SimpleORM\Pagination\Pagination;
 
 class Table implements TableInterface
 {
@@ -63,6 +67,16 @@ class Table implements TableInterface
    */
   private $createDataDBInterface;
 
+  /**
+   * @var FindDataInterface $findDataInterface
+   */
+  private $findDataInterface;
+
+  /**
+   * @var PaginationInterface $paginationInterface
+   */
+  private $paginationInterface;
+
   public function __construct(array $tableConfiguration, object &$object)
   {
     $this->object = $object;
@@ -88,7 +102,9 @@ class Table implements TableInterface
     $this->repositoryDataDBInterface = new RepositoryDataDB($this->dataBaseConnectionInterface);
 
     $this->dataDBInterface = new DataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+    $this->findDataInterface = new FindData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
     $this->querySqlInterface = new QuerySql($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+    $this->paginationInterface = new Pagination($this->querySqlInterface, $this->findAllDataInterface);
     $this->createDataDBInterface = new CreateDataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
   }
 
@@ -163,12 +179,17 @@ class Table implements TableInterface
 
   public function find(int $tableIdentifier, array $tableColumns = null): array
   {
-    return $this->dataDBInterface->find($tableIdentifier, $tableColumns);
+    return $this->findDataInterface->find($tableIdentifier, $tableColumns);
   }
 
   public function findAll(array $tableColumns = null): array
   {
     return $this->dataDBInterface->findAll($tableColumns);
+  }
+
+  public function pagination(int $paginationInit = null, int $paginationAmount = null, int $paginationEnd = null): PaginationInterface
+  {
+    return $this->paginationInterface->init($paginationInit)->amount($paginationAmount)->end($paginationEnd);
   }
 
   public function setData(array $data): void

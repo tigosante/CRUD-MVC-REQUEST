@@ -7,11 +7,13 @@ use core\interfaces\Helpers\{
   QueryDataHelper
 };
 
-interface DataDBInterface extends QueryDataHelper, SetDataHelper
-{
-  public function find(int $tableIdentifier, array $tableColumns = null): array;
-  public function findAll(array $tableColumns = null): array;
+use core\interfaces\DataDB\{
+  FindDataInterface,
+  FindAllDataInterface
+};
 
+interface DataDBInterface extends QueryDataHelper, SetDataHelper, FindAllDataInterface
+{
   public function delete(int $tableIdentifier): bool;
   public function update(array $tableColumns = null): bool;
 

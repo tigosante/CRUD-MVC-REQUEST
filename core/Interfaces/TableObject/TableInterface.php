@@ -6,6 +6,7 @@ use core\Interfaces\{
   DataDB\DataDBInterface,
   QuerySql\QuerySqlInterface
 };
+use core\Interfaces\Pagination\PaginationInterface;
 
 interface TableInterface
 {
@@ -23,6 +24,8 @@ interface TableInterface
 
   public function find(int $tableIdentifier, array $tableColumns = null): array;
   public function findAll(array $tableColumns = null): array;
+
+  public function pagination(int $paginationInit = null, int $paginationAmount = null, int $paginationEnd = null): PaginationInterface;
 
   public function setData(array $data): void;
 

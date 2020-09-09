@@ -17,7 +17,7 @@ class TableInfo implements TableInfoInterface
   private $tableName = null;
 
   /**
-   * @var int $tableIdentifier
+   * @var string $tableIdentifier
    */
   private $tableIdentifier = null;
 
@@ -44,15 +44,13 @@ class TableInfo implements TableInfoInterface
     $this->tableName = $tableName;
   }
 
-  public function getTableIdentifier(): int
+  public function getTableIdentifier(): string
   {
-    return $this->tableIdentifier;
+    return $this->tableIdentifier !== null ? $this->tableIdentifier : "";
   }
-  public function setTableIdentifier(int $tableIdentifier = null): void
+  public function setTableIdentifier(string $tableIdentifier = null): void
   {
-    if ($tableIdentifier !== null) {
-      $this->tableIdentifier = $tableIdentifier;
-    }
+    $this->tableIdentifier = $tableIdentifier;
   }
 
   public function getTableColumns(): array
