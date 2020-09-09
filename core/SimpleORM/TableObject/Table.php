@@ -187,6 +187,15 @@ class Table implements TableInterface
     return $this->dataDBInterface->findAll($tableColumns);
   }
 
+  /**
+   * Por padrão os parâmetros já contêm valores iniciais: paginationInit: 0, paginationAmount: 15 e paginationEnd: 15
+   *
+   * @param int $paginationInit = null
+   * @param int $paginationAmount = null
+   * @param int $paginationEnd = null
+   *
+   * @return PaginationInterface
+   */
   public function pagination(int $paginationInit = null, int $paginationAmount = null, int $paginationEnd = null): PaginationInterface
   {
     return $this->paginationInterface->init($paginationInit)->amount($paginationAmount)->end($paginationEnd);
