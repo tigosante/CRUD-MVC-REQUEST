@@ -9,5 +9,5 @@ use core\Interfaces\{
 
 interface QueryDataHelper
 {
-  public function __construct(QuerySqlStringInterface $querySqlStringInterface, RepositoryDataDBInterface $repositoryDataDBInterface);
+  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface);
 }

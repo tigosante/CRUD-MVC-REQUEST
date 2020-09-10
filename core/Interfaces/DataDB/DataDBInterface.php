@@ -2,17 +2,12 @@
 
 namespace core\Interfaces\DataDB;
 
-use core\interfaces\Helpers\{
-  SetDataHelper,
-  QueryDataHelper
+use core\interfaces\{
+  Helpers\QueryDataHelper,
+  DataDB\FindAllDataInterface
 };
 
-use core\interfaces\DataDB\{
-  FindDataInterface,
-  FindAllDataInterface
-};
-
-interface DataDBInterface extends QueryDataHelper, SetDataHelper, FindAllDataInterface
+interface DataDBInterface extends QueryDataHelper, FindAllDataInterface
 {
   public function delete(int $tableIdentifier): bool;
   public function update(array $tableColumns = null): bool;

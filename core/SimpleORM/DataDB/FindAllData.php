@@ -2,11 +2,11 @@
 
 namespace core\SimpleORM\DataDB;
 
-use core\Interfaces\DataDB\FindAllDataInterface;
+use core\Interfaces\DataDB\FindDataInterface;
 use core\Interfaces\QuerySql\QuerySqlStringInterface;
 use core\interfaces\Repository\RepositoryDataDBInterface;
 
-class FindAllData implements FindAllDataInterface
+class FindData implements FindDataInterface
 {
   /**
    * @var QuerySqlStringInterface $querySqlStringInterface
@@ -24,10 +24,11 @@ class FindAllData implements FindAllDataInterface
     $this->repositoryDataDBInterface = $repositoryDataDBInterface;
   }
 
-  public function findAll(array $tableColumns = null): array
+  public function find(int $tableIdentifier, array $tableColumns = null): array
   {
     $this->querySqlStringInterface->setSelect($tableColumns);
-    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect());
+    $this->querySqlStringInterface->setTableIdentifier($tableIdentifier);
+    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect() . $this->querySqlStringInterface->getTableIdentifier());
 
     return $this->repositoryDataDBInterface->getDataDB();
   }

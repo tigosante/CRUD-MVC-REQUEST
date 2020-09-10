@@ -25,7 +25,7 @@ class QuerySql implements QuerySqlInterface
    */
   private $repositoryDataDBInterface;
 
-  public function __construct(QuerySqlStringInterface $querySqlStringInterface, RepositoryDataDBInterface $repositoryDataDBInterface)
+  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface)
   {
     $this->querySqlStringInterface = $querySqlStringInterface;
     $this->repositoryDataDBInterface = $repositoryDataDBInterface;
@@ -45,7 +45,10 @@ class QuerySql implements QuerySqlInterface
 
   public function where(array $whereCondition): self
   {
-    $this->querySqlStringInterface->setWhere($whereCondition);
+    foreach ($whereCondition as $value) {
+      $this->querySqlStringInterface->setWhere($value);
+    }
+
     return $this;
   }
 
@@ -69,8 +72,6 @@ class QuerySql implements QuerySqlInterface
   public function fetchAll(): array
   {
     $this->repositoryDataDBInterface->setQuery($this->getQueryString());
-    $this->repositoryDataDBInterface->setData($this->getData());
-
     return $this->repositoryDataDBInterface->getDataDB();
   }
 
@@ -82,15 +83,5 @@ class QuerySql implements QuerySqlInterface
       $this->querySqlStringInterface->getWhere() .
       $this->querySqlStringInterface->getGroupBy() .
       $this->querySqlStringInterface->getOrderBy();
-  }
-
-  public function getData(): ?array
-  {
-    return $this->data;
-  }
-
-  public function setData(array $data): void
-  {
-    $this->data = $data;
   }
 }

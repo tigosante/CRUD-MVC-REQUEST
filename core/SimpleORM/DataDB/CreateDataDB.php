@@ -11,11 +11,6 @@ use core\interfaces\{
 class CreateDataDB implements CreateDataDBInterface
 {
   /**
-   * @var array $data
-   */
-  private $data;
-
-  /**
    * @var QuerySqlStringInterface $querySqlStringInterface
    */
   private $querySqlStringInterface;
@@ -25,7 +20,7 @@ class CreateDataDB implements CreateDataDBInterface
    */
   private $repositoryDataDBInterface;
 
-  public function __construct(QuerySqlStringInterface $querySqlStringInterface, RepositoryDataDBInterface $repositoryDataDBInterface)
+  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface)
   {
     $this->querySqlStringInterface = $querySqlStringInterface;
     $this->repositoryDataDBInterface = $repositoryDataDBInterface;
@@ -35,18 +30,7 @@ class CreateDataDB implements CreateDataDBInterface
   {
     $this->querySqlStringInterface->setInsert($tableColumns);
     $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getInsert());
-    $this->repositoryDataDBInterface->setData($this->getData());
 
     return $this->repositoryDataDBInterface->handleDataDB();
-  }
-
-  public function getData(): ?array
-  {
-    return $this->data;
-  }
-
-  public function setData(array $data): void
-  {
-    $this->data = $data;
   }
 }

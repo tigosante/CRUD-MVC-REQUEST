@@ -3,11 +3,10 @@
 namespace core\Interfaces\QuerySql;
 
 use core\interfaces\Helpers\{
-  SetDataHelper,
   QueryDataHelper
 };
 
-interface QuerySqlInterface extends QueryDataHelper, SetDataHelper
+interface QuerySqlInterface extends QueryDataHelper
 {
   public function select(array $tableColumns = null): self;
   public function join(string $joinCondition): self;

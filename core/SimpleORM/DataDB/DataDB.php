@@ -25,7 +25,7 @@ class DataDB implements DataDBInterface
    */
   private $repositoryDataDBInterface;
 
-  public function __construct(QuerySqlStringInterface $querySqlStringInterface, RepositoryDataDBInterface $repositoryDataDBInterface)
+  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface)
   {
     $this->querySqlStringInterface = $querySqlStringInterface;
     $this->repositoryDataDBInterface = $repositoryDataDBInterface;
@@ -35,7 +35,6 @@ class DataDB implements DataDBInterface
   {
     $this->querySqlStringInterface->setSelect($tableColumns);
     $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect());
-    $this->repositoryDataDBInterface->setData($this->getData());
 
     return $this->repositoryDataDBInterface->getDataDB();
   }
@@ -44,7 +43,6 @@ class DataDB implements DataDBInterface
   {
     $this->querySqlStringInterface->setSelect($tableColumns);
     $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect());
-    $this->repositoryDataDBInterface->setData($this->getData());
 
     return $this->repositoryDataDBInterface->getDataDB();
   }
@@ -53,7 +51,6 @@ class DataDB implements DataDBInterface
   {
     $this->querySqlStringInterface->setDelete($tableIdentifier);
     $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getDelete());
-    $this->repositoryDataDBInterface->setData($this->getData());
 
     return $this->repositoryDataDBInterface->handleDataDB();
   }
@@ -62,7 +59,6 @@ class DataDB implements DataDBInterface
   {
     $this->querySqlStringInterface->setUpdate($tableColumns);
     $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getUpdate());
-    $this->repositoryDataDBInterface->setData($this->getData());
 
     return $this->repositoryDataDBInterface->handleDataDB();
   }
@@ -71,15 +67,5 @@ class DataDB implements DataDBInterface
   {
     $this->querySqlStringInterface->setWhere($conditions);
     return $this;
-  }
-
-  public function getData(): ?array
-  {
-    return $this->data;
-  }
-
-  public function setData(array $data): void
-  {
-    $this->data = $data;
   }
 }

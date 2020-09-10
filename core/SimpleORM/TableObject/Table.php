@@ -5,15 +5,16 @@ namespace core\TableObject;
 use core\Connections\OracleConnection;
 use core\interfaces\{
   DataDB\DataDBInterface,
+  DataDB\FindDataInterface,
   DataDB\CreateDataDBInterface,
   QuerySql\QuerySqlInterface,
   QuerySql\QuerySqlStringInterface,
   TableObject\TableInterface,
   TableObject\TableInfoInterface,
   Pagination\PaginationInterface,
-  Repository\RepositoryDataDBInterface
+  Repository\RepositoryDataDBInterface,
 };
-use core\Interfaces\DataDB\FindDataInterface;
+
 use core\SimpleORM\{
   DataDB\DataDB,
   DataDB\CreateDataDB,
@@ -22,6 +23,7 @@ use core\SimpleORM\{
   Repository\RepositoryDataDB,
   TableObject\TableInfo
 };
+use core\SimpleORM\DataDB\FindAllData;
 use core\SimpleORM\DataDB\FindData;
 use core\SimpleORM\Pagination\Pagination;
 
@@ -73,6 +75,11 @@ class Table implements TableInterface
   private $findDataInterface;
 
   /**
+   * @var FindAllDataInterface $findAllDataInterface
+   */
+  private $findAllDataInterface;
+
+  /**
    * @var PaginationInterface $paginationInterface
    */
   private $paginationInterface;
@@ -102,10 +109,12 @@ class Table implements TableInterface
     $this->repositoryDataDBInterface = new RepositoryDataDB($this->dataBaseConnectionInterface);
 
     $this->dataDBInterface = new DataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->findDataInterface = new FindData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
     $this->querySqlInterface = new QuerySql($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->paginationInterface = new Pagination($this->querySqlInterface, $this->findAllDataInterface);
+    $this->findDataInterface = new FindData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+    $this->findAllDataInterface = new FindAllData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
     $this->createDataDBInterface = new CreateDataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+
+    $this->paginationInterface = new Pagination($this->querySqlInterface, $this->findAllDataInterface);
   }
 
   public function setAllData(bool $isDataToTableDataBase = true): bool
@@ -132,11 +141,6 @@ class Table implements TableInterface
     return $result;
   }
 
-  public function ignoreInArray(array $ignore): void
-  {
-    array_merge($this->ignore, $ignore);
-  }
-
   public function setDataFromArray(array $dataArray, bool $isDataToTableDataBase = true): bool
   {
     $result = true;
@@ -145,7 +149,7 @@ class Table implements TableInterface
       foreach ($dataArray as $key => $value) {
         $method = "set_" . strtolower($key);
 
-        if (method_exists($this->object, $method)) {
+        if (method_exists($this->object, $method) && $value !== null) {
           $this->object->$method($value);
 
           if ($isDataToTableDataBase) {
@@ -159,6 +163,29 @@ class Table implements TableInterface
     }
 
     return $result;
+  }
+
+  public function getArrayObjectFromDB(array $dataArray): array
+  {
+    $arrayObject = array();
+
+    foreach ($dataArray as $valueOfArray) {
+      foreach ($$valueOfArray as $key => $value) {
+        $method = "set_" . strtolower($key);
+
+        if (method_exists($this->object, $method) && $value !== null) {
+          $this->object->$method($value);
+        }
+      }
+      array_push($arrayObject, clone $this->object);
+    }
+
+    return $arrayObject;
+  }
+
+  public function ignoreInArray(array $ignore): void
+  {
+    array_merge($this->ignore, $ignore);
   }
 
   public function select(array $tableColumns = null): QuerySqlInterface
@@ -203,9 +230,7 @@ class Table implements TableInterface
 
   public function setData(array $data): void
   {
-    $this->dataDBInterface->setData($data);
-    $this->querySqlInterface->setData($data);
-    $this->createDataDBInterface->setData($data);
+    $this->repositoryDataDBInterface->setData($data);
   }
 
   public function clean(): void

@@ -24,7 +24,7 @@ class RepositoryDataDB implements RepositoryDataDBInterface
    */
   private $data = null;
 
-  public function __construct(DataBaseConnectionInterface $dataBaseConnectionInterface)
+  public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface)
   {
     $this->connection = $dataBaseConnectionInterface->getConnection();
   }

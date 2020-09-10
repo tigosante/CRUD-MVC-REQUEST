@@ -6,7 +6,7 @@ use core\interfaces\TableObject\TableInfoInterface;
 
 interface QuerySqlStringInterface
 {
-  public function __construct(TableInfoInterface $tableInfoInterface);
+  public function __construct(TableInfoInterface &$tableInfoInterface);
 
   public function getSelect(): string;
   public function setSelect(array $tableColumns = null): void;

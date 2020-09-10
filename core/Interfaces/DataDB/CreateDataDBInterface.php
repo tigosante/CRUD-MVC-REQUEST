@@ -3,11 +3,10 @@
 namespace core\interfaces\DataDB;
 
 use core\interfaces\Helpers\{
-  SetDataHelper,
   QueryDataHelper
 };
 
-interface CreateDataDBInterface extends QueryDataHelper, SetDataHelper
+interface CreateDataDBInterface extends QueryDataHelper
 {
   public function create(array $tableColumns = null): bool;
 }

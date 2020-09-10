@@ -2,18 +2,18 @@
 
 namespace core\interfaces\Repository;
 
-use core\Interfaces\Connections\DataBaseConnectionInterface;
+use core\Interfaces\{
+  Helpers\SetDataHelper,
+  Connections\DataBaseConnectionInterface
+};
 
-interface RepositoryDataDBInterface
+interface RepositoryDataDBInterface extends SetDataHelper
 {
-  public function __construct(DataBaseConnectionInterface $dataBaseConnectionInterface);
+  public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface);
 
   public function getDataDB(): ?array;
   public function handleDataDB(): bool;
 
   public function getQuery(): ?string;
   public function setQuery(string $query): void;
-
-  public function getData(): ?array;
-  public function setData(array $query): void;
 }

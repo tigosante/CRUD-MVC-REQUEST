@@ -64,7 +64,7 @@ class QuerySqlString implements QuerySqlStringInterface
    */
   private $tableInfoInterface;
 
-  public function __construct(TableInfoInterface $tableInfoInterface)
+  public function __construct(TableInfoInterface &$tableInfoInterface)
   {
     $this->tableInfoInterface = $tableInfoInterface;
   }

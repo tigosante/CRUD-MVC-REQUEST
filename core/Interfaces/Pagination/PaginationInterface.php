@@ -3,12 +3,11 @@
 namespace core\Interfaces\Pagination;
 
 use core\Interfaces\{
-  Helpers\SetDataHelper,
   QuerySql\QuerySqlInterface,
   DataDB\FindAllDataInterface
 };
 
-interface PaginationInterface extends SetDataHelper
+interface PaginationInterface
 {
   public function __construct(QuerySqlInterface $querySqlInterface, FindAllDataInterface $findAllDataInterface);
 

@@ -7,8 +7,6 @@ use core\Interfaces\{
   DataDB\FindAllDataInterface,
   Pagination\PaginationInterface
 };
-use core\Interfaces\QuerySql\QuerySqlStringInterface;
-use core\interfaces\Repository\RepositoryDataDBInterface;
 
 class Pagination implements PaginationInterface
 {
@@ -83,15 +81,5 @@ class Pagination implements PaginationInterface
   public function where(string $condition): FindAllDataInterface
   {
     return $this->findAllDataInterface;
-  }
-
-  public function getData(): ?array
-  {
-    return $this->data;
-  }
-
-  public function setData(array $data): void
-  {
-    $this->data = $data;
   }
 }
