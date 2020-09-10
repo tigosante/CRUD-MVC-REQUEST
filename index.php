@@ -58,5 +58,3 @@ $tableAdm->set_id(1);
 $tableAdm->find($tableAdm->get_id());
 
 //  ---------------------------------------------------------------------------------------
-
-$tableAdm->pagination()->select()->join("")->where([])->orderBy([])->findAll();
