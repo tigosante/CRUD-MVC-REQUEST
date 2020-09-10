@@ -166,7 +166,7 @@ class QuerySqlString implements QuerySqlStringInterface
     $identifierValue = "";
 
     if (!(isset($this->tableIdentifier))) {
-      $identifierValue = " " . $this->tableInfoInterface->getTableIdentifier() . " = {$this->tableIdentifier} ";
+      $identifierValue = " AND " . $this->tableInfoInterface->getTableIdentifier() . " = {$this->tableIdentifier} ";
     }
 
     return $identifierValue;

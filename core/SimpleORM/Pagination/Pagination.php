@@ -82,4 +82,14 @@ class Pagination implements PaginationInterface
   {
     return $this->findAllDataInterface;
   }
+
+  public function getData(): ?array
+  {
+    return $this->querySqlInterface->getData();
+  }
+
+  public function setData(array $data): void
+  {
+    $this->querySqlInterface->setData($data);
+  }
 }

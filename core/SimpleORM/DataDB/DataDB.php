@@ -11,11 +11,6 @@ use core\Interfaces\{
 class DataDB implements DataDBInterface
 {
   /**
-   * @var array $data
-   */
-  private $data;
-
-  /**
    * @var QuerySqlStringInterface $querySqlStringInterface
    */
   private $querySqlStringInterface;
@@ -29,14 +24,6 @@ class DataDB implements DataDBInterface
   {
     $this->querySqlStringInterface = $querySqlStringInterface;
     $this->repositoryDataDBInterface = $repositoryDataDBInterface;
-  }
-
-  public function find(int $tableIdentifier, array $tableColumns = null): array
-  {
-    $this->querySqlStringInterface->setSelect($tableColumns);
-    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect());
-
-    return $this->repositoryDataDBInterface->getDataDB();
   }
 
   public function findAll(array $tableColumns = null): array
@@ -67,5 +54,15 @@ class DataDB implements DataDBInterface
   {
     $this->querySqlStringInterface->setWhere($conditions);
     return $this;
+  }
+
+  public function getData(): ?array
+  {
+    return $this->repositoryDataDBInterface->getData();
+  }
+
+  public function setData(array $data): void
+  {
+    $this->repositoryDataDBInterface->setData($data);
   }
 }

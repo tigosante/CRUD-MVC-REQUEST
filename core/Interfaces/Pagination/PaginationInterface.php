@@ -6,8 +6,9 @@ use core\Interfaces\{
   QuerySql\QuerySqlInterface,
   DataDB\FindAllDataInterface
 };
+use core\interfaces\Helpers\SetDataHelper;
 
-interface PaginationInterface
+interface PaginationInterface extends SetDataHelper
 {
   public function __construct(QuerySqlInterface $querySqlInterface, FindAllDataInterface $findAllDataInterface);
 

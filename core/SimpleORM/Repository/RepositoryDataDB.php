@@ -24,27 +24,43 @@ class RepositoryDataDB implements RepositoryDataDBInterface
    */
   private $data = null;
 
+  /**
+   * @var array $dataDB
+   */
+  private $dataDB = null;
+
   public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface)
   {
     $this->connection = $dataBaseConnectionInterface->getConnection();
   }
 
+  private function verifyData(): void
+  {
+    $dataArray = $this->getData();
+
+    if (!(empty($dataArray))) {
+      $this->dataDB = $dataArray;
+    }
+  }
+
   public function getDataDB(): ?array
   {
+    $this->verifyData();
     $statement = $this->connection->prepare($this->getQuery());
-    $statement->execute($this->getData());
+    $statement->execute($this->dataDB);
 
     return $statement->fetchAll();
   }
 
   public function handleDataDB(): bool
   {
-    return $this->connection->prepare($this->getQuery())->execute($this->getData());
+    $this->verifyData();
+    return $this->connection->prepare($this->getQuery())->execute($this->dataDB);
   }
 
   public function getQuery(): ?string
   {
-    return $this->query ?? "";
+    return $this->query;
   }
 
   public function setQuery(string $query): void
@@ -59,6 +75,13 @@ class RepositoryDataDB implements RepositoryDataDBInterface
 
   public function setData(array $data): void
   {
-    $this->query = $data;
+    $this->data = $data;
+  }
+
+  public function clean(): void
+  {
+    $this->data = [];
+    $this->query = "";
+    $this->dataDB = null;
   }
 }

@@ -7,7 +7,7 @@ $tableAdm = new Adm;
 $tableAdm->set_adm_name("Tiago");
 $tableAdm->set_dt_cricao((new DateTime())->format('Y-m-d'));
 
-// Ptambém podemos usar o método setData qe recebe um array de chave e valor.
+// Podemos usar o método setData que recebe um array de chave e valor.
 $tableAdm->setData(array(
   $tableAdm::ADM_NAME => "Tiago",
   $tableAdm::DT_CRIACAO => $date->format('Y-m-d')
@@ -40,7 +40,7 @@ $tableAdm->create();
 $tableAdm->set_id(2);
 
 // Remoção de registro de usuário.
-$tableAdm->where($tableAdm::ID . " = :ID")->delete($tableAdm->get_id());
+$tableAdm->where($tableAdm::ID . " = :ID ")->delete($tableAdm->get_id());
 
 //  ---------------------------------------------------------------------------------------
 // Busca de registro no banco de dados.
@@ -48,7 +48,7 @@ $tableAdm->where($tableAdm::ID . " = :ID")->delete($tableAdm->get_id());
 $tableAdm->setData(array($tableAdm::ID => 1, $tableAdm::DT_CRIACAO => "07/09/2020"));
 
 //  Busca de vários registros com where.
-$tableAdm->where($tableAdm::DT_CRIACAO . " > :DT_CRIACAO")->findAll();
+$tableAdm->where($tableAdm::DT_CRIACAO . " > :DT_CRIACAO ")->findAll();
 
 //  Busca de todos os registros pegando apenas a coluna ADM_NAME.
 $tableAdm->findAll(array($tableAdm::ADM_NAME));
@@ -58,3 +58,5 @@ $tableAdm->set_id(1);
 $tableAdm->find($tableAdm->get_id());
 
 //  ---------------------------------------------------------------------------------------
+
+$tableAdm->pagination()->select()->join("")->where([])->orderBy([])->findAll();

@@ -11,11 +11,6 @@ use core\interfaces\{
 class QuerySql implements QuerySqlInterface
 {
   /**
-   * @var array $data
-   */
-  private $data;
-
-  /**
    * @var QuerySqlStringInterface $querySqlStringInterface
    */
   private $querySqlStringInterface;
@@ -69,10 +64,20 @@ class QuerySql implements QuerySqlInterface
     $this->querySqlStringInterface->clean();
   }
 
-  public function fetchAll(): array
+  public function findAll(): array
   {
     $this->repositoryDataDBInterface->setQuery($this->getQueryString());
     return $this->repositoryDataDBInterface->getDataDB();
+  }
+
+  public function getData(): ?array
+  {
+    return $this->repositoryDataDBInterface->getData();
+  }
+
+  public function setData(array $data): void
+  {
+    $this->repositoryDataDBInterface->setData($data);
   }
 
   public function getQueryString(): string

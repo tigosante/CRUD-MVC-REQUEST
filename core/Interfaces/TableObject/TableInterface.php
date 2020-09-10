@@ -11,12 +11,13 @@ use core\Interfaces\{
   Pagination\PaginationInterface,
   Table\TableHandlerDataInterface
 };
+use core\interfaces\Helpers\SetDataHelper;
 
-interface TableInterface extends FindDataInterface, FindAllDataInterface, CreateDataDBInterface, TableHandlerDataInterface
+interface TableInterface extends FindDataInterface, FindAllDataInterface, CreateDataDBInterface, SetDataHelper, TableHandlerDataInterface
 {
   public function __construct(array $tableConfig, object $object);
 
-  public function ignoreInArray(array $ignore): void;
+  public function ignoreViewField(array $ignore = null): void;
 
   public function select(array $tableColumns = null): QuerySqlInterface;
 

@@ -16,4 +16,6 @@ interface RepositoryDataDBInterface extends SetDataHelper
 
   public function getQuery(): ?string;
   public function setQuery(string $query): void;
+
+  public function clean(): void;
 }
