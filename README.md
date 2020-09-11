@@ -18,7 +18,7 @@ Convenções adotadas no ambiente de trabalho para o projeto:
 
 - O nome das das classes devem ser iguais aos das tabelas do banco de dados
 - Todos os `métodos de get e set` devem conter um `_` depois dos prefixos get e set: **_get_name e set_name_**;
-- Todos os `métodos de get e set` devem ter os nomes correspondentes de cada coluna
+- Todos os `métodos de get e set` devem ter os nomes correspondentes de cada coluna que objeto representa
 
 ### BANCO DE DADOS
 
