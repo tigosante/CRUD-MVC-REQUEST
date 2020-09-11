@@ -11,12 +11,12 @@ use core\Interfaces\{
 class Model implements ModelInterface
 {
   /**
-   * @var DataBaseConnectionInterface $dataBaseObject
+   * @var \PDO $connection
    */
-  public $dataBaseObject;
+  public $connection;
 
   public function __construct(DataBaseConnectionInterface $dataBaseConnectionInterface = null)
   {
-    $this->dataBaseObject = $dataBaseConnectionInterface ? $dataBaseConnectionInterface : OracleConnection::singleton();
+    $this->connection = $dataBaseConnectionInterface->getConnection() ? $dataBaseConnectionInterface : OracleConnection::singleton()->getConnection();
   }
 }
