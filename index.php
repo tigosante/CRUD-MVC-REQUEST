@@ -3,14 +3,15 @@
 use app\Tables\Adm;
 
 $tableAdm = new Adm;
+$data = new DateTime;
 
 $tableAdm->set_adm_name("Tiago");
-$tableAdm->set_dt_cricao((new DateTime())->format('Y-m-d'));
+$tableAdm->set_dt_cricao($data->format("Y-m-d"));
 
 // Podemos usar o método setData que recebe um array de chave e valor.
 $tableAdm->setData(array(
   $tableAdm::ADM_NAME => "Tiago",
-  $tableAdm::DT_CRIACAO => $date->format('Y-m-d')
+  $tableAdm::DT_CRIACAO => $date->format("Y-m-d")
 ));
 
 // Criação de novo registro de usuário.
@@ -21,7 +22,7 @@ $tableAdm->create();
 // Podemos usar por encapsulamento.
 $tableAdm->set_id(1);
 $tableAdm->set_adm_name("Pedro");
-$tableAdm->set_dt_cricao((new DateTime())->format('Y-m-d'));
+$tableAdm->set_dt_cricao($data->format("Y-m-d"));
 
 $tableAdm->where($tableAdm::ID . " = :ID")->update();
 
@@ -29,7 +30,7 @@ $tableAdm->where($tableAdm::ID . " = :ID")->update();
 
 $tableAdm->setData(array(
   $tableAdm::ADM_NAME => "Tiago",
-  $tableAdm::DT_CRIACAO => $date->format('Y-m-d')
+  $tableAdm::DT_CRIACAO => $date->format("Y-m-d")
 ));
 
 // Criação de novo registro de usuário.

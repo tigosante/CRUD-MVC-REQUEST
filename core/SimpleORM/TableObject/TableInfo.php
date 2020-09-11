@@ -26,6 +26,11 @@ class TableInfo implements TableInfoInterface
    */
   private $tableColumns = null;
 
+  /**
+   * @var array $tableColumnsDate
+   */
+  private $tableColumnsDate = null;
+
   public function getDataBaseName(): string
   {
     return $this->dataBaseName;
@@ -60,5 +65,14 @@ class TableInfo implements TableInfoInterface
   public function setTableColumns(array $tableColumns): void
   {
     $this->tableColumns = $tableColumns;
+  }
+
+  public function getTableColumnsDate(): array
+  {
+    return $this->tableColumnsDate;
+  }
+  public function setTableColumnsDate(array $tableColumnsDate = null): void
+  {
+    $this->tableColumnsDate = $tableColumnsDate;
   }
 }

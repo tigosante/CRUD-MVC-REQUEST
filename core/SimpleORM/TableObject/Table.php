@@ -30,6 +30,12 @@ use core\SimpleORM\{
 class Table implements TableInterface
 {
   public const ACAO = "acao";
+  public const TABLE_NAME = "tableName";
+  public const TABLE_COLUMNS = "tableColumns";
+  public const DATA_BASE_NAME = "dataBaseName";
+  public const TABLE_IDENTIFIER = "tableIdentifier";
+  public const TABLE_COLUMNS_DATE = "tableColumnsDate";
+
   /**
    * Referência do objeto filho.
    *
@@ -132,10 +138,11 @@ class Table implements TableInterface
    */
   private function setTableConfiguration(array $tableConfiguration): void
   {
-    $this->tableInfoInterface->setTableName($tableConfiguration["tableName"]);
-    $this->tableInfoInterface->setTableColumns($tableConfiguration["tableColumns"]);
-    $this->tableInfoInterface->setDataBaseName($tableConfiguration["dataBaseName"] ?? ".PPC");
-    $this->tableInfoInterface->setTableIdentifier($tableConfiguration["tableIdentifier"]);
+    $this->tableInfoInterface->setTableName($tableConfiguration[self::TABLE_NAME]);
+    $this->tableInfoInterface->setTableColumns($tableConfiguration[self::TABLE_COLUMNS]);
+    $this->tableInfoInterface->setDataBaseName($tableConfiguration[self::DATA_BASE_NAME] ?? "PPC.");
+    $this->tableInfoInterface->setTableIdentifier($tableConfiguration[self::TABLE_IDENTIFIER]);
+    $this->tableInfoInterface->setTableColumnsDate($tableConfiguration[self::TABLE_COLUMNS_DATE]);
   }
 
   /**

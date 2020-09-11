@@ -28,13 +28,16 @@ class Adm extends Table
   public function __construct()
   {
     $tableName = "ADM";
+    $dataBaseName = "CPG.";
     $tableColumns = array(self::ID, self::DT_CRIACAO, self::ADM_NAME);
+    $tableColumnsDate = array(self::DT_CRIACAO);
 
     $tableConfiguration = array(
-      "tableName" => $tableName,
-      "tableColumns" => $tableColumns,
-      "tableIdentifier" => self::ID,
-      "dataBaseName" => ".CPG"
+      self::TABLE_NAME => $tableName,
+      self::TABLE_COLUMNS => $tableColumns,
+      self::DATA_BASE_NAME => $dataBaseName,
+      self::TABLE_IDENTIFIER => self::ID,
+      self::TABLE_COLUMNS_DATE => $tableColumnsDate
     );
 
     parent::__construct($tableConfiguration, $this);

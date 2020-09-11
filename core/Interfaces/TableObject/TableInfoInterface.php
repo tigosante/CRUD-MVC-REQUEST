@@ -15,4 +15,7 @@ interface TableInfoInterface
 
   public function getTableColumns(): array;
   public function setTableColumns(array $tableColumns): void;
+
+  public function getTableColumnsDate(): array;
+  public function setTableColumnsDate(array $tableColumnsDate = null): void;
 }
