@@ -14,7 +14,8 @@ use core\interfaces\{
   Pagination\PaginationInterface,
   Repository\RepositoryDataDBInterface,
 };
-
+use core\Interfaces\Connections\DataBaseConnectionInterface;
+use core\Interfaces\DataDB\FindAllDataInterface;
 use core\SimpleORM\{
   DataDB\DataDB,
   DataDB\FindData,
@@ -35,6 +36,18 @@ class Table implements TableInterface
   public const DATA_BASE_NAME = "dataBaseName";
   public const TABLE_IDENTIFIER = "tableIdentifier";
   public const TABLE_COLUMNS_DATE = "tableColumnsDate";
+  public const DATA_BASE_NAME_DEFAULT = "PPC.";
+
+  public const DATA_DB = "DATA_DB";
+  public const QUERY_SQL = "QUERY_SQL";
+  public const FIND_DATA = "FIND_DATA";
+  public const TABLE_INFO = "TABLE_INFO";
+  public const PAGINATION = "PAGINATION";
+  public const FIND_ALL_DATA = "FIND_ALL_DATA";
+  public const CREATE_DATA_DB = "CREATE_DATA_DB";
+  public const QUERY_SQL_STRING = "QUERY_SQL_STRING";
+  public const REPOSITORY_DATA_DB = "REPOSITORY_DATA_DB";
+  public const DATA_BASE_CONNECTION = "DATA_BASE_CONNECTION";
 
   /**
    * Referência do objeto filho.
@@ -120,50 +133,8 @@ class Table implements TableInterface
    */
   private $paginationInterface;
 
-  public function __construct(array $tableConfiguration, object &$object)
+  public function __construct()
   {
-    $this->object = $object;
-    $this->tableInfoInterface = new TableInfo;
-
-    $this->setTableConfiguration($tableConfiguration);
-    $this->setObjects();
-  }
-
-  /**
-   * Injeta as informações da tabela referente ao objeo atual.
-   *
-   * @param array $tableConfiguration : deve conter um array de chave e valor.
-
-   * @return void
-   */
-  private function setTableConfiguration(array $tableConfiguration): void
-  {
-    $this->tableInfoInterface->setTableName($tableConfiguration[self::TABLE_NAME]);
-    $this->tableInfoInterface->setTableColumns($tableConfiguration[self::TABLE_COLUMNS]);
-    $this->tableInfoInterface->setDataBaseName($tableConfiguration[self::DATA_BASE_NAME] ?? "PPC.");
-    $this->tableInfoInterface->setTableIdentifier($tableConfiguration[self::TABLE_IDENTIFIER]);
-    $this->tableInfoInterface->setTableColumnsDate($tableConfiguration[self::TABLE_COLUMNS_DATE]);
-  }
-
-  /**
-   * Cria instâncias dos objetos necessários para todos os métodos funcionarem corretamente.
-   *
-   * @return void
-   */
-  private function setObjects(): void
-  {
-    $this->dataBaseConnectionInterface = new OracleConnection;
-
-    $this->querySqlStringInterface = new QuerySqlString($this->tableInfoInterface);
-    $this->repositoryDataDBInterface = new RepositoryDataDB($this->dataBaseConnectionInterface);
-
-    $this->dataDBInterface = new DataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->querySqlInterface = new QuerySql($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->findDataInterface = new FindData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->findAllDataInterface = new FindAllData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->createDataDBInterface = new CreateDataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-
-    $this->paginationInterface = new Pagination($this->querySqlInterface, $this->findAllDataInterface);
   }
 
   /**
@@ -200,6 +171,52 @@ class Table implements TableInterface
     }
 
     return $result;
+  }
+
+  /**
+   * Injeta as informações da tabela referente ao objeo atual.
+   *
+   * @param array $tableConfiguration : deve conter um array de chave e valor.
+
+   * @return void
+   */
+  private function setTableConfiguration(array $tableConfiguration): void
+  {
+    $this->tableInfoInterface->setTableName($tableConfiguration[self::TABLE_NAME]);
+    $this->tableInfoInterface->setTableColumns($tableConfiguration[self::TABLE_COLUMNS]);
+    $this->tableInfoInterface->setDataBaseName($tableConfiguration[self::DATA_BASE_NAME] ?? self::DATA_BASE_NAME_DEFAULT);
+    $this->tableInfoInterface->setTableIdentifier($tableConfiguration[self::TABLE_IDENTIFIER]);
+    $this->tableInfoInterface->setTableColumnsDate($tableConfiguration[self::TABLE_COLUMNS_DATE]);
+  }
+
+  /**
+   * Cria instâncias dos objetos necessários para todos os métodos funcionarem corretamente.
+   *
+   * @return void
+   */
+  private function setObjects(array $objectsConfiguration = array()): void
+  {
+    $this->dataBaseConnectionInterface = $objectsConfiguration[self::DATA_BASE_CONNECTION] instanceof DataBaseConnectionInterface ? $objectsConfiguration[self::DATA_BASE_CONNECTION] : new OracleConnection;
+
+    $this->querySqlStringInterface = $objectsConfiguration[self::QUERY_SQL_STRING] instanceof QuerySqlStringInterface ? $objectsConfiguration[self::QUERY_SQL_STRING] : new QuerySqlString($this->tableInfoInterface);
+    $this->repositoryDataDBInterface = $objectsConfiguration[self::REPOSITORY_DATA_DB] instanceof RepositoryDataDBInterface ? $objectsConfiguration[self::REPOSITORY_DATA_DB] : new RepositoryDataDB($this->dataBaseConnectionInterface);
+
+    $this->dataDBInterface = $objectsConfiguration[self::DATA_DB] instanceof DataDBInterface ? $objectsConfiguration[self::DATA_DB] : new DataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+    $this->querySqlInterface = $objectsConfiguration[self::DATA_BASE_CONNECTION] instanceof DataBaseConnectionInterface ? $objectsConfiguration[self::DATA_BASE_CONNECTION] : new QuerySql($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+    $this->findDataInterface = $objectsConfiguration[self::FIND_DATA] instanceof FindDataInterface ? $objectsConfiguration[self::FIND_DATA] : new FindData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+    $this->findAllDataInterface = $objectsConfiguration[self::FIND_ALL_DATA] instanceof FindAllDataInterface ? $objectsConfiguration[self::FIND_ALL_DATA] : new FindAllData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+    $this->createDataDBInterface = $objectsConfiguration[self::CREATE_DATA_DB] instanceof CreateDataDBInterface ? $objectsConfiguration[self::CREATE_DATA_DB] : new CreateDataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+
+    $this->paginationInterface = $objectsConfiguration[self::PAGINATION] instanceof PaginationInterface ? $objectsConfiguration[self::PAGINATION] : new Pagination($this->querySqlInterface, $this->findAllDataInterface);
+  }
+
+  public function configuration(object &$object, array $tableConfiguration, array $objectsConfiguration = array()): void
+  {
+    $this->object = $object;
+    $this->tableInfoInterface[self::TABLE_INFO] instanceof TableInfoInterface ? $objectsConfiguration[self::PAGINATION] : new TableInfo;
+
+    $this->setTableConfiguration($tableConfiguration);
+    $this->setObjects($objectsConfiguration);
   }
 
   /**

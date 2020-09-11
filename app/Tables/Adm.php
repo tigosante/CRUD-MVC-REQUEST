@@ -40,7 +40,20 @@ class Adm extends Table
       self::TABLE_COLUMNS_DATE => $tableColumnsDate
     );
 
-    parent::__construct($tableConfiguration, $this);
+    $objecsConfiguration = array(
+      self::DATA_DB => null,
+      self::QUERY_SQL => null,
+      self::FIND_DATA => null,
+      self::TABLE_INFO => null,
+      self::PAGINATION => null,
+      self::FIND_ALL_DATA => null,
+      self::CREATE_DATA_DB => null,
+      self::QUERY_SQL_STRING => null,
+      self::REPOSITORY_DATA_DB => null,
+      self::DATA_BASE_CONNECTION => null
+    );
+
+    $this->configuration($this, $tableConfiguration, $objecsConfiguration);
   }
 
   public function get_id(): ?int

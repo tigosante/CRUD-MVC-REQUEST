@@ -16,7 +16,9 @@ use core\Interfaces\{
 
 interface TableInterface extends Fetch, FindDataInterface, FindAllDataInterface, CreateDataDBInterface, SetDataHelper, TableHandlerDataInterface
 {
-  public function __construct(array $tableConfig, object $object);
+  public function __construct();
+
+  public function configuration(object &$object, array $tableConfiguration, array $objectsConfiguration = array()): void;
 
   public function ignoreViewField(array $ignore = null): void;
 
