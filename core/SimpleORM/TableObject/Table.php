@@ -210,6 +210,15 @@ class Table implements TableInterface
     $this->paginationInterface = $objectsConfiguration[self::PAGINATION] instanceof PaginationInterface ? $objectsConfiguration[self::PAGINATION] : new Pagination($this->querySqlInterface, $this->findAllDataInterface);
   }
 
+  /**
+   * Configura o objeto pai injetando o que é preciso para tudo funcionar.
+   *
+   * @param object &$object : Deve conter o objeto filho. (passar o $this do objeto que está extendendo o Table).
+   * @param array $tableConfiguration : deve conter um array com as informações da tabela que o objeto filho representa.
+   * @param array $objectsConfiguration = array() : [optional] deve conter a instância dos objetos que o dev deseja usar.
+   *
+   * @return void
+   */
   public function configuration(object &$object, array $tableConfiguration, array $objectsConfiguration = array()): void
   {
     $this->object = $object;
