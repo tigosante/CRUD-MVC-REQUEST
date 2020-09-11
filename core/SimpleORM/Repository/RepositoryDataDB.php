@@ -17,17 +17,32 @@ class RepositoryDataDB implements RepositoryDataDBInterface
   /**
    * @var string $query
    */
-  private $query = null;
+  private $query = "";
 
   /**
    * @var array $data
    */
-  private $data = null;
+  private $data = [];
 
   /**
    * @var array $dataDB
    */
   private $dataDB = null;
+
+  /**
+   * @var int $fetch_style
+   */
+  private $fetch_style = null;
+
+  /**
+   * @var int $fetch_argument
+   */
+  private $fetch_argument = null;
+
+  /**
+   * @var array $ctor_args
+   */
+  private $ctor_args;
 
   public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface)
   {
@@ -49,7 +64,7 @@ class RepositoryDataDB implements RepositoryDataDBInterface
     $statement = $this->connection->prepare($this->getQuery());
     $statement->execute($this->dataDB);
 
-    return $statement->fetchAll();
+    return $statement->fetchAll($this->fetch_style, $this->fetch_argument, $this->ctor_args);
   }
 
   public function handleDataDB(): bool
@@ -75,7 +90,15 @@ class RepositoryDataDB implements RepositoryDataDBInterface
 
   public function setData(array $data): void
   {
-    $this->data = $data;
+    if (!(empty($data))) {
+      $newDataArray = array();
+
+      foreach ($data as $key => $value) {
+        array_push($newDataArray, [":{$key}" => $value]);
+      }
+
+      array_merge($this->data, $newDataArray);
+    }
   }
 
   public function clean(): void
@@ -83,5 +106,23 @@ class RepositoryDataDB implements RepositoryDataDBInterface
     $this->data = [];
     $this->query = "";
     $this->dataDB = null;
+    $this->fetch_style = null;
+    $this->fetch_argument = null;
+    $this->ctor_args = array();
+  }
+
+  public function fetchAllConfiguration(int $fetch_style = null, int $fetch_argument = null, array $ctor_args = array()): void
+  {
+    if (!(empty($fetch_style))) {
+      $this->fetch_style = $fetch_style;
+    }
+
+    if (!(empty($fetch_argument))) {
+      $this->fetch_argument = $fetch_argument;
+    }
+
+    if (!(empty($ctor_args))) {
+      $this->ctor_args = $ctor_args;
+    }
   }
 }

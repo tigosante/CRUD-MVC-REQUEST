@@ -3,17 +3,18 @@
 namespace core\interfaces\TableObject;
 
 use core\Interfaces\{
+  DataDB\Fetch\Fetch,
   DataDB\DataDBInterface,
   DataDB\FindDataInterface,
   DataDB\FindAllDataInterface,
   DataDB\CreateDataDBInterface,
   QuerySql\QuerySqlInterface,
   Pagination\PaginationInterface,
-  Table\TableHandlerDataInterface
+  Table\TableHandlerDataInterface,
+  Helpers\SetDataHelper
 };
-use core\interfaces\Helpers\SetDataHelper;
 
-interface TableInterface extends FindDataInterface, FindAllDataInterface, CreateDataDBInterface, SetDataHelper, TableHandlerDataInterface
+interface TableInterface extends Fetch, FindDataInterface, FindAllDataInterface, CreateDataDBInterface, SetDataHelper, TableHandlerDataInterface
 {
   public function __construct(array $tableConfig, object $object);
 

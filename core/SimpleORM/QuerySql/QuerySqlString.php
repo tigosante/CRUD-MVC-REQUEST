@@ -9,6 +9,9 @@ use core\Interfaces\{
 
 class QuerySqlString implements QuerySqlStringInterface
 {
+  private const BREAK_LINE = "\n";
+  private const SPACE_SEPARATOR = " ";
+
   /**
    * @var int $tableIdentifier
    */
@@ -69,31 +72,40 @@ class QuerySqlString implements QuerySqlStringInterface
     $this->tableInfoInterface = $tableInfoInterface;
   }
 
-  public function getSelect(): string
+  public function getSelect(): ?string
   {
     return $this->select;
   }
 
   public function setSelect(array $tableColumns = null): void
   {
-    $columns = empty($tableColumns) ?   " * " : join(", ", $tableColumns);
-    $this->select = "SELECT {$columns} FROM " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName();
+    $columns = empty($tableColumns) ?   " * " : strtoupper(join(", ", $tableColumns));
+    $this->select = "SELECT {$columns} FROM " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName() . self::SPACE_SEPARATOR;
   }
 
-  public function getJoin(): string
+  public function getJoin(): ?string
   {
-    return join("\n    ", $this->joinCondition);
+    return strtoupper(join("\n    ", $this->joinCondition));
   }
 
   public function setJoin(string $joinCondition, string $typeJoin = "INNER"): void
   {
-    array_push($this->joinCondition, "{$typeJoin} JOIN {$joinCondition}");
+    array_push($this->joinCondition, " {$typeJoin} JOIN {$joinCondition} ");
   }
 
   public function getWhere(): string
   {
-    $identifier = empty($this->tableIdentifier) ? "" : $this->getTableIdentifier();
-    return " WHERE 1=1 " . join(" ", $this->whereCondition) . " {$identifier} ";
+    $identifier = self::SPACE_SEPARATOR;
+    $whereCommand = self::SPACE_SEPARATOR;
+
+    if (empty($this->tableIdentifier)) {
+      $identifier = $this->getTableIdentifier();
+    }
+    if (empty($this->whereCondition)) {
+      $whereCommand = " WHERE 1=1 " . strtoupper(join(" ", $this->whereCondition)) . " {$identifier} " . self::BREAK_LINE;
+    }
+
+    return $whereCommand;
   }
 
   public function setWhere(string $whereCondition, int $tableIdentifier = null): void
@@ -105,9 +117,9 @@ class QuerySqlString implements QuerySqlStringInterface
     array_push($this->whereCondition, $whereCondition);
   }
 
-  public function getGroupBy(): string
+  public function getGroupBy(): ?string
   {
-    return " GROUP BY " . join(", ", $this->groupByCondition);
+    return " GROUP BY " . strtoupper(join(", ", $this->groupByCondition)) . self::BREAK_LINE;
   }
 
   public function setGroupBy(array $groupByCondition): void
@@ -115,9 +127,9 @@ class QuerySqlString implements QuerySqlStringInterface
     $this->groupByCondition = $groupByCondition;
   }
 
-  public function getOrderBy(): string
+  public function getOrderBy(): ?string
   {
-    return " ORDER BY " . join(", ", $this->orderByCondition) . " {$this->typeOrderBy} ";
+    return " ORDER BY " . strtoupper(join(", ", $this->orderByCondition)) . " {$this->typeOrderBy} ";
   }
 
   public function setOrderBy(array $orderByCondition, string $typeOrderBy = "ASC"): void
@@ -126,9 +138,9 @@ class QuerySqlString implements QuerySqlStringInterface
     $this->orderByCondition = $orderByCondition;
   }
 
-  public function getInsert(): string
+  public function getInsert(): ?string
   {
-    return $this->insert ?? "";
+    return $this->insert;
   }
 
   public function setInsert(array $tableColumns = null): void
@@ -139,9 +151,9 @@ class QuerySqlString implements QuerySqlStringInterface
     $this->insert = "INSERT INTO " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName() . " ({$columns}) VALUES ({$columnsBinds}) ";
   }
 
-  public function getUpdate(): string
+  public function getUpdate(): ?string
   {
-    return $this->update ?? "";
+    return $this->update;
   }
 
   public function setUpdate(array $tableColumns = null): void
@@ -151,19 +163,19 @@ class QuerySqlString implements QuerySqlStringInterface
     $this->update = "UPDATE " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName() . " SET {$columns} ";
   }
 
-  public function getDelete(): string
+  public function getDelete(): ?string
   {
-    return $this->delete ?? "";
+    return $this->delete;
   }
 
   public function setDelete(int $tableIdentifier): void
   {
-    $this->delete = "DELETE {$this->dataBaseName}{$this->tableName} ";
+    $this->delete = "DELETE " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName() . self::SPACE_SEPARATOR;
   }
 
-  public function getTableIdentifier(): string
+  public function getTableIdentifier(): ?string
   {
-    $identifierValue = "";
+    $identifierValue = self::SPACE_SEPARATOR;
 
     if (!(isset($this->tableIdentifier))) {
       $identifierValue = " AND " . $this->tableInfoInterface->getTableIdentifier() . " = {$this->tableIdentifier} ";
@@ -179,7 +191,7 @@ class QuerySqlString implements QuerySqlStringInterface
 
   public function clean(): void
   {
-    unset($this->tableIdentifier);
+    $this->tableIdentifier = null;
 
     $this->tableColumns = [];
     $this->joinCondition = [];
@@ -196,20 +208,19 @@ class QuerySqlString implements QuerySqlStringInterface
 
   private function getColumnsFromArray(string $separator, array $tableColumns = null): string
   {
-    $tableColumns = empty($tableColumns) ? $this->tableColumn : $tableColumns;
-
-    return join($separator, $tableColumns);
+    $tableColumns = empty($tableColumns) ? $this->tableInfoInterface->getTableColumns() : $tableColumns;
+    return strtoupper(join($separator, $tableColumns));
   }
 
   private function getColumnsToUpdate(array $tableColumns = null): string
   {
-    $columnsUpdate = "";
-    $tableColumns = empty($tableColumns) ? $this->tableColumn : $tableColumns;
+    $columnsUpdate = array();
+    $tableColumns = empty($tableColumns) ? $this->tableInfoInterface->getTableColumns() : $tableColumns;
 
     foreach ($tableColumns as $column) {
-      $columnsUpdate .= "{$column} = :{$column}";
+      array_push($columnsUpdate, " {$column} = :{$column} ");
     }
 
-    return $columnsUpdate;
+    return strtoupper(join(", ", $columnsUpdate));
   }
 }

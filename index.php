@@ -59,3 +59,7 @@ $tableAdm->set_id(1);
 $tableAdm->find($tableAdm->get_id());
 
 //  ---------------------------------------------------------------------------------------
+
+//  Busca vários registros no banco de dados usando paginação.
+$tableAdm->pagination(10, 15, 60)->findAll();
+$tableAdm->pagination()->init(10)->amount(15)->end(60)->findAll();

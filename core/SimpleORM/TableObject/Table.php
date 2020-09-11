@@ -348,11 +348,12 @@ class Table implements TableInterface
   }
 
   /**
+   * Inicia uma query que retorna dados reduzidos para paginação.
    * Por padrão os parâmetros já contêm valores iniciais: paginationInit: 0, paginationAmount: 15 e paginationEnd: 15.
    *
-   * @param int $paginationInit = null
-   * @param int $paginationAmount = null
-   * @param int $paginationEnd = null
+   * @param int $paginationInit = null : deve conter número do índice inicial da paginação.
+   * @param int $paginationAmount = null : deve conter a quantidade de elementos por página.
+   * @param int $paginationEnd = null : deve conter número do índice final da paginação.
    *
    * @return PaginationInterface
    */
@@ -373,8 +374,9 @@ class Table implements TableInterface
 
   /**
    * Injeta os dados que serão usados no DB.
+   * Por padrão os valores são ajustados para o formato ':CAMPO', não necessitando que o dev use o operador ':' para binds.
    *
-   * @param array $data
+   * @param array $data : deve conter um array de chave e valor que será usado no DB.
    *
    * @return void
    */
@@ -392,5 +394,37 @@ class Table implements TableInterface
   {
     $this->dataToTableObject = [];
     $this->querySqlInterface->clean();
+    $this->repositoryDataDBInterface->clean();
+  }
+
+  /**
+   * @param int $fetch_style = null
+   * [optional]
+   *
+   * Controla o conteúdo da matriz retornada no método find, findAll e select. Valor Padrão: PDO::FETCH_ASSOC
+   *
+   * Para retornar uma matriz que consiste em todos os valores de uma única coluna do conjunto de resultados, use PDO::FETCH_COLUMN. Você pode especificar qual coluna deseja com o parâmetro de índice de coluna.
+   *
+   * Para buscar apenas os valores únicos de uma única coluna do conjunto de resultados, bit a bit-OR PDO::FETCH_COLUMN with PDO::FETCH_UNIQUE.
+   *
+   * Para retornar uma matriz associativa agrupada pelos valores de uma coluna especificada, bit a bit-OR PDO::FETCH_COLUMN with PDO::FETCH_GROUP.
+   *
+   * @param mixed $fetch_argument = null
+   * [optional]
+   *
+   * Este argumento tem um significado diferente dependendo do valor do parâmetro fetch_style:
+   *
+   * PDO::FETCH_COLUMN: Retorna a coluna indicada com índice 0.
+   *
+   * @param array $ctor_args = array()
+   * [optional]
+   *
+   * Argumentos do construtor de classe personalizada quando o parâmetro fetch_style é PDO :: FETCH_CLASS.
+   *
+   * @return void
+   */
+  public function fetchAllConfiguration(int $fetch_style = null, $fetch_argument = null, array $ctor_args = array()): void
+  {
+    $this->repositoryDataDBInterface->fetchAllConfiguration($fetch_style, $fetch_argument, $ctor_args);
   }
 }
