@@ -16,8 +16,9 @@ Este projeto é mantido sob a licença MIT e stá disponível para uso em projet
 
 Convenções adotadas no ambiente de trabalho para o projeto:
 
-- Regra para nome de classes e tabelas e colunas em um db: **_Devem ser criadas com letra maiúscula_**
+- O nome das das classes devem ser iguais aos das tabelas do banco de dados
 - Todos os `métodos de get e set` devem conter um `_` depois dos prefixos get e set: **_get_name e set_name_**;
+- Todos os `métodos de get e set` devem ter os nomes correspondentes de cada coluna
 
 ### BANCO DE DADOS
 
