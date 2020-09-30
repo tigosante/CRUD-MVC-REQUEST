@@ -29,6 +29,6 @@ class FindAllData implements FindAllDataInterface
     $this->querySqlStringInterface->setSelect($tableColumns);
     $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect());
 
-    return $this->repositoryDataDBInterface->getDataDB();
+    return $this->repositoryDataDBInterface->recoverData();
   }
 }

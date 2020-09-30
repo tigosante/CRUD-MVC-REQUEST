@@ -14,13 +14,12 @@ use src\interfaces\{
   Pagination\PaginationInterface,
   Repository\RepositoryDataDBInterface,
 };
-use src\Interfaces\Connections\DataBaseConnectionInterface;
-use src\Interfaces\DataDB\FindAllDataInterface;
 use src\ImplementationObjects\{
   DataDB\DataDB,
   DataDB\FindData,
   DataDB\FindAllData,
   DataDB\CreateDataDB,
+  DataDB\FindAllDataInterface,
   QuerySql\QuerySql,
   QuerySql\QuerySqlString,
   TableObject\TableInfo,
@@ -133,8 +132,21 @@ class Table implements TableInterface
    */
   private $paginationInterface;
 
-  public function __construct()
+  /**
+   * Configura o objeto pai injetando o que é preciso para tudo funcionar.
+   *
+   * @param object &$object : Deve conter o objeto filho. (passar o $this do objeto que está extendendo o Table).
+   * @param array $tableConfiguration : deve conter um array com as informações da tabela que o objeto filho representa.
+   *
+   * @return void
+   */
+  public function __construct(object &$object, array $tableConfiguration)
   {
+    $this->object = $object;
+    $this->tableInfoInterface = new TableInfo;
+
+    $this->setTableConfiguration($tableConfiguration);
+    $this->initObjects();
   }
 
   /**
@@ -194,38 +206,18 @@ class Table implements TableInterface
    *
    * @return void
    */
-  private function setObjects(array $objectsConfiguration = array()): void
+  private function initObjects(): void
   {
-    $this->dataBaseConnectionInterface = $objectsConfiguration[self::DATA_BASE_CONNECTION] instanceof DataBaseConnectionInterface ? $objectsConfiguration[self::DATA_BASE_CONNECTION] : new OracleConnection;
+    $this->querySqlStringInterface = new QuerySqlString($this->tableInfoInterface);
+    $this->repositoryDataDBInterface = new RepositoryDataDB(OracleConnection::singleton());
 
-    $this->querySqlStringInterface = $objectsConfiguration[self::QUERY_SQL_STRING] instanceof QuerySqlStringInterface ? $objectsConfiguration[self::QUERY_SQL_STRING] : new QuerySqlString($this->tableInfoInterface);
-    $this->repositoryDataDBInterface = $objectsConfiguration[self::REPOSITORY_DATA_DB] instanceof RepositoryDataDBInterface ? $objectsConfiguration[self::REPOSITORY_DATA_DB] : new RepositoryDataDB($this->dataBaseConnectionInterface);
+    $this->dataDBInterface = new DataDB($this->querySqlStringInterface, $this->tableInfoInterface, $this->repositoryDataDBInterface);
+    $this->querySqlInterface = new QuerySql($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+    $this->findDataInterface = new FindData($this->querySqlStringInterface, $this->tableInfoInterface, $this->repositoryDataDBInterface);
+    $this->findAllDataInterface = new FindAllData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+    $this->createDataDBInterface = new CreateDataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
 
-    $this->dataDBInterface = $objectsConfiguration[self::DATA_DB] instanceof DataDBInterface ? $objectsConfiguration[self::DATA_DB] : new DataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->querySqlInterface = $objectsConfiguration[self::DATA_BASE_CONNECTION] instanceof DataBaseConnectionInterface ? $objectsConfiguration[self::DATA_BASE_CONNECTION] : new QuerySql($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->findDataInterface = $objectsConfiguration[self::FIND_DATA] instanceof FindDataInterface ? $objectsConfiguration[self::FIND_DATA] : new FindData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->findAllDataInterface = $objectsConfiguration[self::FIND_ALL_DATA] instanceof FindAllDataInterface ? $objectsConfiguration[self::FIND_ALL_DATA] : new FindAllData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->createDataDBInterface = $objectsConfiguration[self::CREATE_DATA_DB] instanceof CreateDataDBInterface ? $objectsConfiguration[self::CREATE_DATA_DB] : new CreateDataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-
-    $this->paginationInterface = $objectsConfiguration[self::PAGINATION] instanceof PaginationInterface ? $objectsConfiguration[self::PAGINATION] : new Pagination($this->querySqlInterface, $this->findAllDataInterface);
-  }
-
-  /**
-   * Configura o objeto pai injetando o que é preciso para tudo funcionar.
-   *
-   * @param object &$object : Deve conter o objeto filho. (passar o $this do objeto que está extendendo o Table).
-   * @param array $tableConfiguration : deve conter um array com as informações da tabela que o objeto filho representa.
-   * @param array $objectsConfiguration = array() : [optional] deve conter a instância dos objetos que o dev deseja usar.
-   *
-   * @return void
-   */
-  public function configuration(object &$object, array $tableConfiguration, array $objectsConfiguration = array()): void
-  {
-    $this->object = $object;
-    $this->tableInfoInterface[self::TABLE_INFO] instanceof TableInfoInterface ? $objectsConfiguration[self::PAGINATION] : new TableInfo;
-
-    $this->setTableConfiguration($tableConfiguration);
-    $this->setObjects($objectsConfiguration);
+    $this->paginationInterface = new Pagination($this->querySqlInterface, $this->findAllDataInterface);
   }
 
   /**
@@ -277,7 +269,7 @@ class Table implements TableInterface
     $arrayObject = array();
 
     foreach ($dataArray as $valueOfArray) {
-      foreach ($$valueOfArray as $key => $value) {
+      foreach ($valueOfArray as $key => $value) {
         $method = "set_" . strtolower($key);
 
         if (method_exists($this->object, $method) && $value !== null) {
@@ -307,7 +299,7 @@ class Table implements TableInterface
     } elseif (!(empty($ignore)) && $isAddInArray === false) {
       $this->ignore = array_merge($ignore, $actionArray);
     } elseif ($isAddInArray) {
-      array_merge($this->ignore, $ignore);
+      $this->ignore = array_merge($this->ignore, $ignore);
     }
   }
 
@@ -393,7 +385,7 @@ class Table implements TableInterface
    *
    * @return array
    */
-  public function getData(): ?array
+  public function getData(): array
   {
     return $this->repositoryDataDBInterface->getData();
   }
@@ -421,36 +413,5 @@ class Table implements TableInterface
     $this->dataToTableObject = [];
     $this->querySqlInterface->clean();
     $this->repositoryDataDBInterface->clean();
-  }
-
-  /**
-   * @param int $fetch_style = null
-   * [optional]
-   *
-   * Controla o conteúdo da matriz retornada no método find, findAll e select. Valor Padrão: PDO::FETCH_ASSOC
-   *
-   * Para retornar uma matriz que consiste em todos os valores de uma única coluna do conjunto de resultados, use PDO::FETCH_COLUMN. Você pode especificar qual coluna deseja com o parâmetro de índice de coluna.
-   *
-   * Para buscar apenas os valores únicos de uma única coluna do conjunto de resultados, bit a bit-OR PDO::FETCH_COLUMN with PDO::FETCH_UNIQUE.
-   *
-   * Para retornar uma matriz associativa agrupada pelos valores de uma coluna especificada, bit a bit-OR PDO::FETCH_COLUMN with PDO::FETCH_GROUP.
-   *
-   * @param mixed $fetch_argument = null
-   * [optional]
-   *
-   * Este argumento tem um significado diferente dependendo do valor do parâmetro fetch_style:
-   *
-   * PDO::FETCH_COLUMN: Retorna a coluna indicada com índice 0.
-   *
-   * @param array $ctor_args = array()
-   * [optional]
-   *
-   * Argumentos do construtor de classe personalizada quando o parâmetro fetch_style é PDO :: FETCH_CLASS.
-   *
-   * @return void
-   */
-  public function fetchAllConfiguration(int $fetch_style = null, $fetch_argument = null, array $ctor_args = array()): void
-  {
-    $this->repositoryDataDBInterface->fetchAllConfiguration($fetch_style, $fetch_argument, $ctor_args);
   }
 }

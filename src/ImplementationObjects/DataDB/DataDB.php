@@ -4,12 +4,18 @@ namespace src\ImplementationObjects\DataDB;
 
 use src\Interfaces\{
   DataDB\DataDBInterface,
+  TableObject\TableInfoInterface,
   QuerySql\QuerySqlStringInterface,
   Repository\RepositoryDataDBInterface
 };
 
 class DataDB implements DataDBInterface
 {
+  /**
+   * @var TableInfoInterface $tableInfoInterface
+   */
+  private $tableInfoInterface;
+
   /**
    * @var QuerySqlStringInterface $querySqlStringInterface
    */
@@ -20,8 +26,9 @@ class DataDB implements DataDBInterface
    */
   private $repositoryDataDBInterface;
 
-  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface)
+  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, TableInfoInterface &$tableInfoInterface, RepositoryDataDBInterface &$repositoryDataDBInterface)
   {
+    $this->tableInfoInterface = $tableInfoInterface;
     $this->querySqlStringInterface = $querySqlStringInterface;
     $this->repositoryDataDBInterface = $repositoryDataDBInterface;
   }
@@ -29,25 +36,30 @@ class DataDB implements DataDBInterface
   public function findAll(array $tableColumns = null): array
   {
     $this->querySqlStringInterface->setSelect($tableColumns);
-    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect());
+    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect() . $this->querySqlStringInterface->getWhere());
 
-    return $this->repositoryDataDBInterface->getDataDB();
+    return $this->repositoryDataDBInterface->recoverData();
   }
 
   public function delete(int $tableIdentifier): bool
   {
-    $this->querySqlStringInterface->setDelete($tableIdentifier);
-    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getDelete());
+    $tableIdentifierName = $this->tableInfoInterface->getTableIdentifier();
 
-    return $this->repositoryDataDBInterface->handleDataDB();
+    $this->querySqlStringInterface->setDelete();
+    $this->querySqlStringInterface->setWhere("{$tableIdentifierName} = :{$tableIdentifierName}");
+
+    $this->repositoryDataDBInterface->setData([$tableIdentifierName => $tableIdentifier]);
+    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getDelete() . $this->querySqlStringInterface->getWhere());
+
+    return $this->repositoryDataDBInterface->handleData();
   }
 
   public function update(array $tableColumns = null): bool
   {
     $this->querySqlStringInterface->setUpdate($tableColumns);
-    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getUpdate());
+    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getUpdate() . $this->querySqlStringInterface->getWhere());
 
-    return $this->repositoryDataDBInterface->handleDataDB();
+    return $this->repositoryDataDBInterface->handleData();
   }
 
   public function where(string $conditions): self
@@ -56,7 +68,7 @@ class DataDB implements DataDBInterface
     return $this;
   }
 
-  public function getData(): ?array
+  public function getData(): array
   {
     return $this->repositoryDataDBInterface->getData();
   }

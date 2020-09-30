@@ -19,7 +19,7 @@ class OracleConnection implements DataBaseConnectionInterface
   private $dsn = "";
   private $username = "";
   private $password = "";
-  private $options = [];
+  private $options = array();
 
   public static function singleton(): self
   {
@@ -30,7 +30,7 @@ class OracleConnection implements DataBaseConnectionInterface
     return self::$singletonObject;
   }
 
-  private function createConnection(): bool
+  public function createConnection(): bool
   {
     $result = true;
 
@@ -46,7 +46,6 @@ class OracleConnection implements DataBaseConnectionInterface
 
   public function getConnection(): \PDO
   {
-    $this->createConnection();
     return $this->connection;
   }
 }

@@ -6,7 +6,7 @@ use src\interfaces\TableObject\TableInfoInterface;
 
 interface QuerySqlStringInterface
 {
-  public function configurate(TableInfoInterface &$tableInfoInterface);
+  public function __construct(TableInfoInterface &$tableInfoInterface);
 
   public function getSelect(): string;
   public function setSelect(array $tableColumns = null): void;
@@ -21,7 +21,7 @@ interface QuerySqlStringInterface
   public function setGroupBy(array $groupByCondition): void;
 
   public function getOrderBy(): string;
-  public function setOrderBy(array $orderByCondition): void;
+  public function setOrderBy(array $orderByCondition, string $typeOrderBy = "ASC"): void;
 
   public function getInsert(): string;
   public function setInsert(array $tableColumns = null): void;

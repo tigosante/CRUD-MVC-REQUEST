@@ -30,11 +30,6 @@ class Pagination implements PaginationInterface
   private $paginationEnd = self::PAGINATION_END;
 
   /**
-   * @var array $data
-   */
-  private $data;
-
-  /**
    * @var QuerySqlInterface $querySqlInterface
    */
   private $querySqlInterface;
@@ -83,7 +78,7 @@ class Pagination implements PaginationInterface
     return $this->findAllDataInterface;
   }
 
-  public function getData(): ?array
+  public function getData(): array
   {
     return $this->querySqlInterface->getData();
   }

@@ -64,13 +64,13 @@ class QuerySql implements QuerySqlInterface
     $this->querySqlStringInterface->clean();
   }
 
-  public function findAll(): array
+  public function fetchAll(): array
   {
-    $this->repositoryDataDBInterface->setQuery($this->getQueryString());
-    return $this->repositoryDataDBInterface->getDataDB();
+    $this->repositoryDataDBInterface->setQuery($this->queryString());
+    return $this->repositoryDataDBInterface->recoverData();
   }
 
-  public function getData(): ?array
+  public function getData(): array
   {
     return $this->repositoryDataDBInterface->getData();
   }
@@ -80,7 +80,7 @@ class QuerySql implements QuerySqlInterface
     $this->repositoryDataDBInterface->setData($data);
   }
 
-  public function getQueryString(): string
+  public function queryString(): string
   {
     return
       $this->querySqlStringInterface->getSelect() .

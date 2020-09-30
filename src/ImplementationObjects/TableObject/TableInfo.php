@@ -19,7 +19,7 @@ class TableInfo implements TableInfoInterface
   /**
    * @var string $tableIdentifier
    */
-  private $tableIdentifier = null;
+  private $tableIdentifier;
 
   /**
    * @var array $tableColumns

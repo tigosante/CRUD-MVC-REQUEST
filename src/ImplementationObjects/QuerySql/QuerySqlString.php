@@ -13,11 +13,6 @@ class QuerySqlString implements QuerySqlStringInterface
   private const SPACE_SEPARATOR = " ";
 
   /**
-   * @var int $tableIdentifier
-   */
-  private $tableIdentifier = null;
-
-  /**
    * @var string $select
    */
   private $select = null;
@@ -72,7 +67,7 @@ class QuerySqlString implements QuerySqlStringInterface
     $this->tableInfoInterface = $tableInfoInterface;
   }
 
-  public function getSelect(): ?string
+  public function getSelect(): string
   {
     return $this->select;
   }
@@ -83,7 +78,7 @@ class QuerySqlString implements QuerySqlStringInterface
     $this->select = "SELECT {$columns} FROM " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName() . self::SPACE_SEPARATOR;
   }
 
-  public function getJoin(): ?string
+  public function getJoin(): string
   {
     return strtoupper(join("\n    ", $this->joinCondition));
   }
@@ -95,29 +90,21 @@ class QuerySqlString implements QuerySqlStringInterface
 
   public function getWhere(): string
   {
-    $identifier = self::SPACE_SEPARATOR;
     $whereCommand = self::SPACE_SEPARATOR;
 
-    if (empty($this->tableIdentifier)) {
-      $identifier = $this->getTableIdentifier();
-    }
     if (empty($this->whereCondition)) {
-      $whereCommand = " WHERE 1=1 " . strtoupper(join(" ", $this->whereCondition)) . " {$identifier} " . self::BREAK_LINE;
+      $whereCommand = " WHERE " . strtoupper(join(" ", $this->whereCondition)) . self::BREAK_LINE;
     }
 
     return $whereCommand;
   }
 
-  public function setWhere(string $whereCondition, int $tableIdentifier = null): void
+  public function setWhere(string $whereCondition): void
   {
-    if ($tableIdentifier !== null) {
-      $this->setTableIdentifier($tableIdentifier);
-    }
-
     array_push($this->whereCondition, $whereCondition);
   }
 
-  public function getGroupBy(): ?string
+  public function getGroupBy(): string
   {
     return " GROUP BY " . strtoupper(join(", ", $this->groupByCondition)) . self::BREAK_LINE;
   }
@@ -127,7 +114,7 @@ class QuerySqlString implements QuerySqlStringInterface
     $this->groupByCondition = $groupByCondition;
   }
 
-  public function getOrderBy(): ?string
+  public function getOrderBy(): string
   {
     return " ORDER BY " . strtoupper(join(", ", $this->orderByCondition)) . " {$this->typeOrderBy} ";
   }
@@ -138,7 +125,7 @@ class QuerySqlString implements QuerySqlStringInterface
     $this->orderByCondition = $orderByCondition;
   }
 
-  public function getInsert(): ?string
+  public function getInsert(): string
   {
     return $this->insert;
   }
@@ -151,7 +138,7 @@ class QuerySqlString implements QuerySqlStringInterface
     $this->insert = "INSERT INTO " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName() . " ({$columns}) VALUES ({$columnsBinds}) ";
   }
 
-  public function getUpdate(): ?string
+  public function getUpdate(): string
   {
     return $this->update;
   }
@@ -163,36 +150,18 @@ class QuerySqlString implements QuerySqlStringInterface
     $this->update = "UPDATE " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName() . " SET {$columns} ";
   }
 
-  public function getDelete(): ?string
+  public function getDelete(): string
   {
     return $this->delete;
   }
 
-  public function setDelete(int $tableIdentifier): void
+  public function setDelete(): void
   {
     $this->delete = "DELETE " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName() . self::SPACE_SEPARATOR;
   }
 
-  public function getTableIdentifier(): ?string
-  {
-    $identifierValue = self::SPACE_SEPARATOR;
-
-    if (!(isset($this->tableIdentifier))) {
-      $identifierValue = " AND " . $this->tableInfoInterface->getTableIdentifier() . " = {$this->tableIdentifier} ";
-    }
-
-    return $identifierValue;
-  }
-
-  public function setTableIdentifier(int $tableIdentifier): void
-  {
-    $this->tableIdentifier = $tableIdentifier;
-  }
-
   public function clean(): void
   {
-    $this->tableIdentifier = null;
-
     $this->tableColumns = [];
     $this->joinCondition = [];
     $this->whereCondition = [];

@@ -31,6 +31,6 @@ class CreateDataDB implements CreateDataDBInterface
     $this->querySqlStringInterface->setInsert($tableColumns);
     $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getInsert());
 
-    return $this->repositoryDataDBInterface->handleDataDB();
+    return $this->repositoryDataDBInterface->handleData();
   }
 }

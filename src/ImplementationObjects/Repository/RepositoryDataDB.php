@@ -29,24 +29,11 @@ class RepositoryDataDB implements RepositoryDataDBInterface
    */
   private $dataDB = null;
 
-  /**
-   * @var int $fetch_style
-   */
-  private $fetch_style = null;
-
-  /**
-   * @var int $fetch_argument
-   */
-  private $fetch_argument = null;
-
-  /**
-   * @var array $ctor_args
-   */
-  private $ctor_args;
-
   public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface)
   {
-    $this->connection = $dataBaseConnectionInterface->getConnection();
+    if ($dataBaseConnectionInterface->createConnection()) {
+      $this->connection = $dataBaseConnectionInterface->getConnection();
+    }
   }
 
   private function verifyData(): void
@@ -58,22 +45,22 @@ class RepositoryDataDB implements RepositoryDataDBInterface
     }
   }
 
-  public function getDataDB(): ?array
+  public function recoverData(): array
   {
     $this->verifyData();
     $statement = $this->connection->prepare($this->getQuery());
     $statement->execute($this->dataDB);
 
-    return $statement->fetchAll($this->fetch_style, $this->fetch_argument, $this->ctor_args);
+    return $statement->fetchAll();
   }
 
-  public function handleDataDB(): bool
+  public function handleData(): bool
   {
     $this->verifyData();
     return $this->connection->prepare($this->getQuery())->execute($this->dataDB);
   }
 
-  public function getQuery(): ?string
+  public function getQuery(): string
   {
     return $this->query;
   }
@@ -83,7 +70,7 @@ class RepositoryDataDB implements RepositoryDataDBInterface
     $this->query = $query;
   }
 
-  public function getData(): ?array
+  public function getData(): array
   {
     return $this->data;
   }
@@ -91,13 +78,9 @@ class RepositoryDataDB implements RepositoryDataDBInterface
   public function setData(array $data): void
   {
     if (!(empty($data))) {
-      $newDataArray = array();
-
       foreach ($data as $key => $value) {
-        array_push($newDataArray, [":{$key}" => $value]);
+        $this->data[":{$key}"] = $value;
       }
-
-      array_merge($this->data, $newDataArray);
     }
   }
 
@@ -106,23 +89,5 @@ class RepositoryDataDB implements RepositoryDataDBInterface
     $this->data = [];
     $this->query = "";
     $this->dataDB = null;
-    $this->fetch_style = null;
-    $this->fetch_argument = null;
-    $this->ctor_args = array();
-  }
-
-  public function fetchAllConfiguration(int $fetch_style = null, int $fetch_argument = null, array $ctor_args = array()): void
-  {
-    if (!(empty($fetch_style))) {
-      $this->fetch_style = $fetch_style;
-    }
-
-    if (!(empty($fetch_argument))) {
-      $this->fetch_argument = $fetch_argument;
-    }
-
-    if (!(empty($ctor_args))) {
-      $this->ctor_args = $ctor_args;
-    }
   }
 }

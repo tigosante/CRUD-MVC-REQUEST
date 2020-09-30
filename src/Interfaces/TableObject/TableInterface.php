@@ -15,7 +15,7 @@ use src\Interfaces\{
 
 interface TableInterface extends FindDataInterface, FindAllDataInterface, CreateDataDBInterface, SetDataHelper, TableHandlerDataInterface
 {
-  public function configuration(object &$object, array $tableConfiguration, array $objectsConfiguration = array()): void;
+  public function __construct(object &$object, array $tableConfiguration, array $objectsConfiguration = array());
 
   public function ignoreViewField(array $ignore = null): void;
 
