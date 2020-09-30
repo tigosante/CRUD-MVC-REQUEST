@@ -4,9 +4,9 @@ namespace src\Interfaces\DataDB;
 
 use src\interfaces\{
   Helpers\QueryDataHelper,
-  DataDB\FindAllDataInterface
+  DataDB\FindAllDataInterface,
+  Helpers\SetDataHelper
 };
-use src\interfaces\Helpers\SetDataHelper;
 
 interface DataDBInterface extends QueryDataHelper, SetDataHelper, FindAllDataInterface
 {

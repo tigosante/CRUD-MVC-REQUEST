@@ -3,7 +3,6 @@
 namespace src\interfaces\TableObject;
 
 use src\Interfaces\{
-  DataDB\Fetch\Fetch,
   DataDB\DataDBInterface,
   DataDB\FindDataInterface,
   DataDB\FindAllDataInterface,
@@ -14,10 +13,8 @@ use src\Interfaces\{
   Helpers\SetDataHelper
 };
 
-interface TableInterface extends Fetch, FindDataInterface, FindAllDataInterface, CreateDataDBInterface, SetDataHelper, TableHandlerDataInterface
+interface TableInterface extends FindDataInterface, FindAllDataInterface, CreateDataDBInterface, SetDataHelper, TableHandlerDataInterface
 {
-  public function __construct();
-
   public function configuration(object &$object, array $tableConfiguration, array $objectsConfiguration = array()): void;
 
   public function ignoreViewField(array $ignore = null): void;

@@ -4,16 +4,15 @@ namespace src\interfaces\Repository;
 
 use src\Interfaces\{
   Helpers\SetDataHelper,
-  DataDB\Fetch\Fetch,
   Connections\DataBaseConnectionInterface
 };
 
-interface RepositoryDataDBInterface extends Fetch, SetDataHelper
+interface RepositoryDataDBInterface extends SetDataHelper
 {
   public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface);
 
-  public function getDataDB(): ?array;
-  public function handleDataDB(): bool;
+  public function handleData(): bool;
+  public function recoverData(): ?array;
 
   public function getQuery(): ?string;
   public function setQuery(string $query): void;

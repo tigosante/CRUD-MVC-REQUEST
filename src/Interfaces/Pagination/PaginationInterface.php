@@ -4,9 +4,9 @@ namespace src\Interfaces\Pagination;
 
 use src\Interfaces\{
   QuerySql\QuerySqlInterface,
-  DataDB\FindAllDataInterface
+  DataDB\FindAllDataInterface,
+  Helpers\SetDataHelper
 };
-use src\interfaces\Helpers\SetDataHelper;
 
 interface PaginationInterface extends SetDataHelper
 {
