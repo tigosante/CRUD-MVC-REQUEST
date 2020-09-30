@@ -7,9 +7,9 @@ use src\Interfaces\Connections\DataBaseConnectionInterface;
 class OracleConnection implements DataBaseConnectionInterface
 {
   /**
-   * @var self $singletonObject
+   * @var self $instance
    */
-  private static $singletonObject;
+  private static $instance;
 
   /**
    * @var \PDO $connection
@@ -23,11 +23,11 @@ class OracleConnection implements DataBaseConnectionInterface
 
   public static function singleton(): self
   {
-    if (!(isset(self::$singletonObject))) {
-      self::$singletonObject = new self;
+    if (!(isset(self::$instance))) {
+      self::$instance = new self;
     }
 
-    return self::$singletonObject;
+    return self::$instance;
   }
 
   public function createConnection(): bool
