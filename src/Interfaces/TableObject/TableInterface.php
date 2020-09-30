@@ -17,6 +17,8 @@ interface TableInterface extends FindDataInterface, FindAllDataInterface, Create
 {
   public function __construct(object &$object, array $tableConfiguration, array $objectsConfiguration = array());
 
+  public static function singleton(): self;
+
   public function ignoreViewField(array $ignore = null): void;
 
   public function select(array $tableColumns = null): QuerySqlInterface;

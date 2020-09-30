@@ -48,6 +48,8 @@ class Table implements TableInterface
   public const REPOSITORY_DATA_DB = "REPOSITORY_DATA_DB";
   public const DATA_BASE_CONNECTION = "DATA_BASE_CONNECTION";
 
+  private static $instance;
+
   /**
    * Referência do objeto filho.
    *
@@ -147,6 +149,17 @@ class Table implements TableInterface
 
     $this->setTableConfiguration($tableConfiguration);
     $this->initObjects();
+  }
+
+  public static function singleton(): self
+  {
+    $classCalled = get_called_class();
+
+    if (!isset(self::$instance) && $classCalled) {
+      self::$instance = new $classCalled();
+    }
+
+    return self::$instance;
   }
 
   /**
