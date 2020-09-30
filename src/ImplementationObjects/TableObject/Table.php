@@ -69,7 +69,7 @@ class Table implements TableInterface
    *
    * @var array $dataToTableObject
    */
-  private $dataToTableObject;
+  private $dataToTableObject = array();
 
   /**
    * Objeto com métodos refentes à uma query select.
@@ -179,14 +179,13 @@ class Table implements TableInterface
       foreach ($dataArray as $key => $value) {
         $method = "set_" . strtolower($key);
 
-        $isIgnoreLoop = $isIgnore ? in_array($key, $this->ignore) : $isIgnore;
+        $isNoIgnoreLoop = $isIgnore ? in_array($key, $this->ignore) : $isIgnore;
 
-        if ($isIgnoreLoop && method_exists($this->object, $method) && $value !== null) {
+        if ($isNoIgnoreLoop && method_exists($this->object, $method) && $value !== null) {
           $this->object->$method($value);
 
           if ($isDataToTableDataBase) {
-            $key = ":" . strtoupper($key);
-            array_push($this->dataToTableObject, [$key => $value]);
+            $this->dataToTableObject[strtoupper($key)] = $value;
           }
         }
       }
