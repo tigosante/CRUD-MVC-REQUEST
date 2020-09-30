@@ -151,12 +151,12 @@ class Table implements TableInterface
     $this->initObjects();
   }
 
-  public static function singleton(): self
+  public static function singleton(array $args = null): self
   {
     $classCalled = get_called_class();
 
     if (!isset(self::$instance) && $classCalled) {
-      self::$instance = new $classCalled();
+      self::$instance = empty($args) ? new $classCalled() : new $classCalled($args);
     }
 
     return self::$instance;

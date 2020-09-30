@@ -17,7 +17,7 @@ interface TableInterface extends FindDataInterface, FindAllDataInterface, Create
 {
   public function __construct(object &$object, array $tableConfiguration, array $objectsConfiguration = array());
 
-  public static function singleton(): self;
+  public static function singleton(array $args = null): self;
 
   public function ignoreViewField(array $ignore = null): void;
 
