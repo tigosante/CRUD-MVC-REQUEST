@@ -28,32 +28,17 @@ class Adm extends Table
   public function __construct()
   {
     $tableName = "ADM";
-    $dataBaseName = "CPG.";
     $tableColumns = array(self::ID, self::DT_CRIACAO, self::ADM_NAME);
     $tableColumnsDate = array(self::DT_CRIACAO);
 
     $tableConfiguration = array(
       self::TABLE_NAME => $tableName,
       self::TABLE_COLUMNS => $tableColumns,
-      self::DATA_BASE_NAME => $dataBaseName,
       self::TABLE_IDENTIFIER => self::ID,
       self::TABLE_COLUMNS_DATE => $tableColumnsDate
     );
 
-    $objecsConfiguration = array(
-      self::DATA_DB => null,
-      self::QUERY_SQL => null,
-      self::FIND_DATA => null,
-      self::TABLE_INFO => null,
-      self::PAGINATION => null,
-      self::FIND_ALL_DATA => null,
-      self::CREATE_DATA_DB => null,
-      self::QUERY_SQL_STRING => null,
-      self::REPOSITORY_DATA_DB => null,
-      self::DATA_BASE_CONNECTION => null
-    );
-
-    $this->configuration($this, $tableConfiguration, $objecsConfiguration);
+    parent::__construct($this, $tableConfiguration);
   }
 
   public function get_id(): ?int

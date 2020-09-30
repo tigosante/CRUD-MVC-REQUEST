@@ -2,12 +2,18 @@
 
 namespace src\ImplementationObjects\DataDB;
 
-use src\Interfaces\DataDB\FindAllDataInterface;
+use src\Interfaces\DataDB\FindDataInterface;
 use src\Interfaces\QuerySql\QuerySqlStringInterface;
 use src\interfaces\Repository\RepositoryDataDBInterface;
+use src\interfaces\TableObject\TableInfoInterface;
 
-class FindAllData implements FindAllDataInterface
+class FindData implements FindDataInterface
 {
+  /**
+   * @var TableInfoInterface $tableInfoInterface
+   */
+  private $tableInfoInterface;
+
   /**
    * @var QuerySqlStringInterface $querySqlStringInterface
    */
@@ -18,16 +24,20 @@ class FindAllData implements FindAllDataInterface
    */
   private $repositoryDataDBInterface;
 
-  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface)
+  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, TableInfoInterface &$tableInfoInterface, RepositoryDataDBInterface &$repositoryDataDBInterface)
   {
+    $this->tableInfoInterface = $tableInfoInterface;
     $this->querySqlStringInterface = $querySqlStringInterface;
     $this->repositoryDataDBInterface = $repositoryDataDBInterface;
   }
 
-  public function findAll(array $tableColumns = null): array
+  public function find(int $tableIdentifier, array $tableColumns = null): array
   {
+    $tableIdentifierName = $this->tableInfoInterface->getTableIdentifier();
+
     $this->querySqlStringInterface->setSelect($tableColumns);
-    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect());
+    $this->querySqlStringInterface->setWhere("{$tableIdentifierName} = :{$tableIdentifierName}");
+    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect() . $this->querySqlStringInterface->getWhere());
 
     return $this->repositoryDataDBInterface->recoverData();
   }

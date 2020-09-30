@@ -353,6 +353,7 @@ class Table implements TableInterface
     return $this->findDataInterface->find($tableIdentifier, $tableColumns);
   }
 
+
   /**
    * Busca todos os registros de uma tabela no DB.
    *
