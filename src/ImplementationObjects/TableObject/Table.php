@@ -406,7 +406,10 @@ class Table implements TableInterface
    */
   public function pagination(int $paginationInit = null, int $paginationAmount = null, int $paginationEnd = null): PaginationInterface
   {
-    return $this->paginationInterface->init($paginationInit)->amount($paginationAmount)->end($paginationEnd);
+    return $this->paginationInterface
+      ->init($paginationInit)
+      ->amount($paginationAmount)
+      ->end($paginationEnd);
   }
 
   /**
