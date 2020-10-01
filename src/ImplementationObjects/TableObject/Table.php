@@ -62,7 +62,7 @@ class Table implements TableInterface
    *
    * @var array $ignore
    */
-  private $ignore = array(self::ACAO);
+  private $ignoreFields = array(self::ACAO);
 
   /**
    * Dados que serão usados no DB.
@@ -150,6 +150,13 @@ class Table implements TableInterface
     $this->initObjects();
   }
 
+  /**
+   * Retorna uma única instâmcia de um objeto.
+   *
+   * @param array $args = null; parâmetros que podem ser injetados no objeto.
+   *
+   * @return self
+   */
   public static function singleton(array $args = null): self
   {
     $classCalled = get_called_class();
@@ -178,7 +185,7 @@ class Table implements TableInterface
       foreach ($dataArray as $key => $value) {
         $method = "set_" . strtolower($key);
 
-        $isNoIgnoreLoop = $isIgnore ? in_array($key, $this->ignore) : $isIgnore;
+        $isNoIgnoreLoop = $isIgnore ? in_array($key, $this->ignoreFields) : $isIgnore;
 
         if ($isNoIgnoreLoop && method_exists($this->object, $method) && $value !== null) {
           $this->object->$method($value);
@@ -284,12 +291,13 @@ class Table implements TableInterface
 
     foreach ($dataArray as $valueOfArray) {
       foreach ($valueOfArray as $key => $value) {
-        $method = "set_" . strtolower($key);
+        $method = "set_" . strtolower(trim($key));
 
         if (method_exists($this->object, $method) && $value !== null) {
           $this->object->$method($value);
         }
       }
+
       array_push($arrayObject, clone $this->object);
     }
 
@@ -304,17 +312,23 @@ class Table implements TableInterface
    *
    * @return void
    */
-  public function ignoreViewField(array $ignore = null, bool $isAddInArray = false): void
+  public function ignoreViewField(array $ignore, bool $isAddInArray = false): void
   {
-    $actionArray = array(self::ACAO);
-
-    if (empty($ignore)) {
-      $this->ignore = $actionArray;
-    } elseif (!(empty($ignore)) && $isAddInArray === false) {
-      $this->ignore = array_merge($ignore, $actionArray);
+    if (!empty($ignore) && $isAddInArray === false) {
+      $this->ignoreFields = array_merge($ignore, self::ACAO);
     } elseif ($isAddInArray) {
-      $this->ignore = array_merge($this->ignore, $ignore);
+      $this->ignoreFields = array_merge($this->ignoreFields, $ignore);
     }
+  }
+
+  /**
+   * Redefine o array de ignoreFields adicionando"acao".
+   *
+   * @return void
+   */
+  public function resetIgnoreViewField(): void
+  {
+    $this->ignoreFields = array(self::ACAO);
   }
 
   /**

@@ -19,7 +19,8 @@ interface TableInterface extends FindDataInterface, FindAllDataInterface, Create
 
   public static function singleton(array $args = null): self;
 
-  public function ignoreViewField(array $ignore = null): void;
+  public function ignoreViewField(array $ignore, bool $isAddInArray = false): void;
+  public function resetIgnoreViewField(): void;
 
   public function select(array $tableColumns = null): QuerySqlInterface;
 
