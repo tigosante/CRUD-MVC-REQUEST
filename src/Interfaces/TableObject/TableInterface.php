@@ -15,7 +15,7 @@ use src\Interfaces\{
 
 interface TableInterface extends FindDataInterface, FindAllDataInterface, CreateDataDBInterface, SetDataHelper, TableHandlerDataInterface
 {
-  public function __construct(object &$object, array $tableConfiguration, array $objectsConfiguration = array());
+  public function __construct(object &$object, array $tableConfiguration);
 
   public static function singleton(array $args = null): self;
 

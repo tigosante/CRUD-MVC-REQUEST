@@ -145,7 +145,6 @@ class Table implements TableInterface
   public function __construct(object &$object, array $tableConfiguration)
   {
     $this->object = $object;
-    $this->tableInfoInterface = new TableInfo;
 
     $this->setTableConfiguration($tableConfiguration);
     $this->initObjects();
@@ -220,14 +219,17 @@ class Table implements TableInterface
    */
   private function initObjects(): void
   {
+    $this->tableInfoInterface = new TableInfo();
+
     $this->querySqlStringInterface = new QuerySqlString($this->tableInfoInterface);
     $this->repositoryDataDBInterface = new RepositoryDataDB(OracleConnection::singleton());
 
-    $this->dataDBInterface = new DataDB($this->querySqlStringInterface, $this->tableInfoInterface, $this->repositoryDataDBInterface);
     $this->querySqlInterface = new QuerySql($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->findDataInterface = new FindData($this->querySqlStringInterface, $this->tableInfoInterface, $this->repositoryDataDBInterface);
     $this->findAllDataInterface = new FindAllData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
     $this->createDataDBInterface = new CreateDataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+
+    $this->dataDBInterface = new DataDB($this->querySqlStringInterface, $this->tableInfoInterface, $this->repositoryDataDBInterface);
+    $this->findDataInterface = new FindData($this->querySqlStringInterface, $this->tableInfoInterface, $this->repositoryDataDBInterface);
 
     $this->paginationInterface = new Pagination($this->querySqlInterface, $this->findAllDataInterface);
   }
