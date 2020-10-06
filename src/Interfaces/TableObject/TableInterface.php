@@ -26,6 +26,8 @@ interface TableInterface extends FindDataInterface, FindAllDataInterface, Create
 
   public function where(string $conditions): DataDBInterface;
 
+  public function audit(): self;
+
   public function pagination(int $paginationInit = null, int $paginationAmount = null, int $paginationEnd = null): PaginationInterface;
 
   public function setData(array $data): void;

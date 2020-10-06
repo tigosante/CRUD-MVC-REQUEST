@@ -6,6 +6,7 @@ use src\Interfaces\{
   Repository\RepositoryDataDBInterface,
   Connections\DataBaseConnectionInterface
 };
+use src\Interfaces\Audit\AuditInterface;
 
 class RepositoryDataDB implements RepositoryDataDBInterface
 {
@@ -29,11 +30,18 @@ class RepositoryDataDB implements RepositoryDataDBInterface
    */
   private $dataDB = null;
 
-  public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface)
+  /**
+   * @return AuditInterface $auditInterface
+   */
+  private $auditInterface;
+
+  public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface, AuditInterface &$auditInterface)
   {
     if ($dataBaseConnectionInterface->createConnection()) {
       $this->connection = $dataBaseConnectionInterface->getConnection();
     }
+
+    $this->auditInterface = $auditInterface;
   }
 
   private function verifyData(): void
@@ -56,8 +64,33 @@ class RepositoryDataDB implements RepositoryDataDBInterface
 
   public function handleData(): bool
   {
-    $this->verifyData();
-    return $this->connection->prepare($this->getQuery())->execute($this->dataDB);
+    $result = true;
+
+    try {
+      if ($this->auditInterface->isMakeAudit()) {
+        $this->connection->beginTransaction();
+        $result = $this->auditInterface->createAuditInDB($this->connection);
+      }
+
+      if ($result) {
+        $this->verifyData();
+        $result = $this->connection->prepare($this->getQuery())->execute($this->dataDB);
+      }
+
+      if (!$result) {
+        $this->auditInterface->isMakeAudit() ? $this->connection->rollBack() : null;
+        return $result;
+      }
+
+      if ($this->auditInterface->isMakeAudit() && $result) {
+        $result = $this->connection->commit();
+      }
+    } catch (\PDOException $error) {
+      $this->connection->rollBack();
+      $result = false;
+    }
+
+    return $result;
   }
 
   public function getQuery(): string

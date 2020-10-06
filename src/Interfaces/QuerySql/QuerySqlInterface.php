@@ -17,5 +17,5 @@ interface QuerySqlInterface extends QueryDataHelper, SetDataHelper
 
   public function clean(): void;
   public function fetchAll(): array;
-  public function queryString(): string;
+  public function queryString(string $typeQuery = null): string;
 }

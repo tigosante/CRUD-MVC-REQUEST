@@ -4,6 +4,7 @@ namespace src\TableObject;
 
 use src\Connections\OracleConnection;
 use src\interfaces\{
+  Audit\AuditInterface,
   DataDB\DataDBInterface,
   DataDB\FindDataInterface,
   DataDB\CreateDataDBInterface,
@@ -26,6 +27,8 @@ use src\ImplementationObjects\{
   Pagination\Pagination,
   Repository\RepositoryDataDB,
 };
+use src\ImplementationObjects\Audit\Audit;
+use src\Objects\AuditObject;
 
 class Table implements TableInterface
 {
@@ -70,6 +73,11 @@ class Table implements TableInterface
    * @var array $dataToTableObject
    */
   private $dataToTableObject = array();
+
+  /**
+   * @var AuditInterface $auditInterface
+   */
+  private $auditInterface;
 
   /**
    * Objeto com métodos refentes à uma query select.
@@ -227,9 +235,10 @@ class Table implements TableInterface
   private function initObjects(): void
   {
     $this->tableInfoInterface = new TableInfo();
+    $this->auditInterface = new Audit(new AuditObject);
 
     $this->querySqlStringInterface = new QuerySqlString($this->tableInfoInterface);
-    $this->repositoryDataDBInterface = new RepositoryDataDB(OracleConnection::singleton());
+    $this->repositoryDataDBInterface = new RepositoryDataDB(OracleConnection::singleton(), $this->auditInterface);
 
     $this->querySqlInterface = new QuerySql($this->querySqlStringInterface, $this->repositoryDataDBInterface);
     $this->findAllDataInterface = new FindAllData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
@@ -354,6 +363,15 @@ class Table implements TableInterface
   {
     $this->dataDBInterface->where($conditions);
     return $this->dataDBInterface;
+  }
+
+  /**
+   * @return self
+   */
+  public function audit(bool $makeAudit = true): self
+  {
+    $this->auditInterface->makeAudit($makeAudit);
+    return $this;
   }
 
   /**

@@ -6,10 +6,11 @@ use src\Interfaces\{
   Helpers\SetDataHelper,
   Connections\DataBaseConnectionInterface
 };
+use src\Interfaces\Audit\AuditInterface;
 
 interface RepositoryDataDBInterface extends SetDataHelper
 {
-  public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface);
+  public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface, AuditInterface &$auditInterface);
 
   public function handleData(): bool;
   public function recoverData(): array;
