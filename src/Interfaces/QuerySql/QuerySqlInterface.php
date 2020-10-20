@@ -43,9 +43,13 @@ interface QuerySqlInterface extends QueryDataHelper, SetDataHelper
    * @return array
    */
   public function fetchAll(): array;
+<<<<<<< HEAD
+  public function queryString(string $typeQuery = null): string;
+=======
 
   /**
    * @return string
    */
   public function queryString(): string;
+>>>>>>> master
 }

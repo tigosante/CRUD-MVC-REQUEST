@@ -4,6 +4,7 @@ namespace src\TableObject;
 
 use src\Connections\OracleConnection;
 use src\interfaces\{
+  Audit\AuditInterface,
   DataDB\DataDBInterface,
   DataDB\FindDataInterface,
   DataDB\CreateDataDBInterface,
@@ -26,6 +27,8 @@ use src\ImplementationObjects\{
   Pagination\Pagination,
   Repository\RepositoryDataDB,
 };
+use src\ImplementationObjects\Audit\Audit;
+use src\Objects\AuditObject;
 
 class Table implements TableInterface
 {
@@ -68,6 +71,11 @@ class Table implements TableInterface
    * @var array $dataToTableObject
    */
   private static $dataToTableObject = array();
+
+  /**
+   * @var AuditInterface $auditInterface
+   */
+  private $auditInterface;
 
   /**
    * Objeto com métodos refentes à uma query select.
@@ -191,7 +199,22 @@ class Table implements TableInterface
    */
   public static function config(object &$object, array $tableConfiguration): void
   {
+<<<<<<< HEAD
+    $this->tableInfoInterface = new TableInfo();
+    $this->auditInterface = new Audit(new AuditObject);
+
+    $this->querySqlStringInterface = new QuerySqlString($this->tableInfoInterface);
+    $this->repositoryDataDBInterface = new RepositoryDataDB(OracleConnection::singleton(), $this->auditInterface);
+
+    $this->querySqlInterface = new QuerySql($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+    $this->findAllDataInterface = new FindAllData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+    $this->createDataDBInterface = new CreateDataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
+
+    $this->dataDBInterface = new DataDB($this->querySqlStringInterface, $this->tableInfoInterface, $this->repositoryDataDBInterface);
+    $this->findDataInterface = new FindData($this->querySqlStringInterface, $this->tableInfoInterface, $this->repositoryDataDBInterface);
+=======
     self::$object = $object;
+>>>>>>> master
 
     self::setTableConfiguration($tableConfiguration);
     self::initObjects();
@@ -295,6 +318,15 @@ class Table implements TableInterface
   {
     self::$dataDBInterface->where($conditions);
     return self::$dataDBInterface;
+  }
+
+  /**
+   * @return self
+   */
+  public function audit(bool $makeAudit = true): self
+  {
+    $this->auditInterface->makeAudit($makeAudit);
+    return $this;
   }
 
   /**

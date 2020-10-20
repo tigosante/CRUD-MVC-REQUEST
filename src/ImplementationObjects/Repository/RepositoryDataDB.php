@@ -6,6 +6,7 @@ use src\Interfaces\{
   Repository\RepositoryDataDBInterface,
   Connections\DataBaseConnectionInterface
 };
+use src\Interfaces\Audit\AuditInterface;
 
 class RepositoryDataDB implements RepositoryDataDBInterface
 {
@@ -29,13 +30,26 @@ class RepositoryDataDB implements RepositoryDataDBInterface
    */
   private $dataDB = null;
 
+<<<<<<< HEAD
+  /**
+   * @return AuditInterface $auditInterface
+   */
+  private $auditInterface;
+
+  public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface, AuditInterface &$auditInterface)
+=======
   public static function config(DataBaseConnectionInterface &$dataBaseConnectionInterface): self
+>>>>>>> master
   {
     if ($dataBaseConnectionInterface->createConnection()) {
       self::$connection = $dataBaseConnectionInterface->getConnection();
     }
 
+<<<<<<< HEAD
+    $this->auditInterface = $auditInterface;
+=======
     return new self;
+>>>>>>> master
   }
 
   private function verifyData(): void
@@ -60,8 +74,38 @@ class RepositoryDataDB implements RepositoryDataDBInterface
 
   public function handleData(): bool
   {
+<<<<<<< HEAD
+    $result = true;
+
+    try {
+      if ($this->auditInterface->isMakeAudit()) {
+        $this->connection->beginTransaction();
+        $result = $this->auditInterface->createAuditInDB($this->connection);
+      }
+
+      if ($result) {
+        $this->verifyData();
+        $result = $this->connection->prepare($this->getQuery())->execute($this->dataDB);
+      }
+
+      if (!$result) {
+        $this->auditInterface->isMakeAudit() ? $this->connection->rollBack() : null;
+        return $result;
+      }
+
+      if ($this->auditInterface->isMakeAudit() && $result) {
+        $result = $this->connection->commit();
+      }
+    } catch (\PDOException $error) {
+      $this->connection->rollBack();
+      $result = false;
+    }
+
+    return $result;
+=======
     $this->verifyData();
     return self::$connection->prepare($this->getQuery())->execute($this->dataDB);
+>>>>>>> master
   }
 
   public function getQuery(): string

@@ -45,10 +45,16 @@ interface TableInterface
    */
   public function where(string $conditions): DataDBInterface;
 
+<<<<<<< HEAD
+  public function audit(): self;
+
+  public function pagination(int $paginationInit = null, int $paginationAmount = null, int $paginationEnd = null): PaginationInterface;
+=======
   /**
    * @return bool
    */
   public function create(array $tableColumns = null): bool;
+>>>>>>> master
 
   /**
    * @return array
