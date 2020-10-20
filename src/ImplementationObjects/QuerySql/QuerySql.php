@@ -13,35 +13,37 @@ class QuerySql implements QuerySqlInterface
   /**
    * @var QuerySqlStringInterface $querySqlStringInterface
    */
-  private $querySqlStringInterface;
+  private static $querySqlStringInterface;
 
   /**
    * @var RepositoryDataDBInterface $repositoryDataDBInterface
    */
-  private $repositoryDataDBInterface;
+  private static $repositoryDataDBInterface;
 
-  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface)
+  public static function config(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface): self
   {
-    $this->querySqlStringInterface = $querySqlStringInterface;
-    $this->repositoryDataDBInterface = $repositoryDataDBInterface;
+    self::$querySqlStringInterface = $querySqlStringInterface;
+    self::$repositoryDataDBInterface = $repositoryDataDBInterface;
+
+    return new self;
   }
 
   public function select(array $tableColumns = null): self
   {
-    $this->querySqlStringInterface->setSelect($tableColumns);
+    self::$querySqlStringInterface->setSelect($tableColumns);
     return $this;
   }
 
   public function join(string $joinCondition): self
   {
-    $this->querySqlStringInterface->setJoin($joinCondition);
+    self::$querySqlStringInterface->setJoin($joinCondition);
     return $this;
   }
 
   public function where(array $whereCondition): self
   {
     foreach ($whereCondition as $value) {
-      $this->querySqlStringInterface->setWhere($value);
+      self::$querySqlStringInterface->setWhere($value);
     }
 
     return $this;
@@ -49,45 +51,54 @@ class QuerySql implements QuerySqlInterface
 
   public function groupBy(array $groupByCondition): self
   {
-    $this->querySqlStringInterface->setGroupBy($groupByCondition);
+    self::$querySqlStringInterface->setGroupBy($groupByCondition);
     return $this;
   }
 
   public function orderBy(array $orderByCondition): self
   {
-    $this->querySqlStringInterface->setOrderBy($orderByCondition);
+    self::$querySqlStringInterface->setOrderBy($orderByCondition);
     return $this;
   }
 
   public function clean(): void
   {
-    $this->querySqlStringInterface->clean();
+    self::$querySqlStringInterface->clean();
   }
 
   public function fetchAll(): array
   {
-    $this->repositoryDataDBInterface->setQuery($this->queryString());
-    return $this->repositoryDataDBInterface->recoverData();
+    self::$repositoryDataDBInterface->setQuery($this->queryString());
+    return self::$repositoryDataDBInterface->recoverData();
   }
 
   public function getData(): array
   {
-    return $this->repositoryDataDBInterface->getData();
+    return self::$repositoryDataDBInterface->getData();
   }
 
   public function setData(array $data): void
   {
-    $this->repositoryDataDBInterface->setData($data);
+    self::$repositoryDataDBInterface->setData($data);
   }
 
   public function queryString(string $typeQuery = ""): string
   {
+<<<<<<< HEAD
     return !empty($typeQuery) ? $this->factoryQuery($typeQuery) :
       $this->querySqlStringInterface->getSelect() .
       $this->querySqlStringInterface->getJoin() .
       $this->querySqlStringInterface->getWhere() .
       $this->querySqlStringInterface->getGroupBy() .
       $this->querySqlStringInterface->getOrderBy();
+=======
+    return
+      self::$querySqlStringInterface->getSelect() .
+      self::$querySqlStringInterface->getJoin() .
+      self::$querySqlStringInterface->getWhere() .
+      self::$querySqlStringInterface->getGroupBy() .
+      self::$querySqlStringInterface->getOrderBy();
+>>>>>>> master
   }
 
   private function factoryQuery(string $typeQuery): string

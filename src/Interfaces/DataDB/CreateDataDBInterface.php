@@ -8,5 +8,8 @@ use src\interfaces\Helpers\{
 
 interface CreateDataDBInterface extends QueryDataHelper
 {
+  /**
+   * @return bool
+   */
   public function create(array $tableColumns = null): bool;
 }

@@ -14,67 +14,69 @@ class DataDB implements DataDBInterface
   /**
    * @var TableInfoInterface $tableInfoInterface
    */
-  private $tableInfoInterface;
+  private static $tableInfoInterface;
 
   /**
    * @var QuerySqlStringInterface $querySqlStringInterface
    */
-  private $querySqlStringInterface;
+  private static $querySqlStringInterface;
 
   /**
    * @var RepositoryDataDBInterface $repositoryDataDBInterface
    */
-  private $repositoryDataDBInterface;
+  private static $repositoryDataDBInterface;
 
-  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, TableInfoInterface &$tableInfoInterface, RepositoryDataDBInterface &$repositoryDataDBInterface)
+  public static function config(QuerySqlStringInterface &$querySqlStringInterface, TableInfoInterface &$tableInfoInterface, RepositoryDataDBInterface &$repositoryDataDBInterface): self
   {
-    $this->tableInfoInterface = $tableInfoInterface;
-    $this->querySqlStringInterface = $querySqlStringInterface;
-    $this->repositoryDataDBInterface = $repositoryDataDBInterface;
+    self::$tableInfoInterface = $tableInfoInterface;
+    self::$querySqlStringInterface = $querySqlStringInterface;
+    self::$repositoryDataDBInterface = $repositoryDataDBInterface;
+
+    return new self;
   }
 
   public function findAll(array $tableColumns = null): array
   {
-    $this->querySqlStringInterface->setSelect($tableColumns);
-    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect() . $this->querySqlStringInterface->getWhere());
+    self::$querySqlStringInterface->setSelect($tableColumns);
+    self::$repositoryDataDBInterface->setQuery(self::$querySqlStringInterface->getSelect() . self::$querySqlStringInterface->getWhere());
 
-    return $this->repositoryDataDBInterface->recoverData();
+    return self::$repositoryDataDBInterface->recoverData();
   }
 
   public function delete(int $tableIdentifier): bool
   {
-    $tableIdentifierName = $this->tableInfoInterface->getTableIdentifier();
+    $tableIdentifierName = self::$tableInfoInterface->getTableIdentifier();
 
-    $this->querySqlStringInterface->setDelete();
-    $this->querySqlStringInterface->setWhere("{$tableIdentifierName} = :{$tableIdentifierName}");
+    self::$querySqlStringInterface->setDelete();
+    self::$querySqlStringInterface->setWhere("{$tableIdentifierName} = :{$tableIdentifierName}");
 
-    $this->repositoryDataDBInterface->setData([$tableIdentifierName => $tableIdentifier]);
-    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getDelete() . $this->querySqlStringInterface->getWhere());
+    self::$repositoryDataDBInterface->setData([$tableIdentifierName => $tableIdentifier]);
+    self::$repositoryDataDBInterface->setQuery(self::$querySqlStringInterface->getDelete() . self::$querySqlStringInterface->getWhere());
 
-    return $this->repositoryDataDBInterface->handleData();
+    return self::$repositoryDataDBInterface->handleData();
   }
 
   public function update(array $tableColumns = null): bool
   {
-    $this->querySqlStringInterface->setUpdate($tableColumns);
-    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getUpdate() . $this->querySqlStringInterface->getWhere());
+    self::$querySqlStringInterface->setUpdate($tableColumns);
+    self::$repositoryDataDBInterface->setQuery(self::$querySqlStringInterface->getUpdate() . self::$querySqlStringInterface->getWhere());
 
-    return $this->repositoryDataDBInterface->handleData();
+    return self::$repositoryDataDBInterface->handleData();
   }
 
   public function where(string $conditions): self
   {
-    $this->querySqlStringInterface->setWhere($conditions);
+    self::$querySqlStringInterface->setWhere($conditions);
     return $this;
   }
 
   public function getData(): array
   {
-    return $this->repositoryDataDBInterface->getData();
+    return self::$repositoryDataDBInterface->getData();
   }
 
   public function setData(array $data): void
   {
-    $this->repositoryDataDBInterface->setData($data);
+    self::$repositoryDataDBInterface->setData($data);
   }
 }

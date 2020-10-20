@@ -51,28 +51,26 @@ class Table implements TableInterface
   public const REPOSITORY_DATA_DB = "REPOSITORY_DATA_DB";
   public const DATA_BASE_CONNECTION = "DATA_BASE_CONNECTION";
 
-  private static $instance;
-
   /**
    * Referência do objeto filho.
    *
    * @var object $object
    */
-  private $object;
+  private static $object;
 
   /**
    * Campos a serem ignorados.
    *
    * @var array $ignore
    */
-  private $ignoreFields = array(self::ACAO);
+  private static $ignoreFields = array(self::ACAO);
 
   /**
    * Dados que serão usados no DB.
    *
    * @var array $dataToTableObject
    */
-  private $dataToTableObject = array();
+  private static $dataToTableObject = array();
 
   /**
    * @var AuditInterface $auditInterface
@@ -84,63 +82,112 @@ class Table implements TableInterface
    *
    * @var QuerySqlInterface $querySqlInterface
    */
-  private $querySqlInterface;
+  private static $querySqlInterface;
 
   /**
    * Objeto responsável por contruir as querys (QueryBuilder).
    *
    * @var QuerySqlStringInterface $querySqlStringInterface
    */
-  private $querySqlStringInterface;
+  private static $querySqlStringInterface;
 
   /**
    * Objeto que contem as informações da tabela que o objeto filho ($object) represente.
    *
    * @var TableInfoInterface $tableInfoInterface
    */
-  private $tableInfoInterface;
+  private static $tableInfoInterface;
 
   /**
    * Objeto responsável por Buscar, atualizar e remover informações o DB.
    *
    * @var DataDBInterface $dataDBInterface
    */
-  private $dataDBInterface;
+  private static $dataDBInterface;
 
   /**
    * Objeto responsável por maniplar os dados do DB.
    *
    * @var RepositoryDataDBInterface $repositoryDataDBInterface
    */
-  private $repositoryDataDBInterface;
+  private static $repositoryDataDBInterface;
 
   /**
    * Objeto responsavel por criar registros no DB.
    *
    * @var CreateDataDBInterface $createDataDBInterface
    */
-  private $createDataDBInterface;
+  private static $createDataDBInterface;
 
   /**
    * Objeto responsável por buscar 1 registro específico dentro do DB.
    *
    * @var FindDataInterface $findDataInterface
    */
-  private $findDataInterface;
+  private static $findDataInterface;
 
   /**
    * Objeto responsável por buscar vários registros dentro do DB.
    *
    * @var FindAllDataInterface $findAllDataInterface
    */
-  private $findAllDataInterface;
+  private static $findAllDataInterface;
 
   /**
    * Objeto responsável por buscar dados, com quantidade reduzida para paginação, no DB.
    *
    * @var PaginationInterface $paginationInterface
    */
-  private $paginationInterface;
+  private static $paginationInterface;
+
+  /**
+   * Injeta as informações da tabela referente ao objeo atual.
+   *
+   * @param array $tableConfiguration : deve conter um array de chave e valor.
+
+   * @return void
+   */
+  private static function setTableConfiguration(array $tableConfiguration): void
+  {
+    self::$tableInfoInterface->setTableName($tableConfiguration[self::TABLE_NAME]);
+    self::$tableInfoInterface->setTableColumns($tableConfiguration[self::TABLE_COLUMNS]);
+    self::$tableInfoInterface->setDataBaseName($tableConfiguration[self::DATA_BASE_NAME] ?? self::DATA_BASE_NAME_DEFAULT);
+    self::$tableInfoInterface->setTableIdentifier($tableConfiguration[self::TABLE_IDENTIFIER]);
+    self::$tableInfoInterface->setTableColumnsDate($tableConfiguration[self::TABLE_COLUMNS_DATE]);
+  }
+
+  /**
+   * Cria instâncias dos objetos necessários para todos os métodos funcionarem corretamente.
+   *
+   * @return void
+   */
+  private static function initObjects(): void
+  {
+    self::$tableInfoInterface = new TableInfo;
+
+    self::$querySqlStringInterface = QuerySqlString::config(self::$tableInfoInterface);
+    self::$repositoryDataDBInterface = RepositoryDataDB::config(OracleConnection::singleton());
+
+    self::$querySqlInterface = QuerySql::config(self::$querySqlStringInterface, self::$repositoryDataDBInterface);
+    self::$findAllDataInterface = FindAllData::config(self::$querySqlStringInterface, self::$repositoryDataDBInterface);
+    self::$createDataDBInterface = CreateDataDB::config(self::$querySqlStringInterface, self::$repositoryDataDBInterface);
+
+    self::$dataDBInterface = DataDB::config(self::$querySqlStringInterface, self::$tableInfoInterface, self::$repositoryDataDBInterface);
+    self::$findDataInterface = FindData::config(self::$querySqlStringInterface, self::$tableInfoInterface, self::$repositoryDataDBInterface);
+
+    self::$paginationInterface = Pagination::config(self::$querySqlInterface, self::$findAllDataInterface);
+  }
+
+  private function removeIgnores(array $data): array
+  {
+    foreach (self::$ignoreFields as $key => $value) {
+      if (in_array($key, $data)) {
+        unset($data[$key]);
+      }
+    }
+
+    return $data;
+  }
 
   /**
    * Configura o objeto pai injetando o que é preciso para tudo funcionar.
@@ -150,90 +197,9 @@ class Table implements TableInterface
    *
    * @return void
    */
-  public function __construct(object &$object, array $tableConfiguration)
+  public static function config(object &$object, array $tableConfiguration): void
   {
-    $this->object = $object;
-
-    $this->setTableConfiguration($tableConfiguration);
-    $this->initObjects();
-  }
-
-  /**
-   * Retorna uma única instâmcia de um objeto.
-   *
-   * @param array $args = null; parâmetros que podem ser injetados no objeto.
-   *
-   * @return self
-   */
-  public static function singleton(array $args = null): self
-  {
-    $classCalled = get_called_class();
-
-    if (!isset(self::$instance) && $classCalled) {
-      self::$instance = empty($args) ? new $classCalled() : new $classCalled($args);
-    }
-
-    return self::$instance;
-  }
-
-  /**
-   * Método auxiliar para setar dados no objeto atual.
-   *
-   * @param array $dataArray : deve conter um array com chave e valor.
-   * @param bool $isDataToTableDataBase : informa se os dados devem ser carregados para uso no banco de dados.
-   * @param bool $isIgnore = false : informa se o método deve usar os valores no array $ignore.
-
-   * @return bool
-   */
-  private function setDataObject(array $dataArray, bool $isDataToTableDataBase, bool $isIgnore = false): bool
-  {
-    $result = true;
-
-    try {
-      foreach ($dataArray as $key => $value) {
-        $method = "set_" . strtolower($key);
-
-        $isNoIgnoreLoop = $isIgnore ? in_array($key, $this->ignoreFields) : $isIgnore;
-
-        if ($isNoIgnoreLoop && method_exists($this->object, $method) && $value !== null) {
-          $this->object->$method($value);
-
-          if ($isDataToTableDataBase) {
-            $this->dataToTableObject[strtoupper($key)] = $value;
-          }
-        }
-      }
-    } catch (\Throwable $error) {
-      $result = false;
-      var_dump("Erro ao tentar settar os dados vindos da view:: Error: " . $error->getMessage());
-    }
-
-    return $result;
-  }
-
-  /**
-   * Injeta as informações da tabela referente ao objeo atual.
-   *
-   * @param array $tableConfiguration : deve conter um array de chave e valor.
-
-   * @return void
-   */
-  private function setTableConfiguration(array $tableConfiguration): void
-  {
-    $this->tableInfoInterface->setTableName($tableConfiguration[self::TABLE_NAME]);
-    $this->tableInfoInterface->setTableColumns($tableConfiguration[self::TABLE_COLUMNS]);
-    $this->tableInfoInterface->setDataBaseName($tableConfiguration[self::DATA_BASE_NAME] ?? self::DATA_BASE_NAME_DEFAULT);
-    $this->tableInfoInterface->setTableIdentifier($tableConfiguration[self::TABLE_IDENTIFIER]);
-    $this->tableInfoInterface->setTableColumnsDate($tableConfiguration[self::TABLE_COLUMNS_DATE]);
-  }
-
-  /**
-   * Cria instâncias dos objetos necessários para todos os métodos funcionarem corretamente.
-   *
-   * @return void
-   */
-  private function initObjects(): void
-  {
+<<<<<<< HEAD
     $this->tableInfoInterface = new TableInfo();
     $this->auditInterface = new Audit(new AuditObject);
 
@@ -246,8 +212,22 @@ class Table implements TableInterface
 
     $this->dataDBInterface = new DataDB($this->querySqlStringInterface, $this->tableInfoInterface, $this->repositoryDataDBInterface);
     $this->findDataInterface = new FindData($this->querySqlStringInterface, $this->tableInfoInterface, $this->repositoryDataDBInterface);
+=======
+    self::$object = $object;
+>>>>>>> master
 
-    $this->paginationInterface = new Pagination($this->querySqlInterface, $this->findAllDataInterface);
+    self::setTableConfiguration($tableConfiguration);
+    self::initObjects();
+  }
+
+  /**
+   * Retorna os dados injetados para uso no DB.
+   *
+   * @return array
+   */
+  public function getAllData(bool $useREQUEST = true): array
+  {
+    return $useREQUEST ? array_merge(self::$repositoryDataDBInterface->getData(), $this->removeIgnores($_REQUEST)) : self::$repositoryDataDBInterface->getData();
   }
 
   /**
@@ -257,60 +237,35 @@ class Table implements TableInterface
 
    * @return bool
    */
-  public function setAllData(bool $isDataToTableDataBase = true): bool
+  public function setAllData(array $data = null, bool $isDataToTableDataBase = true): bool
   {
-    $result = $this->setDataObject($_REQUEST, $isDataToTableDataBase, true);
+    $result = true;
+    $data = empty($data) ? $_REQUEST : $data;
 
-    if ($result && $isDataToTableDataBase) {
-      $this->setData($this->dataToTableObject);
-    }
+    try {
+      foreach ($data as $key => $value) {
+        $method = "set_" . strtolower($key);
 
-    return $result;
-  }
+        $isNoIgnoreLoop = in_array($key, self::$ignoreFields);
 
-  /**
-   * Injeta no objeto atual os valores informados.
-   *
-   * @param array $dataArray : deve conter um com chave e valor.
-   * @param bool $isDataToTableDataBase = false : informa se os dados devem ser carregados para uso no banco de dados.
+        if ($isNoIgnoreLoop && method_exists(self::$object, $method) && $value !== null) {
+          self::$object->$method($value);
 
-   * @return bool
-   */
-  public function setDataFromArray(array $dataArray, bool $isDataToTableDataBase = false): bool
-  {
-    $result = $this->setDataObject($dataArray, $isDataToTableDataBase);
-
-    if ($result && $isDataToTableDataBase) {
-      $this->setData($this->dataToTableObject);
-    }
-
-    return $result;
-  }
-
-  /**
-   * Cria e retorna um array contendo cópias do objeto atual carregado com os dados informados.
-   *
-   * @param array $dataArray : deve conter um array, de array's com chave e valor.
-
-   * @return array
-   */
-  public function getArrayObjectFromDB(array $dataArray): array
-  {
-    $arrayObject = array();
-
-    foreach ($dataArray as $valueOfArray) {
-      foreach ($valueOfArray as $key => $value) {
-        $method = "set_" . strtolower(trim($key));
-
-        if (method_exists($this->object, $method) && $value !== null) {
-          $this->object->$method($value);
+          if ($isDataToTableDataBase) {
+            self::$dataToTableObject[strtoupper($key)] = $value;
+          }
         }
       }
-
-      array_push($arrayObject, clone $this->object);
+    } catch (\Throwable $error) {
+      $result = false;
+      var_dump("Erro ao tentar settar os dados vindos da view:: Error: " . $error->getMessage());
     }
 
-    return $arrayObject;
+    if ($result && $isDataToTableDataBase) {
+      self::$repositoryDataDBInterface->setData(self::$dataToTableObject);
+    }
+
+    return $result;
   }
 
   /**
@@ -324,9 +279,9 @@ class Table implements TableInterface
   public function ignoreViewField(array $ignore, bool $isAddInArray = false): void
   {
     if (!empty($ignore) && $isAddInArray === false) {
-      $this->ignoreFields = array_merge($ignore, self::ACAO);
+      self::$ignoreFields = array_merge($ignore, self::ACAO);
     } elseif ($isAddInArray) {
-      $this->ignoreFields = array_merge($this->ignoreFields, $ignore);
+      self::$ignoreFields = array_merge(self::$ignoreFields, $ignore);
     }
   }
 
@@ -337,7 +292,7 @@ class Table implements TableInterface
    */
   public function resetIgnoreViewField(): void
   {
-    $this->ignoreFields = array(self::ACAO);
+    self::$ignoreFields = array(self::ACAO);
   }
 
   /**
@@ -349,7 +304,7 @@ class Table implements TableInterface
    */
   public function select(array $tableColumns = null): QuerySqlInterface
   {
-    return $this->querySqlInterface;
+    return self::$querySqlInterface;
   }
 
   /**
@@ -361,8 +316,8 @@ class Table implements TableInterface
    */
   public function where(string $conditions): DataDBInterface
   {
-    $this->dataDBInterface->where($conditions);
-    return $this->dataDBInterface;
+    self::$dataDBInterface->where($conditions);
+    return self::$dataDBInterface;
   }
 
   /**
@@ -383,7 +338,7 @@ class Table implements TableInterface
    */
   public function create(array $tableColumns = null): bool
   {
-    return $this->createDataDBInterface->create($tableColumns);
+    return self::$createDataDBInterface->create($tableColumns);
   }
 
   /**
@@ -396,7 +351,7 @@ class Table implements TableInterface
    */
   public function find(int $tableIdentifier, array $tableColumns = null): array
   {
-    return $this->findDataInterface->find($tableIdentifier, $tableColumns);
+    return self::$findDataInterface->find($tableIdentifier, $tableColumns);
   }
 
 
@@ -409,7 +364,7 @@ class Table implements TableInterface
    */
   public function findAll(array $tableColumns = null): array
   {
-    return $this->dataDBInterface->findAll($tableColumns);
+    return self::$dataDBInterface->findAll($tableColumns);
   }
 
   /**
@@ -424,33 +379,10 @@ class Table implements TableInterface
    */
   public function pagination(int $paginationInit = null, int $paginationAmount = null, int $paginationEnd = null): PaginationInterface
   {
-    return $this->paginationInterface
+    return self::$paginationInterface
       ->init($paginationInit)
       ->amount($paginationAmount)
       ->end($paginationEnd);
-  }
-
-  /**
-   * Retorna os dados injetados para uso no DB.
-   *
-   * @return array
-   */
-  public function getData(): array
-  {
-    return $this->repositoryDataDBInterface->getData();
-  }
-
-  /**
-   * Injeta os dados que serão usados no DB.
-   * Por padrão os valores são ajustados para o formato ':CAMPO', não necessitando que o dev use o operador ':' para binds.
-   *
-   * @param array $data : deve conter um array de chave e valor que será usado no DB.
-   *
-   * @return void
-   */
-  public function setData(array $data): void
-  {
-    $this->repositoryDataDBInterface->setData($data);
   }
 
   /**
@@ -460,8 +392,8 @@ class Table implements TableInterface
    */
   public function clean(): void
   {
-    $this->dataToTableObject = [];
-    $this->querySqlInterface->clean();
-    $this->repositoryDataDBInterface->clean();
+    self::$dataToTableObject = [];
+    self::$querySqlInterface->clean();
+    self::$repositoryDataDBInterface->clean();
   }
 }

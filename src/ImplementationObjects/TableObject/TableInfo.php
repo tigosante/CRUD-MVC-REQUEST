@@ -35,6 +35,7 @@ class TableInfo implements TableInfoInterface
   {
     return $this->dataBaseName;
   }
+
   public function setDataBaseName(string $dataBaseName): void
   {
     $this->dataBaseName = $dataBaseName;
@@ -44,6 +45,7 @@ class TableInfo implements TableInfoInterface
   {
     return $this->tableName;
   }
+
   public function setTableName(string $tableName): void
   {
     $this->tableName = $tableName;
@@ -53,6 +55,7 @@ class TableInfo implements TableInfoInterface
   {
     return $this->tableIdentifier !== null ? $this->tableIdentifier : "";
   }
+
   public function setTableIdentifier(string $tableIdentifier = null): void
   {
     $this->tableIdentifier = $tableIdentifier;
@@ -62,6 +65,7 @@ class TableInfo implements TableInfoInterface
   {
     return $this->tableColumns;
   }
+
   public function setTableColumns(array $tableColumns): void
   {
     $this->tableColumns = $tableColumns;
@@ -71,6 +75,7 @@ class TableInfo implements TableInfoInterface
   {
     return $this->tableColumnsDate;
   }
+
   public function setTableColumnsDate(array $tableColumnsDate = null): void
   {
     $this->tableColumnsDate = $tableColumnsDate;

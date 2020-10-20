@@ -13,7 +13,7 @@ class RepositoryDataDB implements RepositoryDataDBInterface
   /**
    * @var \PDO $connection
    */
-  private $connection;
+  private static $connection;
 
   /**
    * @var string $query
@@ -30,18 +30,26 @@ class RepositoryDataDB implements RepositoryDataDBInterface
    */
   private $dataDB = null;
 
+<<<<<<< HEAD
   /**
    * @return AuditInterface $auditInterface
    */
   private $auditInterface;
 
   public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface, AuditInterface &$auditInterface)
+=======
+  public static function config(DataBaseConnectionInterface &$dataBaseConnectionInterface): self
+>>>>>>> master
   {
     if ($dataBaseConnectionInterface->createConnection()) {
-      $this->connection = $dataBaseConnectionInterface->getConnection();
+      self::$connection = $dataBaseConnectionInterface->getConnection();
     }
 
+<<<<<<< HEAD
     $this->auditInterface = $auditInterface;
+=======
+    return new self;
+>>>>>>> master
   }
 
   private function verifyData(): void
@@ -49,14 +57,16 @@ class RepositoryDataDB implements RepositoryDataDBInterface
     $dataArray = $this->getData();
 
     if (!(empty($dataArray))) {
-      $this->dataDB = $dataArray;
+      foreach ($dataArray as $key => $value) {
+        $this->dataDB[":{$key}"] = $value;
+      }
     }
   }
 
   public function recoverData(): array
   {
     $this->verifyData();
-    $statement = $this->connection->prepare($this->getQuery());
+    $statement = self::$connection->prepare($this->getQuery());
     $statement->execute($this->dataDB);
 
     return $statement->fetchAll();
@@ -64,6 +74,7 @@ class RepositoryDataDB implements RepositoryDataDBInterface
 
   public function handleData(): bool
   {
+<<<<<<< HEAD
     $result = true;
 
     try {
@@ -91,6 +102,10 @@ class RepositoryDataDB implements RepositoryDataDBInterface
     }
 
     return $result;
+=======
+    $this->verifyData();
+    return self::$connection->prepare($this->getQuery())->execute($this->dataDB);
+>>>>>>> master
   }
 
   public function getQuery(): string
@@ -112,7 +127,7 @@ class RepositoryDataDB implements RepositoryDataDBInterface
   {
     if (!(empty($data))) {
       foreach ($data as $key => $value) {
-        $this->data[":{$key}"] = $value;
+        $this->data[$key] = $value;
       }
     }
   }

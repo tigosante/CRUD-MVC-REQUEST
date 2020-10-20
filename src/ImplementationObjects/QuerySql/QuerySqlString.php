@@ -60,11 +60,12 @@ class QuerySqlString implements QuerySqlStringInterface
   /**
    * @var TableInfoInterface $tableInfoInterface
    */
-  private $tableInfoInterface;
+  private static $tableInfoInterface;
 
-  public function __construct(TableInfoInterface &$tableInfoInterface)
+  public static function config(TableInfoInterface &$tableInfoInterface): self
   {
-    $this->tableInfoInterface = $tableInfoInterface;
+    self::$tableInfoInterface = $tableInfoInterface;
+    return new self;
   }
 
   public function getSelect(): string
@@ -75,7 +76,7 @@ class QuerySqlString implements QuerySqlStringInterface
   public function setSelect(array $tableColumns = null): void
   {
     $columns = empty($tableColumns) ?   " * " : strtoupper(join(", ", $tableColumns));
-    $this->select = "SELECT {$columns} FROM " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName() . self::SPACE_SEPARATOR;
+    $this->select = "SELECT {$columns} FROM " . self::$tableInfoInterface->getDataBaseName() . self::$tableInfoInterface->getTableName() . self::SPACE_SEPARATOR;
   }
 
   public function getJoin(): string
@@ -135,7 +136,7 @@ class QuerySqlString implements QuerySqlStringInterface
     $columns = $this->getColumnsFromArray(", ", $tableColumns);
     $columnsBinds = $this->getColumnsFromArray(", :", $tableColumns);
 
-    $this->insert = "INSERT INTO " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName() . " ({$columns}) VALUES ({$columnsBinds}) ";
+    $this->insert = "INSERT INTO " . self::$tableInfoInterface->getDataBaseName() . self::$tableInfoInterface->getTableName() . " ({$columns}) VALUES ({$columnsBinds}) ";
   }
 
   public function getUpdate(): string
@@ -147,7 +148,7 @@ class QuerySqlString implements QuerySqlStringInterface
   {
     $columns = $this->getColumnsToUpdate($tableColumns);
 
-    $this->update = "UPDATE " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName() . " SET {$columns} ";
+    $this->update = "UPDATE " . self::$tableInfoInterface->getDataBaseName() . self::$tableInfoInterface->getTableName() . " SET {$columns} ";
   }
 
   public function getDelete(): string
@@ -157,7 +158,7 @@ class QuerySqlString implements QuerySqlStringInterface
 
   public function setDelete(): void
   {
-    $this->delete = "DELETE " . $this->tableInfoInterface->getDataBaseName() . $this->tableInfoInterface->getTableName() . self::SPACE_SEPARATOR;
+    $this->delete = "DELETE " . self::$tableInfoInterface->getDataBaseName() . self::$tableInfoInterface->getTableName() . self::SPACE_SEPARATOR;
   }
 
   public function clean(): void
@@ -177,14 +178,14 @@ class QuerySqlString implements QuerySqlStringInterface
 
   private function getColumnsFromArray(string $separator, array $tableColumns = null): string
   {
-    $tableColumns = empty($tableColumns) ? $this->tableInfoInterface->getTableColumns() : $tableColumns;
+    $tableColumns = empty($tableColumns) ? self::$tableInfoInterface->getTableColumns() : $tableColumns;
     return strtoupper(join($separator, $tableColumns));
   }
 
   private function getColumnsToUpdate(array $tableColumns = null): string
   {
     $columnsUpdate = array();
-    $tableColumns = empty($tableColumns) ? $this->tableInfoInterface->getTableColumns() : $tableColumns;
+    $tableColumns = empty($tableColumns) ? self::$tableInfoInterface->getTableColumns() : $tableColumns;
 
     foreach ($tableColumns as $column) {
       array_push($columnsUpdate, " {$column} = :{$column} ");

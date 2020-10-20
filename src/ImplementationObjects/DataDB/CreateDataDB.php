@@ -13,24 +13,26 @@ class CreateDataDB implements CreateDataDBInterface
   /**
    * @var QuerySqlStringInterface $querySqlStringInterface
    */
-  private $querySqlStringInterface;
+  private static $querySqlStringInterface;
 
   /**
    * @var RepositoryDataDBInterface $repositoryDataDBInterface
    */
-  private $repositoryDataDBInterface;
+  private static $repositoryDataDBInterface;
 
-  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface)
+  public static function config(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface): self
   {
-    $this->querySqlStringInterface = $querySqlStringInterface;
-    $this->repositoryDataDBInterface = $repositoryDataDBInterface;
+    self::$querySqlStringInterface = $querySqlStringInterface;
+    self::$repositoryDataDBInterface = $repositoryDataDBInterface;
+
+    return new self;
   }
 
   public function create(array $tableColumns = null): bool
   {
-    $this->querySqlStringInterface->setInsert($tableColumns);
-    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getInsert());
+    self::$querySqlStringInterface->setInsert($tableColumns);
+    self::$repositoryDataDBInterface->setQuery(self::$querySqlStringInterface->getInsert());
 
-    return $this->repositoryDataDBInterface->handleData();
+    return self::$repositoryDataDBInterface->handleData();
   }
 }
