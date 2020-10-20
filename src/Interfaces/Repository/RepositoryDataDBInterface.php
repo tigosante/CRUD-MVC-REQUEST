@@ -9,13 +9,33 @@ use src\Interfaces\{
 
 interface RepositoryDataDBInterface extends SetDataHelper
 {
-  public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface);
+  /**
+   * @return self
+   */
+  public static function config(DataBaseConnectionInterface &$dataBaseConnectionInterface): self;
 
+  /**
+   * @return bool
+   */
   public function handleData(): bool;
+
+  /**
+   * @return array
+   */
   public function recoverData(): array;
 
+  /**
+   * @return string
+   */
   public function getQuery(): string;
+
+  /**
+   * @return void
+   */
   public function setQuery(string $query): void;
 
+  /**
+   * @return void
+   */
   public function clean(): void;
 }

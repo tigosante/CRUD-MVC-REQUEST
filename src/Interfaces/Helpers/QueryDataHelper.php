@@ -9,5 +9,8 @@ use src\Interfaces\{
 
 interface QueryDataHelper
 {
-  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface);
+  /**
+   * @return self
+   */
+  public static function config(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface): self;
 }

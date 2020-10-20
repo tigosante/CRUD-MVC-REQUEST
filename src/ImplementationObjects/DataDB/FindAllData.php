@@ -11,24 +11,26 @@ class FindAllData implements FindAllDataInterface
   /**
    * @var QuerySqlStringInterface $querySqlStringInterface
    */
-  private $querySqlStringInterface;
+  private static $querySqlStringInterface;
 
   /**
    * @var RepositoryDataDBInterface $repositoryDataDBInterface
    */
-  private $repositoryDataDBInterface;
+  private static $repositoryDataDBInterface;
 
-  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface)
+  public static function config(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface): self
   {
-    $this->querySqlStringInterface = $querySqlStringInterface;
-    $this->repositoryDataDBInterface = $repositoryDataDBInterface;
+    self::$querySqlStringInterface = $querySqlStringInterface;
+    self::$repositoryDataDBInterface = $repositoryDataDBInterface;
+
+    return new self;
   }
 
   public function findAll(array $tableColumns = null): array
   {
-    $this->querySqlStringInterface->setSelect($tableColumns);
-    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect());
+    self::$querySqlStringInterface->setSelect($tableColumns);
+    self::$repositoryDataDBInterface->setQuery(self::$querySqlStringInterface->getSelect());
 
-    return $this->repositoryDataDBInterface->recoverData();
+    return self::$repositoryDataDBInterface->recoverData();
   }
 }

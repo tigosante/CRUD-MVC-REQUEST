@@ -12,7 +12,7 @@ class RepositoryDataDB implements RepositoryDataDBInterface
   /**
    * @var \PDO $connection
    */
-  private $connection;
+  private static $connection;
 
   /**
    * @var string $query
@@ -29,11 +29,13 @@ class RepositoryDataDB implements RepositoryDataDBInterface
    */
   private $dataDB = null;
 
-  public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface)
+  public static function config(DataBaseConnectionInterface &$dataBaseConnectionInterface): self
   {
     if ($dataBaseConnectionInterface->createConnection()) {
-      $this->connection = $dataBaseConnectionInterface->getConnection();
+      self::$connection = $dataBaseConnectionInterface->getConnection();
     }
+
+    return new self;
   }
 
   private function verifyData(): void
@@ -41,14 +43,16 @@ class RepositoryDataDB implements RepositoryDataDBInterface
     $dataArray = $this->getData();
 
     if (!(empty($dataArray))) {
-      $this->dataDB = $dataArray;
+      foreach ($dataArray as $key => $value) {
+        $this->dataDB[":{$key}"] = $value;
+      }
     }
   }
 
   public function recoverData(): array
   {
     $this->verifyData();
-    $statement = $this->connection->prepare($this->getQuery());
+    $statement = self::$connection->prepare($this->getQuery());
     $statement->execute($this->dataDB);
 
     return $statement->fetchAll();
@@ -57,7 +61,7 @@ class RepositoryDataDB implements RepositoryDataDBInterface
   public function handleData(): bool
   {
     $this->verifyData();
-    return $this->connection->prepare($this->getQuery())->execute($this->dataDB);
+    return self::$connection->prepare($this->getQuery())->execute($this->dataDB);
   }
 
   public function getQuery(): string
@@ -79,7 +83,7 @@ class RepositoryDataDB implements RepositoryDataDBInterface
   {
     if (!(empty($data))) {
       foreach ($data as $key => $value) {
-        $this->data[":{$key}"] = $value;
+        $this->data[$key] = $value;
       }
     }
   }

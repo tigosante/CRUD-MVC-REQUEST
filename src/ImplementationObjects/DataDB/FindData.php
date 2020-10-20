@@ -12,33 +12,35 @@ class FindData implements FindDataInterface
   /**
    * @var TableInfoInterface $tableInfoInterface
    */
-  private $tableInfoInterface;
+  private static $tableInfoInterface;
 
   /**
    * @var QuerySqlStringInterface $querySqlStringInterface
    */
-  private $querySqlStringInterface;
+  private static $querySqlStringInterface;
 
   /**
    * @var RepositoryDataDBInterface $repositoryDataDBInterface
    */
-  private $repositoryDataDBInterface;
+  private static $repositoryDataDBInterface;
 
-  public function __construct(QuerySqlStringInterface &$querySqlStringInterface, TableInfoInterface &$tableInfoInterface, RepositoryDataDBInterface &$repositoryDataDBInterface)
+  public static function config(QuerySqlStringInterface &$querySqlStringInterface, TableInfoInterface &$tableInfoInterface, RepositoryDataDBInterface &$repositoryDataDBInterface): self
   {
-    $this->tableInfoInterface = $tableInfoInterface;
-    $this->querySqlStringInterface = $querySqlStringInterface;
-    $this->repositoryDataDBInterface = $repositoryDataDBInterface;
+    self::$tableInfoInterface = $tableInfoInterface;
+    self::$querySqlStringInterface = $querySqlStringInterface;
+    self::$repositoryDataDBInterface = $repositoryDataDBInterface;
+
+    return new self;
   }
 
   public function find(int $tableIdentifier, array $tableColumns = null): array
   {
-    $tableIdentifierName = $this->tableInfoInterface->getTableIdentifier();
+    $tableIdentifierName = self::$tableInfoInterface->getTableIdentifier();
 
-    $this->querySqlStringInterface->setSelect($tableColumns);
-    $this->querySqlStringInterface->setWhere("{$tableIdentifierName} = :{$tableIdentifierName}");
-    $this->repositoryDataDBInterface->setQuery($this->querySqlStringInterface->getSelect() . $this->querySqlStringInterface->getWhere());
+    self::$querySqlStringInterface->setSelect($tableColumns);
+    self::$querySqlStringInterface->setWhere("{$tableIdentifierName} = :{$tableIdentifierName}");
+    self::$repositoryDataDBInterface->setQuery(self::$querySqlStringInterface->getSelect() . self::$querySqlStringInterface->getWhere());
 
-    return $this->repositoryDataDBInterface->recoverData();
+    return self::$repositoryDataDBInterface->recoverData();
   }
 }

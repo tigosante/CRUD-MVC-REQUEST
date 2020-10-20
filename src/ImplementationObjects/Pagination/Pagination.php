@@ -32,17 +32,19 @@ class Pagination implements PaginationInterface
   /**
    * @var QuerySqlInterface $querySqlInterface
    */
-  private $querySqlInterface;
+  private static $querySqlInterface;
 
   /**
    * @var FindAllDataInterface $findAllDataInterface
    */
-  private $findAllDataInterface;
+  private static $findAllDataInterface;
 
-  public function __construct(QuerySqlInterface $querySqlInterface, FindAllDataInterface $findAllDataInterface)
+  public static function config(QuerySqlInterface $querySqlInterface, FindAllDataInterface $findAllDataInterface): self
   {
-    $this->querySqlInterface = $querySqlInterface;
-    $this->findAllDataInterface = $findAllDataInterface;
+    self::$querySqlInterface = $querySqlInterface;
+    self::$findAllDataInterface = $findAllDataInterface;
+
+    return new self;
   }
 
   public function init(int $paginationInit = null): self
@@ -65,26 +67,26 @@ class Pagination implements PaginationInterface
 
   public function findAll(array $tableColumns = null): array
   {
-    return $this->findAllDataInterface->findAll($tableColumns);
+    return self::$findAllDataInterface->findAll($tableColumns);
   }
 
   public function select(array $tableColumns = null): QuerySqlInterface
   {
-    return $this->querySqlInterface->select($tableColumns);
+    return self::$querySqlInterface->select($tableColumns);
   }
 
   public function where(string $condition): FindAllDataInterface
   {
-    return $this->findAllDataInterface;
+    return self::$findAllDataInterface;
   }
 
   public function getData(): array
   {
-    return $this->querySqlInterface->getData();
+    return self::$querySqlInterface->getData();
   }
 
   public function setData(array $data): void
   {
-    $this->querySqlInterface->setData($data);
+    self::$querySqlInterface->setData($data);
   }
 }
