@@ -27,8 +27,6 @@ use src\ImplementationObjects\{
   Pagination\Pagination,
   Repository\RepositoryDataDB,
 };
-use src\ImplementationObjects\Audit\Audit;
-use src\Objects\AuditObject;
 
 class Table implements TableInterface
 {
@@ -208,6 +206,8 @@ class Table implements TableInterface
   /**
    * Retorna os dados injetados para uso no DB.
    *
+   * @var bool $useREQUEST = true : Informa se os dados do $_REQUEST devem ser enviados juntos.
+   *
    * @return array
    */
   public function getAllData(bool $useREQUEST = true): array
@@ -218,14 +218,22 @@ class Table implements TableInterface
   /**
    * Injeta no objeto atual os valores vindos da view.
    *
-   * @param bool $isDataToTableDataBase = false : informa se os dados devem ser carregados para uso no banco de dados.
+   * @param array $data = true : Deve receber um array de chave e valor: array("FIELD" => "value").
+   * @param bool $isMergeWithREQUEST = true : Faz merge com os dados do $_REQUEST.
 
    * @return bool
    */
-  public function setAllData(array $data = null, bool $isDataToTableDataBase = true): bool
+  public function setAllData(array $data = null, bool $isMergeWithREQUEST = true): bool
   {
     $result = true;
-    $data = empty($data) ? $_REQUEST : $data;
+
+    if (empty($data)) {
+      $data = $_REQUEST;
+    } else if ($isMergeWithREQUEST) {
+      $data = array_merge($_REQUEST, $data);
+    } else {
+      $data = $_REQUEST;
+    }
 
     try {
       foreach ($data as $key => $value) {
@@ -235,10 +243,7 @@ class Table implements TableInterface
 
         if ($isNoIgnoreLoop && method_exists(self::$object, $method) && $value !== null) {
           self::$object->$method($value);
-
-          if ($isDataToTableDataBase) {
-            self::$dataToTableObject[strtoupper($key)] = $value;
-          }
+          self::$dataToTableObject[strtoupper($key)] = $value;
         }
       }
     } catch (\Throwable $error) {
@@ -246,7 +251,7 @@ class Table implements TableInterface
       var_dump("Erro ao tentar settar os dados vindos da view:: Error: " . $error->getMessage());
     }
 
-    if ($result && $isDataToTableDataBase) {
+    if ($result) {
       self::$repositoryDataDBInterface->setData(self::$dataToTableObject);
     }
 

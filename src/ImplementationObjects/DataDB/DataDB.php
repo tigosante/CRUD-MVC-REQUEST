@@ -49,8 +49,8 @@ class DataDB implements DataDBInterface
 
     self::$querySqlStringInterface->setDelete();
     self::$querySqlStringInterface->setWhere("{$tableIdentifierName} = :{$tableIdentifierName}");
-
     self::$repositoryDataDBInterface->setData([$tableIdentifierName => $tableIdentifier]);
+
     self::$repositoryDataDBInterface->setQuery(self::$querySqlStringInterface->getDelete() . self::$querySqlStringInterface->getWhere());
 
     return self::$repositoryDataDBInterface->handleData();
