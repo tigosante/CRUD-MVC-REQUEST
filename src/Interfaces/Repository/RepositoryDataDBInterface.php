@@ -10,14 +10,10 @@ use src\Interfaces\Audit\AuditInterface;
 
 interface RepositoryDataDBInterface extends SetDataHelper
 {
-<<<<<<< HEAD
-  public function __construct(DataBaseConnectionInterface &$dataBaseConnectionInterface, AuditInterface &$auditInterface);
-=======
   /**
    * @return self
    */
   public static function config(DataBaseConnectionInterface &$dataBaseConnectionInterface): self;
->>>>>>> master
 
   /**
    * @return bool

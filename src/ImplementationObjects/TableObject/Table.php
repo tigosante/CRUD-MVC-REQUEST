@@ -199,22 +199,7 @@ class Table implements TableInterface
    */
   public static function config(object &$object, array $tableConfiguration): void
   {
-<<<<<<< HEAD
-    $this->tableInfoInterface = new TableInfo();
-    $this->auditInterface = new Audit(new AuditObject);
-
-    $this->querySqlStringInterface = new QuerySqlString($this->tableInfoInterface);
-    $this->repositoryDataDBInterface = new RepositoryDataDB(OracleConnection::singleton(), $this->auditInterface);
-
-    $this->querySqlInterface = new QuerySql($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->findAllDataInterface = new FindAllData($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-    $this->createDataDBInterface = new CreateDataDB($this->querySqlStringInterface, $this->repositoryDataDBInterface);
-
-    $this->dataDBInterface = new DataDB($this->querySqlStringInterface, $this->tableInfoInterface, $this->repositoryDataDBInterface);
-    $this->findDataInterface = new FindData($this->querySqlStringInterface, $this->tableInfoInterface, $this->repositoryDataDBInterface);
-=======
     self::$object = $object;
->>>>>>> master
 
     self::setTableConfiguration($tableConfiguration);
     self::initObjects();

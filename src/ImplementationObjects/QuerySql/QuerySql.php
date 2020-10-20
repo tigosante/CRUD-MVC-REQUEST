@@ -84,21 +84,12 @@ class QuerySql implements QuerySqlInterface
 
   public function queryString(string $typeQuery = ""): string
   {
-<<<<<<< HEAD
-    return !empty($typeQuery) ? $this->factoryQuery($typeQuery) :
-      $this->querySqlStringInterface->getSelect() .
-      $this->querySqlStringInterface->getJoin() .
-      $this->querySqlStringInterface->getWhere() .
-      $this->querySqlStringInterface->getGroupBy() .
-      $this->querySqlStringInterface->getOrderBy();
-=======
     return
       self::$querySqlStringInterface->getSelect() .
       self::$querySqlStringInterface->getJoin() .
       self::$querySqlStringInterface->getWhere() .
       self::$querySqlStringInterface->getGroupBy() .
       self::$querySqlStringInterface->getOrderBy();
->>>>>>> master
   }
 
   private function factoryQuery(string $typeQuery): string
