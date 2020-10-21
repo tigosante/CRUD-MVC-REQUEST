@@ -411,7 +411,7 @@ class Table implements TableInterface
    */
   public function clean(): void
   {
-    self::$dataToTableObject = [];
+    self::$dataToTableObject = array();
     self::$querySql->clean();
     self::$repositoryDataDB->clean();
   }
