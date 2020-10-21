@@ -22,7 +22,7 @@ class RepositoryDataDB implements RepositoryDataDBInterface
   /**
    * @var array $data
    */
-  private $data = [];
+  private $data = array();
 
   /**
    * @var array $dataDB
@@ -90,7 +90,7 @@ class RepositoryDataDB implements RepositoryDataDBInterface
 
   public function clean(): void
   {
-    $this->data = [];
+    $this->data = array();
     $this->query = "";
     $this->dataDB = null;
   }

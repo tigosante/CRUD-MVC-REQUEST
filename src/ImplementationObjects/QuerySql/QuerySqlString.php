@@ -168,11 +168,11 @@ class QuerySqlString implements QuerySqlStringInterface
 
   public function clean(): void
   {
-    $this->tableColumns = [];
-    $this->joinCondition = [];
-    $this->whereCondition = [];
-    $this->groupByCondition = [];
-    $this->orderByCondition = [];
+    $this->tableColumns = array();
+    $this->joinCondition = array();
+    $this->whereCondition = array();
+    $this->groupByCondition = array();
+    $this->orderByCondition = array();
 
     $this->select = "";
     $this->insert = "";
