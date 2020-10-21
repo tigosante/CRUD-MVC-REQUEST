@@ -47,5 +47,5 @@ interface QuerySqlInterface extends QueryDataHelper, SetDataHelper
   /**
    * @return string
    */
-  public function queryString(): string;
+  public function queryString(string $typeQuery = ""): string;
 }

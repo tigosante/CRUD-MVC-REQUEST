@@ -84,12 +84,7 @@ class QuerySql implements QuerySqlInterface
 
   public function queryString(string $typeQuery = ""): string
   {
-    return
-      self::$querySqlStringInterface->getSelect() .
-      self::$querySqlStringInterface->getJoin() .
-      self::$querySqlStringInterface->getWhere() .
-      self::$querySqlStringInterface->getGroupBy() .
-      self::$querySqlStringInterface->getOrderBy();
+    return $this->factoryQuery($typeQuery);
   }
 
   private function factoryQuery(string $typeQuery): string
@@ -166,7 +161,12 @@ class QuerySql implements QuerySqlInterface
         break;
 
       default:
-        $query = "Informe um comando válido de banco de dados!";
+        $query =
+          self::$querySqlStringInterface->getSelect() .
+          self::$querySqlStringInterface->getJoin() .
+          self::$querySqlStringInterface->getWhere() .
+          self::$querySqlStringInterface->getGroupBy() .
+          self::$querySqlStringInterface->getOrderBy();
         break;
     }
 

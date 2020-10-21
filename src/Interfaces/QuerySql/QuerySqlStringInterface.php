@@ -95,4 +95,14 @@ interface QuerySqlStringInterface
    * @return void
    */
   public function clean(): void;
+
+  /**
+   * @return array
+   */
+  public function getTableColumnsData(): array;
+
+  /**
+   * @return void
+   */
+  public function setTableColumnsData(array $tableColumnsData): void;
 }

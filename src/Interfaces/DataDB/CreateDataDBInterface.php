@@ -2,12 +2,16 @@
 
 namespace src\interfaces\DataDB;
 
-use src\interfaces\Helpers\{
-  QueryDataHelper
+use src\interfaces\{
+  DataObject\DataObjectInterface,
+  QuerySql\QuerySqlStringInterface,
+  Repository\RepositoryDataDBInterface
 };
 
-interface CreateDataDBInterface extends QueryDataHelper
+interface CreateDataDBInterface
 {
+  public static function config(DataObjectInterface $dataObject, QuerySqlStringInterface &$querySqlString, RepositoryDataDBInterface &$repositoryDataDB): self;
+
   /**
    * @return bool
    */

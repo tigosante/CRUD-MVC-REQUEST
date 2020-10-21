@@ -4,6 +4,7 @@ namespace src\Interfaces\DataDB;
 
 use src\interfaces\{
   Helpers\SetDataHelper,
+  DataObject\DataObjectInterface,
   QuerySql\QuerySqlStringInterface,
   Repository\RepositoryDataDBInterface,
   TableObject\TableInfoInterface
@@ -14,7 +15,7 @@ interface DataDBInterface extends SetDataHelper
   /**
    * @return self
    */
-  public static function config(QuerySqlStringInterface &$querySqlStringInterface, TableInfoInterface &$tableInfoInterface, RepositoryDataDBInterface &$repositoryDataDBInterface): self;
+  public static function config(DataObjectInterface $dataObject, QuerySqlStringInterface &$querySqlStringInterface, TableInfoInterface &$tableInfoInterface, RepositoryDataDBInterface &$repositoryDataDBInterface): self;
 
   /**
    * @return bool

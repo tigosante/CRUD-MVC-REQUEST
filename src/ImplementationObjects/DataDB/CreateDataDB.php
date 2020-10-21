@@ -4,6 +4,7 @@ namespace src\ImplementationObjects\DataDB;
 
 use src\interfaces\{
   DataDB\CreateDataDBInterface,
+  DataObject\DataObjectInterface,
   QuerySql\QuerySqlStringInterface,
   Repository\RepositoryDataDBInterface
 };
@@ -11,28 +12,39 @@ use src\interfaces\{
 class CreateDataDB implements CreateDataDBInterface
 {
   /**
-   * @var QuerySqlStringInterface $querySqlStringInterface
+   * @var DataObjectInterface $dataObject
    */
-  private static $querySqlStringInterface;
+  private static $dataObject;
+
 
   /**
-   * @var RepositoryDataDBInterface $repositoryDataDBInterface
+   * @var QuerySqlStringInterface $querySqlString
    */
-  private static $repositoryDataDBInterface;
+  private static $querySqlString;
 
-  public static function config(QuerySqlStringInterface &$querySqlStringInterface, RepositoryDataDBInterface &$repositoryDataDBInterface): self
+  /**
+   * @var RepositoryDataDBInterface $repositoryDataDB
+   */
+  private static $repositoryDataDB;
+
+  public static function config(DataObjectInterface $dataObject, QuerySqlStringInterface &$querySqlString, RepositoryDataDBInterface &$repositoryDataDB): self
   {
-    self::$querySqlStringInterface = $querySqlStringInterface;
-    self::$repositoryDataDBInterface = $repositoryDataDBInterface;
+    self::$dataObject = $dataObject;
+    self::$querySqlString = $querySqlString;
+    self::$repositoryDataDB = $repositoryDataDB;
 
     return new self;
   }
 
   public function create(array $tableColumns = null): bool
   {
-    self::$querySqlStringInterface->setInsert($tableColumns);
-    self::$repositoryDataDBInterface->setQuery(self::$querySqlStringInterface->getInsert());
+    self::$querySqlString->setInsert($tableColumns);
 
-    return self::$repositoryDataDBInterface->handleData();
+    $tableColumns = empty($tableColumns) ? self::$querySqlString->getTableColumnsData() : $tableColumns;
+
+    self::$repositoryDataDB->setData(self::$dataObject->getData($tableColumns));
+    self::$repositoryDataDB->setQuery(self::$querySqlString->getInsert());
+
+    return self::$repositoryDataDB->handleData();
   }
 }

@@ -9,27 +9,22 @@ class TableInfo implements TableInfoInterface
   /**
    * @var string $dataBaseName
    */
-  private $dataBaseName = null;
+  private $dataBaseName = "";
 
   /**
    * @var string $tableName
    */
-  private $tableName = null;
+  private $tableName = "";
 
   /**
    * @var string $tableIdentifier
    */
-  private $tableIdentifier;
+  private $tableIdentifier = "";
 
   /**
    * @var array $tableColumns
    */
-  private $tableColumns = null;
-
-  /**
-   * @var array $tableColumnsDate
-   */
-  private $tableColumnsDate = null;
+  private $tableColumns = array();
 
   public function getDataBaseName(): string
   {
@@ -53,7 +48,7 @@ class TableInfo implements TableInfoInterface
 
   public function getTableIdentifier(): string
   {
-    return $this->tableIdentifier !== null ? $this->tableIdentifier : "";
+    return  $this->tableIdentifier;
   }
 
   public function setTableIdentifier(string $tableIdentifier = null): void
@@ -69,15 +64,5 @@ class TableInfo implements TableInfoInterface
   public function setTableColumns(array $tableColumns): void
   {
     $this->tableColumns = $tableColumns;
-  }
-
-  public function getTableColumnsDate(): array
-  {
-    return $this->tableColumnsDate;
-  }
-
-  public function setTableColumnsDate(array $tableColumnsDate = null): void
-  {
-    $this->tableColumnsDate = $tableColumnsDate;
   }
 }

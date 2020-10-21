@@ -15,47 +15,52 @@ class QuerySqlString implements QuerySqlStringInterface
   /**
    * @var string $select
    */
-  private $select = null;
+  private $select = "";
 
   /**
    * @var array $joinCondition
    */
-  private $joinCondition = [];
+  private $joinCondition = array();
 
   /**
    * @var array $whereCondition
    */
-  private $whereCondition = [];
+  private $whereCondition = array();
 
   /**
    * @var array $groupByCondition
    */
-  private $groupByCondition = [];
+  private $groupByCondition = array();
 
   /**
    * @var array $orderByCondition
    */
-  private $orderByCondition = [];
+  private $orderByCondition = array();
 
   /**
    * @var string $typeOrderBy
    */
-  private $typeOrderBy = null;
+  private $typeOrderBy = "";
 
   /**
    * @var string $insert
    */
-  private $insert = null;
+  private $insert = "";
 
   /**
    * @var string $update
    */
-  private $update = null;
+  private $update = "";
 
   /**
    * @var string $delete
    */
-  private $delete = null;
+  private $delete = "";
+
+  /**
+   * @var array $tableColumnsData
+   */
+  private $tableColumnsData = array();
 
   /**
    * @var TableInfoInterface $tableInfoInterface
@@ -176,9 +181,27 @@ class QuerySqlString implements QuerySqlStringInterface
     $this->typeOrderBy = "ASC";
   }
 
+  /**
+   * @return array
+   */
+  public function getTableColumnsData(): array
+  {
+    return $this->tableColumnsData;
+  }
+
+  /**
+   * @return void
+   */
+  public function setTableColumnsData(array $tableColumnsData): void
+  {
+    $this->tableColumnsData = $tableColumnsData;
+  }
+
   private function getColumnsFromArray(string $separator, array $tableColumns = null): string
   {
     $tableColumns = empty($tableColumns) ? self::$tableInfoInterface->getTableColumns() : $tableColumns;
+    $this->setTableColumnsData($tableColumns);
+
     return strtoupper(join($separator, $tableColumns));
   }
 
@@ -186,6 +209,7 @@ class QuerySqlString implements QuerySqlStringInterface
   {
     $columnsUpdate = array();
     $tableColumns = empty($tableColumns) ? self::$tableInfoInterface->getTableColumns() : $tableColumns;
+    $this->setTableColumnsData($tableColumns);
 
     foreach ($tableColumns as $column) {
       array_push($columnsUpdate, " {$column} = :{$column} ");

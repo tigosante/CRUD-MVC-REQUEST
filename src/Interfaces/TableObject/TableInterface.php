@@ -16,6 +16,13 @@ interface TableInterface
   public static function config(object &$object, array $tableConfiguration): void;
 
   /**
+   * @param bool $useRequest = true
+   *
+   * @return void
+   */
+  public function useRequest(bool $useRequest = true): void;
+
+  /**
    * @return array
    */
   public function getAllData(bool $useREQUEST = true): array;
@@ -23,7 +30,7 @@ interface TableInterface
   /**
    * @return bool
    */
-  public function setAllData(array $data = null, bool $isDataToTableDataBase = true): bool;
+  public function setAllData(array $data = null, bool $useRequest = true): bool;
 
   /**
    * @return void
@@ -45,16 +52,10 @@ interface TableInterface
    */
   public function where(string $conditions): DataDBInterface;
 
-<<<<<<< HEAD
-  public function audit(): self;
-
-  public function pagination(int $paginationInit = null, int $paginationAmount = null, int $paginationEnd = null): PaginationInterface;
-=======
   /**
    * @return bool
    */
   public function create(array $tableColumns = null): bool;
->>>>>>> master
 
   /**
    * @return array

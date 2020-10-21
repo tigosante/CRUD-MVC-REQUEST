@@ -7,12 +7,13 @@ use src\interfaces\{
   Audit\AuditInterface,
   DataDB\DataDBInterface,
   DataDB\FindDataInterface,
-  DataDB\CreateDataDBInterface,
   QuerySql\QuerySqlInterface,
-  QuerySql\QuerySqlStringInterface,
   TableObject\TableInterface,
+  DataDB\CreateDataDBInterface,
   TableObject\TableInfoInterface,
   Pagination\PaginationInterface,
+  DataObject\DataObjectInterface,
+  QuerySql\QuerySqlStringInterface,
   Repository\RepositoryDataDBInterface,
 };
 use src\ImplementationObjects\{
@@ -25,6 +26,7 @@ use src\ImplementationObjects\{
   QuerySql\QuerySqlString,
   TableObject\TableInfo,
   Pagination\Pagination,
+  DataObject\DataObject,
   Repository\RepositoryDataDB,
 };
 
@@ -71,72 +73,82 @@ class Table implements TableInterface
   private static $dataToTableObject = array();
 
   /**
-   * @var AuditInterface $auditInterface
+   * @var DataObjectInterface $dataObject
    */
-  private $auditInterface;
+  private static $dataObject;
+
+  /**
+   * @var AuditInterface $audit
+   */
+  private $audit;
 
   /**
    * Objeto com métodos refentes à uma query select.
    *
-   * @var QuerySqlInterface $querySqlInterface
+   * @var QuerySqlInterface $querySql
    */
-  private static $querySqlInterface;
+  private static $querySql;
 
   /**
    * Objeto responsável por contruir as querys (QueryBuilder).
    *
-   * @var QuerySqlStringInterface $querySqlStringInterface
+   * @var QuerySqlStringInterface $querySqlString
    */
-  private static $querySqlStringInterface;
+  private static $querySqlString;
 
   /**
    * Objeto que contem as informações da tabela que o objeto filho ($object) represente.
    *
-   * @var TableInfoInterface $tableInfoInterface
+   * @var TableInfoInterface $tableInfo
    */
-  private static $tableInfoInterface;
+  private static $tableInfo;
 
   /**
    * Objeto responsável por Buscar, atualizar e remover informações o DB.
    *
-   * @var DataDBInterface $dataDBInterface
+   * @var DataDBInterface $dataDB
    */
-  private static $dataDBInterface;
+  private static $dataDB;
 
   /**
    * Objeto responsável por maniplar os dados do DB.
    *
-   * @var RepositoryDataDBInterface $repositoryDataDBInterface
+   * @var RepositoryDataDBInterface $repositoryDataDB
    */
-  private static $repositoryDataDBInterface;
+  private static $repositoryDataDB;
 
   /**
    * Objeto responsavel por criar registros no DB.
    *
-   * @var CreateDataDBInterface $createDataDBInterface
+   * @var CreateDataDBInterface $createDataDB
    */
-  private static $createDataDBInterface;
+  private static $createDataDB;
 
   /**
    * Objeto responsável por buscar 1 registro específico dentro do DB.
    *
-   * @var FindDataInterface $findDataInterface
+   * @var FindDataInterface $findData
    */
-  private static $findDataInterface;
+  private static $findData;
 
   /**
    * Objeto responsável por buscar vários registros dentro do DB.
    *
-   * @var FindAllDataInterface $findAllDataInterface
+   * @var FindAllDataInterface $findAllData
    */
-  private static $findAllDataInterface;
+  private static $findAllData;
 
   /**
    * Objeto responsável por buscar dados, com quantidade reduzida para paginação, no DB.
    *
-   * @var PaginationInterface $paginationInterface
+   * @var PaginationInterface $pagination
    */
-  private static $paginationInterface;
+  private static $pagination;
+
+  /**
+   * @var bool $useRequest
+   */
+  private $useRequest = true;
 
   /**
    * Injeta as informações da tabela referente ao objeo atual.
@@ -147,11 +159,10 @@ class Table implements TableInterface
    */
   private static function setTableConfiguration(array $tableConfiguration): void
   {
-    self::$tableInfoInterface->setTableName($tableConfiguration[self::TABLE_NAME]);
-    self::$tableInfoInterface->setTableColumns($tableConfiguration[self::TABLE_COLUMNS]);
-    self::$tableInfoInterface->setDataBaseName($tableConfiguration[self::DATA_BASE_NAME] ?? self::DATA_BASE_NAME_DEFAULT);
-    self::$tableInfoInterface->setTableIdentifier($tableConfiguration[self::TABLE_IDENTIFIER]);
-    self::$tableInfoInterface->setTableColumnsDate($tableConfiguration[self::TABLE_COLUMNS_DATE]);
+    self::$tableInfo->setTableName($tableConfiguration[self::TABLE_NAME]);
+    self::$tableInfo->setTableColumns($tableConfiguration[self::TABLE_COLUMNS]);
+    self::$tableInfo->setDataBaseName($tableConfiguration[self::DATA_BASE_NAME] ?? self::DATA_BASE_NAME_DEFAULT);
+    self::$tableInfo->setTableIdentifier($tableConfiguration[self::TABLE_IDENTIFIER]);
   }
 
   /**
@@ -161,19 +172,20 @@ class Table implements TableInterface
    */
   private static function initObjects(): void
   {
-    self::$tableInfoInterface = new TableInfo;
+    self::$tableInfo = new TableInfo;
+    self::$dataObject = DataObject::config(self::$object);
 
-    self::$querySqlStringInterface = QuerySqlString::config(self::$tableInfoInterface);
-    self::$repositoryDataDBInterface = RepositoryDataDB::config(OracleConnection::singleton());
+    self::$querySqlString = QuerySqlString::config(self::$tableInfo);
+    self::$repositoryDataDB = RepositoryDataDB::config(OracleConnection::singleton());
 
-    self::$querySqlInterface = QuerySql::config(self::$querySqlStringInterface, self::$repositoryDataDBInterface);
-    self::$findAllDataInterface = FindAllData::config(self::$querySqlStringInterface, self::$repositoryDataDBInterface);
-    self::$createDataDBInterface = CreateDataDB::config(self::$querySqlStringInterface, self::$repositoryDataDBInterface);
+    self::$querySql = QuerySql::config(self::$querySqlString, self::$repositoryDataDB);
+    self::$findAllData = FindAllData::config(self::$querySqlString, self::$repositoryDataDB);
+    self::$createDataDB = CreateDataDB::config(self::$dataObject, self::$querySqlString, self::$repositoryDataDB);
 
-    self::$dataDBInterface = DataDB::config(self::$querySqlStringInterface, self::$tableInfoInterface, self::$repositoryDataDBInterface);
-    self::$findDataInterface = FindData::config(self::$querySqlStringInterface, self::$tableInfoInterface, self::$repositoryDataDBInterface);
+    self::$dataDB = DataDB::config(self::$dataObject, self::$querySqlString, self::$tableInfo, self::$repositoryDataDB);
+    self::$findData = FindData::config(self::$querySqlString, self::$tableInfo, self::$repositoryDataDB);
 
-    self::$paginationInterface = Pagination::config(self::$querySqlInterface, self::$findAllDataInterface);
+    self::$pagination = Pagination::config(self::$querySql, self::$findAllData);
   }
 
   private function removeIgnores(array $data): array
@@ -204,6 +216,16 @@ class Table implements TableInterface
   }
 
   /**
+   * @param bool $use = true
+   *
+   * @return void
+   */
+  public function useRequest(bool $useRequest = true): void
+  {
+    $this->useRequest = $useRequest;
+  }
+
+  /**
    * Retorna os dados injetados para uso no DB.
    *
    * @var bool $useREQUEST = true : Informa se os dados do $_REQUEST devem ser enviados juntos.
@@ -212,27 +234,25 @@ class Table implements TableInterface
    */
   public function getAllData(bool $useREQUEST = true): array
   {
-    return $useREQUEST ? array_merge(self::$repositoryDataDBInterface->getData(), $this->removeIgnores($_REQUEST)) : self::$repositoryDataDBInterface->getData();
+    return $useREQUEST ? array_merge(self::$repositoryDataDB->getData(), $this->removeIgnores($_REQUEST)) : (self::$repositoryDataDB->getData());
   }
 
   /**
    * Injeta no objeto atual os valores vindos da view.
    *
    * @param array $data = true : Deve receber um array de chave e valor: array("FIELD" => "value").
-   * @param bool $isMergeWithREQUEST = true : Faz merge com os dados do $_REQUEST.
+   * @param bool $useRequest = true : Faz merge com os dados do $_REQUEST.
 
    * @return bool
    */
-  public function setAllData(array $data = null, bool $isMergeWithREQUEST = true): bool
+  public function setAllData(array $data = null, bool $useRequest = true): bool
   {
     $result = true;
 
     if (empty($data)) {
       $data = $_REQUEST;
-    } else if ($isMergeWithREQUEST) {
+    } else if ($useRequest) {
       $data = array_merge($_REQUEST, $data);
-    } else {
-      $data = $_REQUEST;
     }
 
     try {
@@ -252,7 +272,7 @@ class Table implements TableInterface
     }
 
     if ($result) {
-      self::$repositoryDataDBInterface->setData(self::$dataToTableObject);
+      self::$repositoryDataDB->setData(self::$dataToTableObject);
     }
 
     return $result;
@@ -294,7 +314,7 @@ class Table implements TableInterface
    */
   public function select(array $tableColumns = null): QuerySqlInterface
   {
-    return self::$querySqlInterface;
+    return self::$querySql;
   }
 
   /**
@@ -306,8 +326,13 @@ class Table implements TableInterface
    */
   public function where(string $conditions): DataDBInterface
   {
-    self::$dataDBInterface->where($conditions);
-    return self::$dataDBInterface;
+    if ($this->useRequest) {
+      $this->setAllData();
+    }
+
+    self::$dataDB->where($conditions);
+
+    return self::$dataDB;
   }
 
   /**
@@ -315,7 +340,7 @@ class Table implements TableInterface
    */
   public function audit(bool $makeAudit = true): self
   {
-    $this->auditInterface->makeAudit($makeAudit);
+    $this->audit->makeAudit($makeAudit);
     return $this;
   }
 
@@ -328,7 +353,11 @@ class Table implements TableInterface
    */
   public function create(array $tableColumns = null): bool
   {
-    return self::$createDataDBInterface->create($tableColumns);
+    if ($this->useRequest) {
+      $this->setAllData();
+    }
+
+    return self::$createDataDB->create($tableColumns);
   }
 
   /**
@@ -341,7 +370,7 @@ class Table implements TableInterface
    */
   public function find(int $tableIdentifier, array $tableColumns = null): array
   {
-    return self::$findDataInterface->find($tableIdentifier, $tableColumns);
+    return self::$findData->find($tableIdentifier, $tableColumns);
   }
 
 
@@ -354,7 +383,7 @@ class Table implements TableInterface
    */
   public function findAll(array $tableColumns = null): array
   {
-    return self::$dataDBInterface->findAll($tableColumns);
+    return self::$dataDB->findAll($tableColumns);
   }
 
   /**
@@ -369,7 +398,7 @@ class Table implements TableInterface
    */
   public function pagination(int $paginationInit = null, int $paginationAmount = null, int $paginationEnd = null): PaginationInterface
   {
-    return self::$paginationInterface
+    return self::$pagination
       ->init($paginationInit)
       ->amount($paginationAmount)
       ->end($paginationEnd);
@@ -383,7 +412,7 @@ class Table implements TableInterface
   public function clean(): void
   {
     self::$dataToTableObject = [];
-    self::$querySqlInterface->clean();
-    self::$repositoryDataDBInterface->clean();
+    self::$querySql->clean();
+    self::$repositoryDataDB->clean();
   }
 }
