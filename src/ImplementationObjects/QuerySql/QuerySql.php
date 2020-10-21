@@ -55,9 +55,9 @@ class QuerySql implements QuerySqlInterface
     return $this;
   }
 
-  public function orderBy(array $orderByCondition): self
+  public function orderBy(array $orderByCondition, string $type = "ASC"): self
   {
-    self::$querySqlStringInterface->setOrderBy($orderByCondition);
+    self::$querySqlStringInterface->setOrderBy($orderByCondition, $type);
     return $this;
   }
 

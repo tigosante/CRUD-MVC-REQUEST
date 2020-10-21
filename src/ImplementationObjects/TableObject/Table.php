@@ -1,6 +1,6 @@
 <?php
 
-namespace src\TableObject;
+namespace src\ImplementationObjects\TableObject;
 
 use src\Connections\OracleConnection;
 use src\interfaces\{
@@ -172,7 +172,6 @@ class Table implements TableInterface
    */
   private static function initObjects(): void
   {
-    self::$tableInfo = new TableInfo;
     self::$dataObject = DataObject::config(self::$object);
 
     self::$querySqlString = QuerySqlString::config(self::$tableInfo);
@@ -210,6 +209,7 @@ class Table implements TableInterface
   public static function config(object &$object, array $tableConfiguration): void
   {
     self::$object = $object;
+    self::$tableInfo = new TableInfo;
 
     self::setTableConfiguration($tableConfiguration);
     self::initObjects();

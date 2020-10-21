@@ -32,9 +32,10 @@ class DataObject implements DataObjectInterface
     try {
       foreach ($columns as $column) {
         $method = "get_" . strtolower($column);
-
+        // var_dump($method);
         if (method_exists(self::$object, $method)) {
           $data = self::$object->$method();
+
           if ($data !== NULL) {
             $dataObject[strtoupper($column)] = $data;
           }

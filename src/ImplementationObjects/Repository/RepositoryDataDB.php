@@ -61,7 +61,11 @@ class RepositoryDataDB implements RepositoryDataDBInterface
   public function handleData(): bool
   {
     $this->verifyData();
-    return self::$connection->prepare($this->getQuery())->execute($this->dataDB);
+
+    var_dump($this->getQuery(), $this->dataDB);
+
+    return true;
+    // self::$connection->prepare($this->getQuery())->execute($this->dataDB);
   }
 
   public function getQuery(): string

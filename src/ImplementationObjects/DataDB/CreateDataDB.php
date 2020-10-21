@@ -40,7 +40,7 @@ class CreateDataDB implements CreateDataDBInterface
   {
     self::$querySqlString->setInsert($tableColumns);
 
-    $tableColumns = empty($tableColumns) ? self::$querySqlString->getTableColumnsData() : $tableColumns;
+    $tableColumns = self::$querySqlString->getTableColumnsData();
 
     self::$repositoryDataDB->setData(self::$dataObject->getData($tableColumns));
     self::$repositoryDataDB->setQuery(self::$querySqlString->getInsert());

@@ -2,7 +2,7 @@
 
 namespace exemple\Tables;
 
-use src\TableObject\Table;
+use src\ImplementationObjects\TableObject\Table;
 
 class Adm extends Table
 {
@@ -23,25 +23,23 @@ class Adm extends Table
   /**
    * @var string $dt_cricao
    */
-  private $dt_cricao;
+  private $dt_cricao = "SYSDATE";
 
   public function __construct()
   {
-    $tableName = "ADM";
-    $tableColumns = array(self::ID, self::DT_CRIACAO, self::ADM_NAME);
-    $tableColumnsDate = array(self::DT_CRIACAO);
-
     $tableConfiguration = array(
-      self::TABLE_NAME => $tableName,
-      self::TABLE_COLUMNS => $tableColumns,
+      self::TABLE_NAME => "ADM",
       self::TABLE_IDENTIFIER => self::ID,
-      self::TABLE_COLUMNS_DATE => $tableColumnsDate
+      self::TABLE_COLUMNS => array(
+        self::ID,
+        self::DT_CRIACAO, self::ADM_NAME
+      ),
     );
 
-    parent::__construct($this, $tableConfiguration);
+    self::config($this, $tableConfiguration);
   }
 
-  public function get_id(): ?int
+  public function get_id(): int
   {
     return $this->id;
   }
@@ -61,12 +59,12 @@ class Adm extends Table
     $this->adm_name = $adm_name;
   }
 
-  public function get_dt_cricao(): ?string
+  public function get_dt_criacao(): ?string
   {
     return $this->dt_cricao;
   }
 
-  public function set_dt_cricao(int $dt_cricao): void
+  public function set_dt_criacao(int $dt_cricao): void
   {
     $this->dt_cricao = $dt_cricao;
   }
