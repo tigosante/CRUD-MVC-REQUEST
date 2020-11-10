@@ -18,8 +18,8 @@ $tableAdm->create();
 // Dessa forma todos os dados do $_REQUEST referentes à essa tabela
 // serão inseridos no banco de dado.
 
-$columnsCreate = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
-$tableAdm->create($columnsCreate);
+$columns = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
+$tableAdm->create($columns);
 // Dessa forma apenas os dados do $_REQUEST referentes às colunas informadas
 // serão inseridos no banco de dado.
 
@@ -36,8 +36,8 @@ $tableAdm->find($_REQUEST[$tableAdm::ID]);
 // Dessa forma os dados do registro com ID = 1 serão retornado em formato de array nomeado (CHAVE e VALOR).
 // EXEMPLO: ["ID" => 1, "ADM_NOME" => "Tiago", "DT_CRIACAO" => "10/11/2020"]
 
-$columnsCreate = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
-$tableAdm->find($_REQUEST[$tableAdm::ID], $columnsCreate);
+$columns = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
+$tableAdm->find($_REQUEST[$tableAdm::ID], $columns);
 // Dessa forma os dados do registro com ID = 1 refentes às colunas informadas
 // serão retornado em formato de array nomeado (CHAVE e VALOR).
 // EXEMPLO: ["ADM_NOME" => "Tiago", "DT_CRIACAO" => "10/11/2020"]
@@ -57,8 +57,8 @@ $tableAdm->findAll();
 // ["ID" => 4, "ADM_NOME" => "Luiz", "DT_CRIACAO" => "10/11/2020"],
 // ]
 
-$columnsCreate = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
-$tableAdm->findAll($columnsCreate);
+$columns = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
+$tableAdm->findAll($columns);
 // Dessa forma todos os dados refentes às colunas informadas serão retornado em formato
 // de array nomeado (CHAVE e VALOR).
 // EXEMPLO:
@@ -78,15 +78,15 @@ $tableAdm->where($tableAdm::ID . " = :" . $tableAdm::ID)->update();
 // Dessa forma todos os dados do $_REQUEST referentes ao ID informado
 // serão atualizados no banco de dado.
 
-$columnsCreate = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
-$tableAdm->where($tableAdm::DT_CRIACAO . " >= :" . $tableAdm::DT_CRIACAO)->update($columnsCreate);
+$columns = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
+$tableAdm->where($tableAdm::DT_CRIACAO . " >= :" . $tableAdm::DT_CRIACAO)->update($columns);
 // Dessa forma apenas os dados do $_REQUEST referentes às colunas informadas
 // serão atualizados no banco de dado.
 
 // *** Nos dois casos acima, colunas que não tiverem valor serão inseridas NULL (caso o banco permita). ***
 
 $tableAdm->where("")->update();
-$tableAdm->where("")->update($columnsCreate);
+$tableAdm->where("")->update($columns);
 // *** É possível dar UPDATE sem WHERE mas não é recomendado. ***
 
 
@@ -135,8 +135,8 @@ $tableAdm->create();
 // Dessa forma todos os dados informados no $data referentes à essa tabela
 // serão inseridos no banco de dado.
 
-$columnsCreate = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
-$tableAdm->create($columnsCreate);
+$columns = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
+$tableAdm->create($columns);
 // Dessa forma apenas os dados informados no $data referentes às colunas informadas
 // serão inseridos no banco de dado.
 
@@ -148,8 +148,8 @@ $tableAdm->create();
 // Dessa forma todos os dados informados inseridos no objeto filho referentes à essa tabela
 // serão inseridos no banco de dado.
 
-$columnsCreate = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
-$tableAdm->create($columnsCreate);
+$columns = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
+$tableAdm->create($columns);
 // Dessa forma apenas os dados informados inseridos no objeto filho referentes às colunas informadas
 // serão inseridos no banco de dado.
 
@@ -166,8 +166,8 @@ $tableAdm->find($tableAdm->get_id());
 // Dessa forma os dados do registro com ID = 1 serão retornado em formato de array nomeado (CHAVE e VALOR).
 // EXEMPLO: ["ID" => 1, "ADM_NOME" => "Tiago", "DT_CRIACAO" => "10/11/2020"]
 
-$columnsCreate = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
-$tableAdm->find($tableAdm->get_id(), $columnsCreate);
+$columns = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
+$tableAdm->find($tableAdm->get_id(), $columns);
 // Dessa forma os dados do registro com ID = 1 refentes às colunas informadas
 // serão retornado em formato de array nomeado (CHAVE e VALOR).
 // EXEMPLO: ["ADM_NOME" => "Tiago", "DT_CRIACAO" => "10/11/2020"]
@@ -187,8 +187,8 @@ $tableAdm->findAll();
 // ["ID" => 4, "ADM_NOME" => "Luiz", "DT_CRIACAO" => "10/11/2020"],
 // ]
 
-$columnsCreate = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
-$tableAdm->findAll($columnsCreate);
+$columns = array($tableAdm::ADM_NAME, $tableAdm::DT_CRIACAO);
+$tableAdm->findAll($columns);
 // Dessa forma todos os dados refentes às colunas informadas serão retornado em formato
 // de array nomeado (CHAVE e VALOR).
 // EXEMPLO:
@@ -213,15 +213,15 @@ $tableAdm->where($tableAdm::ID . " = :" . $tableAdm::ID)->update();
 // Dessa forma todos os dados inseridos no objeto filho referentes ao ID informado
 // serão atualizados no banco de dado.
 
-$columnsCreate = array($tableAdm::ADM_NAME);
-$tableAdm->where($tableAdm::DT_CRIACAO . " >= :" . $tableAdm::DT_CRIACAO)->update($columnsCreate);
+$columns = array($tableAdm::ADM_NAME);
+$tableAdm->where($tableAdm::DT_CRIACAO . " >= :" . $tableAdm::DT_CRIACAO)->update($columns);
 // Dessa forma apenas os dados inseridos no objeto filho referentes às colunas informadas
 // serão atualizados no banco de dado.
 
 // *** Nos dois casos acima, colunas que não tiverem valor serão inseridas NULL (caso o banco permita). ***
 
 $tableAdm->where("")->update();
-$tableAdm->where("")->update($columnsCreate);
+$tableAdm->where("")->update($columns);
 // *** É possível dar UPDATE sem WHERE mas não é recomendado. ***
 
 
