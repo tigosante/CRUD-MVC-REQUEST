@@ -107,7 +107,7 @@ $tableAdm->where("")->delete($_REQUEST[$tableAdm::ID]);
 // *** Dessa forma o ORM irá verificar quais valores estão carregados no $_REQUEST para fazer os BINDS. ***
 // *** Mas também ira adicinar na no WHERE a seguinte expressão: %TABLE_IDENTIFIER% = :%TABLE_IDENTIFIER%. ***
 
-$tableAdm->where($tableAdm::ID . "= :" . $tableAdm::ID)->delete($_REQUEST[$tableAdm::ID]);
+$tableAdm->where($tableAdm::ID . " = :" . $tableAdm::ID)->delete($_REQUEST[$tableAdm::ID]);
 // *** Dessa forma o ORM irá verificar quais valores estão carregados no $_REQUEST para fazer os BINDS. ***
 // *** Mas também ira adicinar na no WHERE a seguinte expressão: %TABLE_IDENTIFIER% = :%TABLE_IDENTIFIER%. ***
 // *** o ORM verifica se existem condições repetidas no WHERE e as remove deixando apenas uma. ***
@@ -248,7 +248,7 @@ $tableAdm->where("")->delete($tableAdm->get_id());
 // *** Dessa forma o ORM irá verificar quais valores estão carregados no objeto filho para fazer os BINDS. ***
 // *** Mas também ira adicinar na no WHERE a seguinte expressão: %TABLE_IDENTIFIER% = :%TABLE_IDENTIFIER%. ***
 
-$tableAdm->where($tableAdm::ID . "= :" . $tableAdm::ID)->delete($tableAdm->get_id());
+$tableAdm->where($tableAdm::ID . " = :" . $tableAdm::ID)->delete($tableAdm->get_id());
 // *** Dessa forma o ORM irá verificar quais valores estão carregados no objeto filho para fazer os BINDS. ***
 // *** Mas também ira adicinar na no WHERE a seguinte expressão: %TABLE_IDENTIFIER% = :%TABLE_IDENTIFIER%. ***
 // *** o ORM verifica se existem condições repetidas no WHERE e as remove deixando apenas uma. ***
