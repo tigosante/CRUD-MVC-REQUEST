@@ -1,11 +1,19 @@
 <?php
 
-namespace src\Interfaces\DataDB;
+namespace src\interfaces\dataDB;
 
-use src\interfaces\Helpers\QueryDataHelper;
+use src\interfaces\{
+  QuerySql\QuerySqlStringInterface,
+  Repository\RepositoryDataDBInterface
+};
 
-interface FindAllDataInterface extends QueryDataHelper
+interface FindAllDataInterface
 {
+  /**
+   * @return self
+   */
+  public static function config(QuerySqlStringInterface &$querySqlString, RepositoryDataDBInterface &$repositoryDataDB): self;
+
   /**
    * @return array
    */

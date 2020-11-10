@@ -1,14 +1,20 @@
 <?php
 
-namespace src\Interfaces\QuerySql;
+namespace src\interfaces\querySql;
 
-use src\interfaces\Helpers\{
-  QueryDataHelper,
-  SetDataHelper
+use src\interfaces\{
+  Helpers\SetDataHelper,
+  QuerySql\QuerySqlStringInterface,
+  Repository\RepositoryDataDBInterface
 };
 
-interface QuerySqlInterface extends QueryDataHelper, SetDataHelper
+interface QuerySqlInterface extends SetDataHelper
 {
+  /**
+   * @return self
+   */
+  public static function config(QuerySqlStringInterface &$querySqlString, RepositoryDataDBInterface &$repositoryDataDB): self;
+
   /**
    * @return self
    */
@@ -34,6 +40,7 @@ interface QuerySqlInterface extends QueryDataHelper, SetDataHelper
    */
   public function orderBy(array $orderByCondition, string $type = "ASC"): self;
 
+
   /**
    * @return void
    */
@@ -45,6 +52,18 @@ interface QuerySqlInterface extends QueryDataHelper, SetDataHelper
   public function fetchAll(): array;
 
   /**
+   * @param string $typeQuery Deve receber o comando desejado.
+   *
+   * #### Comando INSERT: INSERIR, CRIAR, INSERT ou CREATE.
+   * #### Comando DELETE: APAGAR, DELETAR, REMOVER, DELET ou REMOVE.
+   * #### Comando UPDATE: ATUALIZAR, EDITAR, EDIT ou UPDATE.
+   * #### Comandos SELECT ou FINDALL: BUSCAR, PROCURAR, PESQUISAR, SELECIONAR, SELECT, SEARCH ou FINDALL.
+   * #### Comando FIND: ENCONTRAR ou FIND.
+   * #### Comandos JOIN: UNIR, LIGAR, JUNTAR, JUNTE-SE ou JOIN.
+   * #### Comando WHERE: ONDE, CODIÇÃO, CODIÇÕES, WHERE, CONDITION ou CONDITIONS.
+   * #### Comando GROUP BY: GRUPO, GRUPO POR, GROUP ou GROUP BY.
+   * #### Comando ORDER BY: ORDENAR, ORDENAR POR, ORDER ou ORDER BY.
+   *
    * @return string
    */
   public function queryString(string $typeQuery = ""): string;

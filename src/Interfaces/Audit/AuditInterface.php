@@ -1,12 +1,15 @@
 <?php
 
-namespace src\Interfaces\Audit;
+namespace src\interfaces\audit;
 
 use src\interfaces\Helpers\SetDataHelper;
 
 interface AuditInterface extends SetDataHelper
 {
-  public function __construct(object $objectAudit);
+  /**
+   * @return self
+   */
+  public function config(AuditObjectInterface &$objectAudit): self;
 
   /**
    * @return string
@@ -21,10 +24,15 @@ interface AuditInterface extends SetDataHelper
   /**
    * @return void
    */
-  public function makeAudit(bool $isMakeAudit): void;
+  public function notify(bool $isMakeAudit): void;
 
   /**
    * @return bool
    */
   public function createAuditInDB(\PDO &$connection): bool;
+
+  /**
+   * @return string
+   */
+  public function recoveryIpMachine(): string;
 }

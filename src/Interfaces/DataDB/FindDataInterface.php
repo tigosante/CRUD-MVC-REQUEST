@@ -1,11 +1,11 @@
 <?php
 
-namespace src\Interfaces\DataDB;
+namespace src\interfaces\dataDB;
 
-use src\Interfaces\{
+use src\interfaces\{
   QuerySql\QuerySqlStringInterface,
   Repository\RepositoryDataDBInterface,
-  TableObject\TableInfoInterface
+  TableObject\TableObjectInfoInterface
 };
 
 interface FindDataInterface
@@ -13,7 +13,7 @@ interface FindDataInterface
   /**
    * @return self
    */
-  public static function config(QuerySqlStringInterface &$querySqlStringInterface, TableInfoInterface &$tableInfoInterface, RepositoryDataDBInterface &$repositoryDataDBInterface): self;
+  public static function config(QuerySqlStringInterface &$querySqlString, TableObjectInfoInterface &$tableObjectInfo, RepositoryDataDBInterface &$repositoryDataDB): self;
 
   /**
    * @return array

@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Interfaces\DataObject;
+namespace src\interfaces\dataObject;
 
 interface DataObjectInterface
 {

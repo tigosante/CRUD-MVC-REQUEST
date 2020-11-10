@@ -1,6 +1,6 @@
 <?php
 
-namespace src\interfaces\DataDB;
+namespace src\interfaces\dataDB;
 
 use src\interfaces\{
   DataObject\DataObjectInterface,
@@ -10,7 +10,10 @@ use src\interfaces\{
 
 interface CreateDataDBInterface
 {
-  public static function config(DataObjectInterface $dataObject, QuerySqlStringInterface &$querySqlString, RepositoryDataDBInterface &$repositoryDataDB): self;
+  /**
+   * @return self
+   */
+  public static function config(DataObjectInterface &$dataObject, QuerySqlStringInterface &$querySqlString, RepositoryDataDBInterface &$repositoryDataDB): self;
 
   /**
    * @return bool

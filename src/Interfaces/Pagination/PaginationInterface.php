@@ -1,11 +1,12 @@
 <?php
 
-namespace src\Interfaces\Pagination;
+namespace src\interfaces\pagination;
 
-use src\Interfaces\{
+use src\interfaces\{
+  Helpers\SetDataHelper,
   QuerySql\QuerySqlInterface,
   DataDB\FindAllDataInterface,
-  Helpers\SetDataHelper
+  QuerySql\QuerySqlStringInterface
 };
 
 interface PaginationInterface extends SetDataHelper
@@ -13,18 +14,16 @@ interface PaginationInterface extends SetDataHelper
   /**
    * @return self
    */
-  public static function config(QuerySqlInterface $querySqlInterface, FindAllDataInterface $findAllDataInterface): self;
+  public static function config(QuerySqlInterface &$querySql, FindAllDataInterface &$findAllData, QuerySqlStringInterface &$querySqlString): self;
 
   /**
    * @return self
    */
   public function init(int $paginationInit = null): self;
-
   /**
    * @return self
    */
   public function amount(int $paginationAmount = null): self;
-
   /**
    * @return self
    */
@@ -34,12 +33,10 @@ interface PaginationInterface extends SetDataHelper
    * @return array
    */
   public function findAll(array $tableColumns = null): array;
-
   /**
    * @return QuerySqlInterface
    */
   public function select(array $tableColumns = null): QuerySqlInterface;
-
   /**
    * @return FindAllDataInterface
    */

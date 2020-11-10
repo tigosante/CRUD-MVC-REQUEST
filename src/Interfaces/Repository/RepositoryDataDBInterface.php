@@ -1,25 +1,24 @@
 <?php
 
-namespace src\interfaces\Repository;
+namespace src\interfaces\repository;
 
-use src\Interfaces\{
+use src\interfaces\{
   Helpers\SetDataHelper,
+  Audit\AuditInterface,
   Connections\DataBaseConnectionInterface
 };
-use src\Interfaces\Audit\AuditInterface;
 
 interface RepositoryDataDBInterface extends SetDataHelper
 {
   /**
    * @return self
    */
-  public static function config(DataBaseConnectionInterface &$dataBaseConnectionInterface): self;
+  public static function config(DataBaseConnectionInterface &$dataBaseConnection, AuditInterface &$audit): self;
 
   /**
    * @return bool
    */
   public function handleData(): bool;
-
   /**
    * @return array
    */
@@ -29,7 +28,6 @@ interface RepositoryDataDBInterface extends SetDataHelper
    * @return string
    */
   public function getQuery(): string;
-
   /**
    * @return void
    */

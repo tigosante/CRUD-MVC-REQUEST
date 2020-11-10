@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Interfaces\Connections;
+namespace src\interfaces\connections;
 
 interface DataBaseConnectionInterface
 {

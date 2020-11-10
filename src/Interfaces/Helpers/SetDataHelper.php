@@ -1,6 +1,6 @@
 <?php
 
-namespace src\interfaces\Helpers;
+namespace src\interfaces\helpers;
 
 interface SetDataHelper
 {

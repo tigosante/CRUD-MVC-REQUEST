@@ -2,9 +2,9 @@
 
 namespace exemple\Tables;
 
-use src\ImplementationObjects\TableObject\Table;
+use src\core\table\TableObject;
 
-class Adm extends Table
+class Adm extends TableObject
 {
   public const ID = "ID";
   public const ADM_NAME = "ADM_NAME";
@@ -36,7 +36,7 @@ class Adm extends Table
       ),
     );
 
-    self::config($this, $tableConfiguration);
+    $this->config($this, $tableConfiguration);
   }
 
   public function get_id(): int
